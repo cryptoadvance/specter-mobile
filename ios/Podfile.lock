@@ -1,0 +1,22 @@
+PODS:
+  - Flutter (1.0.0)
+  - specter_rust (0.0.1):
+    - Flutter
+
+DEPENDENCIES:
+  - Flutter (from `Flutter`)
+  - specter_rust (from `.symlinks/plugins/specter_rust/ios`)
+
+EXTERNAL SOURCES:
+  Flutter:
+    :path: Flutter
+  specter_rust:
+    :path: ".symlinks/plugins/specter_rust/ios"
+
+SPEC CHECKSUMS:
+  Flutter: 434fef37c0980e73bb6479ef766c45957d4b510c
+  specter_rust: cd5433b3c8a0b4c5e9291b4ad37a10784678ebfc
+
+PODFILE CHECKSUM: aafe91acc616949ddb318b77800a7f51bffa2a4c
+
+COCOAPODS: 1.10.1
