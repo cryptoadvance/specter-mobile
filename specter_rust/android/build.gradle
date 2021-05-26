@@ -1,4 +1,4 @@
-group 'com.example.specter_rust'
+group 'solutions.specter.specter_rust'
 version '1.0-SNAPSHOT'
 
 buildscript {

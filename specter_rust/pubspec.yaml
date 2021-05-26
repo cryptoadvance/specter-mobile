@@ -28,7 +28,7 @@ flutter:
   plugin:
     platforms:
       android:
-        package: com.example.specter_rust
+        package: solutions.specter.specter_rust
         pluginClass: SpecterRustPlugin
       ios:
         pluginClass: SpecterRustPlugin

@@ -1,4 +1,4 @@
-package com.example.specter_rust
+package solutions.specter.specter_rust
 
 import androidx.annotation.NonNull
 

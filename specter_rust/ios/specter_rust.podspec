@@ -4,14 +4,14 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'specter_rust'
-  s.version          = '0.0.1'
-  s.summary          = 'A new flutter plugin project.'
+  s.version          = '0.1.0'
+  s.summary          = 'Rust implementation of Specter Bitcoin wallet.'
   s.description      = <<-DESC
 A new flutter plugin project.
                        DESC
-  s.homepage         = 'http://example.com'
+  s.homepage         = 'http://specter.solutions'
   s.license          = { :file => '../LICENSE' }
-  s.author           = { 'Your Company' => 'email@example.com' }
+  s.author           = { 'Specter Solutions (Crypto Advance GmbH)' => 'contact@cryptoadvance.io' }
   s.source           = { :path => '.' }
   s.source_files = 'Classes/**/*'
   s.dependency 'Flutter'
