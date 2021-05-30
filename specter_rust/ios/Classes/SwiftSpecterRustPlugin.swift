@@ -11,4 +11,9 @@ public class SwiftSpecterRustPlugin: NSObject, FlutterPlugin {
   public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
     result("iOS " + UIDevice.current.systemVersion)
   }
+
+  public func intertMethodToEnforceBundling() {
+    // This will never be executed
+    rust_greeting("");
+  }
 }

@@ -1,16 +1,21 @@
-# specter_mobile
+# Specter-Mobile (WIP)
 
-A new Flutter project.
+**POC Mobile wallet / co-signer app built with Flutter and Rust**
 
-## Getting Started
+## Pre-requisites
 
-This project is a starting point for a Flutter application.
+- Check if Flutter is properly configured by running `flutter doctor`
+- To check whether you have Rust installed correctly, run `rustc --version`
+- Make sure that the Android NDK is installed
+  - You might also need LLVM from the SDK manager
+- Ensure that the env variable `$ANDROID_NDK_HOME` points to the NDK base folder
+  - It may look like `/Users/brickpop/Library/Android/sdk/ndk-bundle` on MacOS
+  - And look like `/home/brickpop/dev/android/ndk-bundle` on Linux
 
-A few resources to get you started if this is your first Flutter project:
+## Building and running
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+On the root directory:
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- Run `make` to see the available actions
+- Run `make init` to install the Flutter dependencies and Rust targets
+- Run `make run` to build and run the mobile app on an attached device

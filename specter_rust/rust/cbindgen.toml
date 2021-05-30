@@ -1,0 +1,8 @@
+language = "C"
+autogen_warning = "// AUTO GENERATED FILE, DO NOT EDIT."
+#namespace = "ffi"
+#include_guard = "CBINDGEN_BINDINGS_H"
+
+[defines]
+"target_os = ios" = "TARGET_OS_IOS"
+"target_os = macos" = "TARGET_OS_MACOS"

@@ -1,0 +1,13 @@
+[package]
+name = "specter_rust"
+version = "0.1.0"
+authors = ["Specter Solutions <contact@cryptoadvance.io>"]
+edition = "2018"
+
+[lib]
+name = "specter_rust"
+crate-type = ["staticlib", "cdylib"]
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]

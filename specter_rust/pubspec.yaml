@@ -1,6 +1,6 @@
 name: specter_rust
-description: A new flutter plugin project.
-version: 0.0.1
+description: Rust implementation of Specter Bitcoin wallet
+version: 0.1.0
 author:
 homepage:
 
@@ -11,10 +11,12 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  ffi: ^1.1.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  ffigen: ^3.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -63,3 +65,11 @@ flutter:
   #
   # For details regarding fonts in packages, see
   # https://flutter.dev/custom-fonts/#from-packages
+
+ffigen:
+  output: lib/bindings.dart
+  headers:
+    entry-points:
+    - rust/target/bindings.h
+  name: SpecterRustBindings
+  description: Dart bindings to call libspecter_rust functions

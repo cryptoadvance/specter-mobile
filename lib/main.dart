@@ -6,6 +6,9 @@ import 'app/routes/app_pages.dart';
 void main() {
   print("Flutter app starting...");
   SpecterRust.sayHi();
+  final result = SpecterRust.greet("Someone");
+  print('Calling SpecterRust.greet() ${result}');
+
   runApp(
     GetMaterialApp(
       title: "Specter Mobile",
