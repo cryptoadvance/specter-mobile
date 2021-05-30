@@ -9,8 +9,8 @@
 - Make sure that the Android NDK is installed
   - You might also need LLVM from the SDK manager
 - Ensure that the env variable `$ANDROID_NDK_HOME` points to the NDK base folder
-  - It may look like `/Users/brickpop/Library/Android/sdk/ndk-bundle` on MacOS
-  - And look like `/home/brickpop/dev/android/ndk-bundle` on Linux
+  - It may look like `/Users/username/Library/Android/sdk/ndk-bundle` on MacOS
+  - And look like `/home/username/dev/android/ndk-bundle` on Linux
 
 ## Building and running
 
