@@ -35,6 +35,20 @@ class SpecterRust {
     return result;
   }
 
+  /// Computes a greeting for the given name using the native function
+  static String runBitcoinDemo() {
+    // Native call
+    final ptrResult = _bindings.run_bitcoin_demo();
+
+    // Cast the result pointer to a Dart string
+    final result = ptrResult.cast<Utf8>().toDartString();
+
+    // Free returned string
+    _bindings.rust_cstr_free(ptrResult);
+
+    return result;
+  }
+
   static void sayHi() {
     print("Hello from specter_rust (Dart side)");
   }

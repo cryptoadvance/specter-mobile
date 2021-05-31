@@ -100,7 +100,7 @@ ndk-home:
 ## bindings: Generate the .h file for iOS
 bindings: target/bindings.h
 
-target/bindings.h: $(SOURCES)
+target/bindings.h: src/lib.rs
 	cbindgen $^ -c cbindgen.toml | grep -v \#include | uniq > $@
 	cp -f $@ ../ios/Classes/$(LIBNAME)_bindings.h
 	@echo "[DONE] $@"

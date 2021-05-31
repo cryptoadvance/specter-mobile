@@ -44,6 +44,15 @@ class SpecterRustBindings {
       _lookup<ffi.NativeFunction<_c_rust_cstr_free>>('rust_cstr_free');
   late final _dart_rust_cstr_free _rust_cstr_free =
       _rust_cstr_free_ptr.asFunction<_dart_rust_cstr_free>();
+
+  ffi.Pointer<ffi.Int8> run_bitcoin_demo() {
+    return _run_bitcoin_demo();
+  }
+
+  late final _run_bitcoin_demo_ptr =
+      _lookup<ffi.NativeFunction<_c_run_bitcoin_demo>>('run_bitcoin_demo');
+  late final _dart_run_bitcoin_demo _run_bitcoin_demo =
+      _run_bitcoin_demo_ptr.asFunction<_dart_run_bitcoin_demo>();
 }
 
 typedef _c_rust_greeting = ffi.Pointer<ffi.Int8> Function(
@@ -61,3 +70,7 @@ typedef _c_rust_cstr_free = ffi.Void Function(
 typedef _dart_rust_cstr_free = void Function(
   ffi.Pointer<ffi.Int8> s,
 );
+
+typedef _c_run_bitcoin_demo = ffi.Pointer<ffi.Int8> Function();
+
+typedef _dart_run_bitcoin_demo = ffi.Pointer<ffi.Int8> Function();

@@ -9,6 +9,9 @@ void main() {
   final result = SpecterRust.greet("Someone");
   print('Calling SpecterRust.greet() ${result}');
 
+  final log = SpecterRust.runBitcoinDemo();
+  print('Bitcoin demo: ${log}');
+
   runApp(
     GetMaterialApp(
       title: "Specter Mobile",
