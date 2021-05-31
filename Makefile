@@ -36,6 +36,7 @@ init:
 ## build_rust: Build the Rust part of the project.
 build_rust:
 	@$(MAKE) -C $(RUST_DIR) all
+	@cd $(RUST_PACKAGE_DIR); flutter pub run ffigen
 
 ## build: Build the Flutter application.
 build: build_rust
