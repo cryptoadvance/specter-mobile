@@ -1,0 +1,9 @@
+{
+  "verification": {
+  	"labels": {
+  		"welcome": "Welcome",
+  		"chose_your_pin_code": "Please chose your PIN-code",
+  		"remember_these_words": "Remember these words. They will stay the same on this device unless it has been tampered."
+  	}
+  }
+}

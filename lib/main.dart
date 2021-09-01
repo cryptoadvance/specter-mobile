@@ -1,20 +1,41 @@
 import 'package:flutter/material.dart';
+
 import 'package:get/get.dart';
-import 'package:specter_rust/specter_rust.dart';
+
 import 'app/routes/app_pages.dart';
+import 'generated/locales.g.dart';
 
 void main() {
-  print("Flutter app starting...");
-  SpecterRust.sayHi();
-  final result = SpecterRust.greet("Someone");
-  print('Calling SpecterRust.greet() ${result}');
+  ThemeData _darkTheme = ThemeData(
+    fontFamily: 'Mulish',
+    accentColor: Colors.white,
+    brightness: Brightness.dark,
+    primaryColor: Colors.amber,
+    buttonTheme: ButtonThemeData(
+      buttonColor: Colors.amber,
+      disabledColor: Colors.grey,
+    )
+  );
 
-  final log = SpecterRust.runBitcoinDemo();
-  print('Bitcoin demo: ${log}');
+  ThemeData _lightTheme = ThemeData(
+    fontFamily: 'Mulish',
+    accentColor: Colors.grey[800],
+    brightness: Brightness.light,
+    primaryColor: Colors.blue,
+    buttonTheme: ButtonThemeData(
+      buttonColor: Colors.blue,
+      disabledColor: Colors.grey,
+    )
+  );
 
   runApp(
     GetMaterialApp(
       title: "Specter Mobile",
+      locale: Locale('en', 'US'),
+      theme: _lightTheme,
+      darkTheme: _darkTheme,
+      themeMode: ThemeMode.dark,
+      translationsKeys: AppTranslation.translations,
       initialRoute: AppPages.INITIAL,
       getPages: AppPages.routes,
     ),
