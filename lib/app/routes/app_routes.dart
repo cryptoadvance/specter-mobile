@@ -5,10 +5,14 @@ abstract class Routes {
   Routes._();
 
   static const HOME = _Paths.HOME;
-  static const TEST = _Paths.TEST;
+  static const VERIFICATION = _Paths.VERIFICATION;
+  static const RECOVERY_SELECT = _Paths.RECOVERY_SELECT;
+  static const GENERATE_SEED = _Paths.GENERATE_SEED;
 }
 
 abstract class _Paths {
   static const HOME = '/home';
-  static const TEST = '/test';
+  static const VERIFICATION = '/verification';
+  static const RECOVERY_SELECT = '/recovery-select';
+  static const GENERATE_SEED = '/generate-seed';
 }

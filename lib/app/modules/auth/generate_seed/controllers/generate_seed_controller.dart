@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 
-class DemoController extends GetxController {
-  //TODO: Implement DemoController
+class GenerateSeedController extends GetxController {
+  //TODO: Implement GenerateSeedController
 
   final count = 0.obs;
   @override

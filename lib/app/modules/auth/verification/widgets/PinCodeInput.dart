@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../../utils.dart';
+import '../../../../../utils.dart';
 
 class PinCodeInput extends StatelessWidget {
   final int passwordLen = 6;

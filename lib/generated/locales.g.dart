@@ -15,6 +15,12 @@ class LocaleKeys {
       'verification_labels_chose_your_pin_code';
   static const verification_labels_remember_these_words =
       'verification_labels_remember_these_words';
+  static const recovery_select_labels_middle_help =
+      'recovery_select_labels_middle_help';
+  static const recovery_select_buttons_generate_new_seed =
+      'recovery_select_buttons_generate_new_seed';
+  static const recovery_select_buttons_recovery_phrase =
+      'recovery_select_buttons_recovery_phrase';
 }
 
 class Locales {
@@ -23,5 +29,9 @@ class Locales {
     'verification_labels_chose_your_pin_code': 'Please chose your PIN-code',
     'verification_labels_remember_these_words':
         'Remember these words. They will stay the same on this device unless it has been tampered.',
+    'recovery_select_labels_middle_help':
+        'Generating a new random seed allows creating an infinite number of wallets. All these wallets will be entirely determined by the seed phrase that must be kept highly secret. Please backup the seed phrase in a safe place to regain control over your assets if this device is damaged or lost.',
+    'recovery_select_buttons_generate_new_seed': 'YES, GENERATE NEW SEED',
+    'recovery_select_buttons_recovery_phrase': 'USE RECOVERY PHRASE',
   };
 }

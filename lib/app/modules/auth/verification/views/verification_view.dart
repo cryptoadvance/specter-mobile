@@ -2,11 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
-import 'package:specter_mobile/app/modules/verification/widgets/PinCodeKeyboard.dart';
-import 'package:specter_mobile/app/modules/verification/widgets/PinCodeInput.dart';
+import 'package:specter_mobile/app/modules/auth/recovery_select/views/recovery_select_view.dart';
+import 'package:specter_mobile/app/modules/auth/verification/widgets/PinCodeInput.dart';
+import 'package:specter_mobile/app/modules/auth/verification/widgets/PinCodeKeyboard.dart';
 import 'package:specter_mobile/app/widgets/LightButton.dart';
 
-import '../../../../utils.dart';
+import '../../../../../utils.dart';
 import '../controllers/verification_controller.dart';
 
 class VerificationView extends GetView<VerificationController> {
@@ -91,7 +92,11 @@ class VerificationView extends GetView<VerificationController> {
           child: Icon(CupertinoIcons.chevron_forward, size: 20, color: Utils.hexToColor('#1264D1'))
         )
       ],
-    ));
+    ),
+    onTap: () {
+      Get.to(RecoverySelectView(), arguments: {
+      });
+    });
   }
 
   Widget getBottomPanel() {

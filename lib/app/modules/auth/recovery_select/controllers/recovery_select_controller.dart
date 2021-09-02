@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 
-class HomeController extends GetxController {
-  //TODO: Implement HomeController
+class RecoverySelectController extends GetxController {
+  //TODO: Implement RecoverySelectController
 
   final count = 0.obs;
   @override

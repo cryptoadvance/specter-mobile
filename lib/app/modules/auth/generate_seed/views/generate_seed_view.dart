@@ -2,19 +2,15 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 
-import '../controllers/demo_controller.dart';
+import '../controllers/generate_seed_controller.dart';
 
-class DemoView extends GetView<DemoController> {
+class GenerateSeedView extends GetView<GenerateSeedController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('DemoView'),
-        centerTitle: true,
-      ),
       body: Center(
         child: Text(
-          'DemoView is working',
+          'GenerateSeedView is working',
           style: TextStyle(fontSize: 20),
         ),
       ),
