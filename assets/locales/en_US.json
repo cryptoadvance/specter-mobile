@@ -1,7 +1,7 @@
 {
   "verification": {
   	"labels": {
-  		"welcome": "Welcome",
+  		"top_title": "Welcome",
   		"chose_your_pin_code": "Please chose your PIN-code",
   		"remember_these_words": "Remember these words. They will stay the same on this device unless it has been tampered."
   	}
@@ -15,5 +15,17 @@
   		"generate_new_seed": "YES, GENERATE NEW SEED",
   		"recovery_phrase": "USE RECOVERY PHRASE"
   	}
+  },
+  "generate_seed": {
+    "labels": {
+      "top_title": "Your recovery phrase",
+      "recovery_warning": "Write it down and never show to anybody!",
+      "complexity_suggest": "Use 24 words",
+      "complexity_description": "Generates a 24-word seed phrase containing 256 bits of entropy instead of 128 in a 12-word variant."
+    },
+    "buttons": {
+      "prev_page": "BACK",
+      "next_page": "DONE"
+    }
   }
 }

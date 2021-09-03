@@ -1,9 +1,13 @@
 import 'package:get/get.dart';
 
-class GenerateSeedController extends GetxController {
-  //TODO: Implement GenerateSeedController
+enum SEED_COMPLEXITY {
+  SIMPLE,
+  WORDS_24
+}
 
-  final count = 0.obs;
+class GenerateSeedController extends GetxController {
+  Rx<SEED_COMPLEXITY> seed_complexity = SEED_COMPLEXITY.SIMPLE.obs;
+
   @override
   void onInit() {
     super.onInit();
@@ -16,5 +20,9 @@ class GenerateSeedController extends GetxController {
 
   @override
   void onClose() {}
-  void increment() => count.value++;
+
+  void setComplexityState(SEED_COMPLEXITY seed_complexity_) {
+    seed_complexity.value = seed_complexity_;
+    update();
+  }
 }

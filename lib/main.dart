@@ -38,6 +38,6 @@ void main() {
       translationsKeys: AppTranslation.translations,
       initialRoute: AppPages.INITIAL,
       getPages: AppPages.routes,
-    ),
+    )
   );
 }
