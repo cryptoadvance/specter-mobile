@@ -6,6 +6,8 @@ import 'package:specter_mobile/app/modules/auth/recovery_select/bindings/recover
 import 'package:specter_mobile/app/modules/auth/recovery_select/views/recovery_select_view.dart';
 import 'package:specter_mobile/app/modules/auth/verification/bindings/verification_binding.dart';
 import 'package:specter_mobile/app/modules/auth/verification/views/verification_view.dart';
+import 'package:specter_mobile/app/modules/wallets/keys/bindings/keys_binding.dart';
+import 'package:specter_mobile/app/modules/wallets/keys/views/keys_view.dart';
 
 part 'app_routes.dart';
 
@@ -29,6 +31,11 @@ class AppPages {
       name: _Paths.GENERATE_SEED,
       page: () => GenerateSeedView(),
       binding: GenerateSeedBinding(),
+    ),
+    GetPage(
+      name: _Paths.KEYS,
+      page: () => KeysView(),
+      binding: KeysBinding(),
     ),
   ];
 }

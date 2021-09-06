@@ -27,6 +27,10 @@ flutter:
     - assets/icons/fingerprint.svg
     - assets/icons/delete.svg
     - assets/icons/vpn_key.svg
+    - assets/icons/account_balance_wallet.svg
+    - assets/icons/qr_code_scanner.svg
+    - assets/icons/coolicon.svg
+    - assets/icons/bitcoin.svg
 
   fonts:
     - family: Mulish

@@ -8,6 +8,7 @@ abstract class Routes {
   static const VERIFICATION = _Paths.VERIFICATION;
   static const RECOVERY_SELECT = _Paths.RECOVERY_SELECT;
   static const GENERATE_SEED = _Paths.GENERATE_SEED;
+  static const KEYS = _Paths.KEYS;
 }
 
 abstract class _Paths {
@@ -15,4 +16,5 @@ abstract class _Paths {
   static const VERIFICATION = '/verification';
   static const RECOVERY_SELECT = '/recovery-select';
   static const GENERATE_SEED = '/generate-seed';
+  static const KEYS = '/keys';
 }

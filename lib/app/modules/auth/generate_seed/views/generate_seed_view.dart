@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:specter_mobile/app/modules/auth/generate_seed/widgets/GeneratedSeed24WordList.dart';
 import 'package:specter_mobile/app/modules/auth/generate_seed/widgets/GeneratedSeedSimpleList.dart';
+import 'package:specter_mobile/app/modules/wallets/keys/views/keys_view.dart';
 import 'package:specter_mobile/app/widgets/LightButton.dart';
 
 import '../controllers/generate_seed_controller.dart';
@@ -136,7 +137,8 @@ class GenerateSeedView extends GetView<GenerateSeedController> {
                 ),
                 style: LightButtonStyle.PRIMARY,
                 onTap: () {
-
+                  Get.to(KeysView(), arguments: {
+                  });
                 }
             ),
           )
