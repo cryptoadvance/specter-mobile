@@ -1,23 +1,44 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
+import 'package:specter_mobile/app/modules/wallets/walletInfo/views/wallet_info_view.dart';
 
 import '../../../../../utils.dart';
 
 class AccountWalletItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Container(
-          child: getTopPanel(),
+    return InkWell(
+      onTap: tapItem,
+      child: Container(
+        padding: EdgeInsets.only(top: 15, bottom: 5),
+        child: Stack(
+          children: [
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 15),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    child: getTopPanel(),
+                  ),
+                  Container(
+                    width: double.infinity,
+                    child: getOperationsList(),
+                  )
+                ]
+              ),
+            ),
+            Positioned(
+              top: 3,
+              right: 10,
+              child: Icon(CupertinoIcons.right_chevron, color: Colors.grey[700], size: 20)
+            )
+          ]
         ),
-        Container(
-          width: double.infinity,
-          child: getOperationsList(),
-        )
-      ]
+      )
     );
   }
 
@@ -41,6 +62,7 @@ class AccountWalletItem extends StatelessWidget {
                 Text('My wallet 1', style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Colors.grey[700])),
                 Container(
                   width: double.infinity,
+                  padding: EdgeInsets.only(right: 20),
                   child: Row(
                     mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -79,5 +101,10 @@ class AccountWalletItem extends StatelessWidget {
     return Column(
       children: rows
     );
+  }
+
+  void tapItem() {
+    Get.to(WalletInfoView(), arguments: {
+    });
   }
 }

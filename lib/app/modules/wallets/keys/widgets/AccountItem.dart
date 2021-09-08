@@ -54,7 +54,6 @@ class AccountItem extends StatelessWidget {
               )
           ),
           margin: EdgeInsets.only(top: 15),
-          padding: EdgeInsets.only(top: 15, left: 15, right: 15, bottom: 5),
           child: AccountWalletItem()
       ));
     }

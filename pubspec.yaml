@@ -31,6 +31,7 @@ flutter:
     - assets/icons/qr_code_scanner.svg
     - assets/icons/coolicon.svg
     - assets/icons/bitcoin.svg
+    - assets/icons/top_right_icon.svg
 
   fonts:
     - family: Mulish

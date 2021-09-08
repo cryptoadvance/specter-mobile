@@ -9,6 +9,7 @@ abstract class Routes {
   static const RECOVERY_SELECT = _Paths.RECOVERY_SELECT;
   static const GENERATE_SEED = _Paths.GENERATE_SEED;
   static const KEYS = _Paths.KEYS;
+  static const WALLET_INFO = _Paths.WALLET_INFO;
 }
 
 abstract class _Paths {
@@ -17,4 +18,5 @@ abstract class _Paths {
   static const RECOVERY_SELECT = '/recovery-select';
   static const GENERATE_SEED = '/generate-seed';
   static const KEYS = '/keys';
+  static const WALLET_INFO = '/wallet-info';
 }
