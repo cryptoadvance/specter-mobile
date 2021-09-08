@@ -24,11 +24,11 @@ class RecoverySelectView extends GetView<RecoverySelectController> {
                   shape: BoxShape.circle
                 ),
                 padding: EdgeInsets.all(20),
-                child: SvgPicture.asset('assets/icons/vpn_key.svg', color: Colors.grey[600]),
+                child: SvgPicture.asset('assets/icons/vpn_key.svg', color: Colors.grey[600])
               ),
               Container(
                 margin: EdgeInsets.only(top: 20),
-                child: Text('recovery_select_labels_top_title'.tr, style: TextStyle(fontSize: 20)),
+                child: Text('recovery_select_labels_top_title'.tr, style: TextStyle(fontSize: 20))
               ),
               Container(
                 margin: EdgeInsets.only(top: 30),

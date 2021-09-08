@@ -1,9 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
+import 'package:specter_mobile/app/modules/auth/verification/controllers/pincode_input_controller.dart';
 
 class PinCodeKeyboard extends StatelessWidget {
-  final codes = [3, 5, 9, 0, 4, 7, 6, 1, 8, 2];
+  final PinCodeInputController controller = Get.find<PinCodeInputController>();
 
   @override
   Widget build(BuildContext context) {
@@ -52,6 +54,7 @@ class PinCodeKeyboard extends StatelessWidget {
   Widget getBottomButtons(double width) {
     double buttonWidth = width / 3;
     return Row(
+      mainAxisSize: MainAxisSize.max,
       children: [
         Container(
           width: buttonWidth,
@@ -65,20 +68,20 @@ class PinCodeKeyboard extends StatelessWidget {
         Container(
           width: buttonWidth,
           child: getCleanButton()
-        ),
-      ],
+        )
+      ]
     );
   }
 
   Widget getButton(int idx) {
-    var code = codes[idx];
+    var code = controller.codes[idx];
     return ClipRRect(
       borderRadius: BorderRadius.all(Radius.circular(5)),
       child: Container(
         color: Colors.white,
         child: TextButton(
           onPressed: () {
-            // Respond to button press
+            controller.addCode(code);
           },
           style: TextButton.styleFrom(
             padding: EdgeInsets.zero,
@@ -101,18 +104,23 @@ class PinCodeKeyboard extends StatelessWidget {
       onTap: () {
         print('auth');
       },
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            child: SvgPicture.asset('assets/icons/face_id.svg', color: Colors.grey[900]),
+      child: Container(
+        height: 60,
+        child: Center(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                child: SvgPicture.asset('assets/icons/face_id.svg', color: Colors.grey[900]),
+              ),
+              Container(
+                margin: EdgeInsets.only(left: 10),
+                child: SvgPicture.asset('assets/icons/fingerprint.svg', color: Colors.grey[900]),
+              )
+            ],
           ),
-          Container(
-            margin: EdgeInsets.only(left: 10),
-            child: SvgPicture.asset('assets/icons/fingerprint.svg', color: Colors.grey[900]),
-          )
-        ],
+        ),
       )
     );
   }
@@ -120,9 +128,14 @@ class PinCodeKeyboard extends StatelessWidget {
   Widget getCleanButton() {
     return InkWell(
       onTap: () {
-        print('clean');
+        controller.clean();
       },
-      child: SvgPicture.asset('assets/icons/delete.svg', color: Colors.grey[900], width: 30),
+      child: Container(
+        height: 60,
+        child: Center(
+          child: SvgPicture.asset('assets/icons/delete.svg', color: Colors.grey[900], width: 30)
+        )
+      )
     );
   }
 }

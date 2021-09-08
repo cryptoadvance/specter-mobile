@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:specter_mobile/app/modules/auth/recovery_select/views/recovery_select_view.dart';
-import 'package:specter_mobile/app/modules/auth/verification/widgets/PinCodeInput.dart';
+import 'package:specter_mobile/app/modules/auth/verification/controllers/pincode_input_controller.dart';
+import 'package:specter_mobile/app/modules/auth/verification/views/pincode_input_view.dart';
 import 'package:specter_mobile/app/modules/auth/verification/widgets/PinCodeKeyboard.dart';
 import 'package:specter_mobile/app/widgets/LightButton.dart';
 
@@ -11,6 +12,8 @@ import '../../../../../utils.dart';
 import '../controllers/verification_controller.dart';
 
 class VerificationView extends GetView<VerificationController> {
+  final PinCodeInputController pinCodeInputController = Get.put(PinCodeInputController());
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,7 +53,7 @@ class VerificationView extends GetView<VerificationController> {
             ),
             Container(
               margin: EdgeInsets.only(top: 24),
-              child: PinCodeInput(),
+              child: PinCodeInputView(),
             ),
             Container(
               margin: EdgeInsets.only(top: 50),
