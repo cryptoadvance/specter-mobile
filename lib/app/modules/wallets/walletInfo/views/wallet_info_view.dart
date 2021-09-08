@@ -3,18 +3,29 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 import 'package:get/get.dart';
+import 'package:specter_mobile/app/modules/wallets/walletInfo/widgets/WalletInfoAddresses.dart';
+import 'package:specter_mobile/app/modules/wallets/walletInfo/widgets/WalletInfoDetails.dart';
+import 'package:specter_mobile/app/modules/wallets/walletInfo/widgets/WalletInfoTransactions.dart';
+import 'package:specter_mobile/app/widgets/LightTab.dart';
 
 import '../../../../../utils.dart';
 import '../controllers/wallet_info_controller.dart';
 
 class WalletInfoView extends GetView<WalletInfoController> {
+  final WalletInfoController controller = Get.put(WalletInfoController());
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            getTopTitle()
+            getTopTitle(),
+            Expanded(
+              child: getContent()
+            )
           ]
         )
       )
@@ -93,5 +104,46 @@ class WalletInfoView extends GetView<WalletInfoController> {
         child: SvgPicture.asset('assets/icons/top_right_icon.svg', color: Colors.white, height: 35)
       )
     );
+  }
+
+  Widget getContent() {
+    return Obx(() => Container(
+      padding: EdgeInsets.only(top: 10),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          LightTab(
+            tabs: [
+              LightTabNode('Info', key: WALLET_INFO_TAB.INFO.toString()),
+              LightTabNode('Addresses', key: WALLET_INFO_TAB.ADDRESSES.toString()),
+              LightTabNode('Transactions', key: WALLET_INFO_TAB.TRANSACTIONS.toString())
+            ],
+            tabKey: controller.currentTab.toString(),
+            onSelect: (String key) {
+              controller.setCurrentTab(key);
+            }
+          ),
+          Expanded(
+            child: Container(
+              padding: EdgeInsets.all(15),
+              child: getTabContent()
+            )
+          )
+        ]
+      )
+    ));
+  }
+
+  Widget getTabContent() {
+    switch(controller.currentTab.value) {
+      case WALLET_INFO_TAB.INFO: {
+        return WalletInfoDetails();
+      }
+      case WALLET_INFO_TAB.ADDRESSES:
+        return WalletInfoAddresses();
+      case WALLET_INFO_TAB.TRANSACTIONS:
+        return WalletInfoTransactions();
+    }
   }
 }
