@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 import 'package:get/get.dart';
-import 'package:specter_mobile/app/modules/wallets/walletInfo/widgets/WalletInfoAddresses.dart';
-import 'package:specter_mobile/app/modules/wallets/walletInfo/widgets/WalletInfoDetails.dart';
+import 'package:specter_mobile/app/modules/wallets/walletInfo/views/wallet_info_addresses_view.dart';
+import 'package:specter_mobile/app/modules/wallets/walletInfo/views/wallet_info_details_view.dart';
 import 'package:specter_mobile/app/modules/wallets/walletInfo/widgets/WalletInfoTransactions.dart';
 import 'package:specter_mobile/app/widgets/LightTab.dart';
 
@@ -36,7 +36,7 @@ class WalletInfoView extends GetView<WalletInfoController> {
     return Container(
       decoration: BoxDecoration(
         border: Border(
-          bottom: BorderSide(width: 1.0, color: Colors.white)
+          bottom: BorderSide(width: 1.0, color: Colors.white.withOpacity(0.5))
         )
       ),
       child: Row(
@@ -113,16 +113,19 @@ class WalletInfoView extends GetView<WalletInfoController> {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          LightTab(
-            tabs: [
-              LightTabNode('Info', key: WALLET_INFO_TAB.INFO.toString()),
-              LightTabNode('Addresses', key: WALLET_INFO_TAB.ADDRESSES.toString()),
-              LightTabNode('Transactions', key: WALLET_INFO_TAB.TRANSACTIONS.toString())
-            ],
-            tabKey: controller.currentTab.toString(),
-            onSelect: (String key) {
-              controller.setCurrentTab(key);
-            }
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+            child: LightTab(
+              tabs: [
+                LightTabNode('Info', key: WALLET_INFO_TAB.INFO.toString()),
+                LightTabNode('Addresses', key: WALLET_INFO_TAB.ADDRESSES.toString()),
+                LightTabNode('Transactions', key: WALLET_INFO_TAB.TRANSACTIONS.toString())
+              ],
+              tabKey: controller.currentTab.toString(),
+              onSelect: (String key) {
+                controller.setCurrentTab(key);
+              }
+            ),
           ),
           Expanded(
             child: Container(
@@ -138,10 +141,10 @@ class WalletInfoView extends GetView<WalletInfoController> {
   Widget getTabContent() {
     switch(controller.currentTab.value) {
       case WALLET_INFO_TAB.INFO: {
-        return WalletInfoDetails();
+        return WalletInfoDetailsView();
       }
       case WALLET_INFO_TAB.ADDRESSES:
-        return WalletInfoAddresses();
+        return WalletInfoAddressesView();
       case WALLET_INFO_TAB.TRANSACTIONS:
         return WalletInfoTransactions();
     }
