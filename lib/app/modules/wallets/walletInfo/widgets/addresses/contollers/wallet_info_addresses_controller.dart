@@ -8,6 +8,8 @@ enum WALLET_INFO_ADDRESSES_TAB {
 class WalletInfoAddressesController extends GetxController {
   var currentTab = WALLET_INFO_ADDRESSES_TAB.RECEIVE.obs;
 
+  var items = [1, 2, 3, 4];
+
   @override
   void onInit() {
     super.onInit();

@@ -51,7 +51,7 @@ class LightTab extends StatelessWidget {
     return Container(
       width: double.infinity,
       padding: EdgeInsets.only(
-        bottom: (view == LightTabView.TABS)?15:0
+        bottom: (view == LightTabView.TABS)?0:0
       ),
       decoration: BoxDecoration(
         border: Border(
@@ -85,20 +85,29 @@ class LightTabItemTabView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        onSelect(item.key);
-      },
-      child: ClipRRect(
-        borderRadius: BorderRadius.all(Radius.circular(5)),
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: () {
+          onSelect(item.key);
+        },
+        highlightColor: Colors.transparent,
+        hoverColor: Colors.transparent,
+        splashColor: Colors.transparent,
         child: Container(
-          decoration: BoxDecoration(
-            color: isActive?Colors.white.withOpacity(0.95):Colors.transparent
+          padding: EdgeInsets.symmetric(vertical: 15),
+          child: ClipRRect(
+            borderRadius: BorderRadius.all(Radius.circular(5)),
+            child: Container(
+              decoration: BoxDecoration(
+                color: isActive?Colors.white.withOpacity(0.95):Colors.transparent
+              ),
+              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+              child: Text(item.title, style: TextStyle(color: isActive?Colors.grey[700]:Colors.white))
+            )
           ),
-          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-          child: Text(item.title, style: TextStyle(color: isActive?Colors.grey[700]:Colors.white))
         )
-      )
+      ),
     );
   }
 }
@@ -120,25 +129,34 @@ class LightTabItemToggleView extends StatelessWidget {
   Widget build(BuildContext context) {
     Radius radius = Radius.circular(5);
 
-    return InkWell(
-      onTap: () {
-        onSelect(item.key);
-      },
-      child: ClipRRect(
-        borderRadius: BorderRadius.only(
-          topLeft: isFirst?radius:Radius.zero,
-          bottomLeft: isFirst?radius:Radius.zero,
-          topRight: isLast?radius:Radius.zero,
-          bottomRight: isLast?radius:Radius.zero
-        ),
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: () {
+          onSelect(item.key);
+        },
+        highlightColor: Colors.transparent,
+        hoverColor: Colors.transparent,
+        splashColor: Colors.transparent,
         child: Container(
-          decoration: BoxDecoration(
-            color: isActive?Colors.white.withOpacity(0.95):Colors.white.withOpacity(0.25)
+          padding: EdgeInsets.symmetric(vertical: 15),
+          child: ClipRRect(
+            borderRadius: BorderRadius.only(
+              topLeft: isFirst?radius:Radius.zero,
+              bottomLeft: isFirst?radius:Radius.zero,
+              topRight: isLast?radius:Radius.zero,
+              bottomRight: isLast?radius:Radius.zero
+            ),
+            child: Container(
+              decoration: BoxDecoration(
+                color: isActive?Colors.white.withOpacity(0.95):Colors.white.withOpacity(0.25)
+              ),
+              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+              child: Text(item.title, style: TextStyle(color: isActive?Colors.grey[700]:Colors.white))
+            )
           ),
-          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-          child: Text(item.title, style: TextStyle(color: isActive?Colors.grey[700]:Colors.white))
         )
-      )
+      ),
     );
   }
 }

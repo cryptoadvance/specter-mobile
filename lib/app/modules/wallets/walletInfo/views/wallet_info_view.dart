@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 import 'package:get/get.dart';
-import 'package:specter_mobile/app/modules/wallets/walletInfo/views/wallet_info_addresses_view.dart';
-import 'package:specter_mobile/app/modules/wallets/walletInfo/views/wallet_info_details_view.dart';
-import 'package:specter_mobile/app/modules/wallets/walletInfo/widgets/WalletInfoTransactions.dart';
+import 'package:specter_mobile/app/modules/wallets/walletInfo/widgets/addresses/views/wallet_info_addresses_view.dart';
+import 'package:specter_mobile/app/modules/wallets/walletInfo/widgets/details/wallet_info_details_view.dart';
+import 'package:specter_mobile/app/modules/wallets/walletInfo/widgets/transactions/wallet_info_transactions_view.dart';
 import 'package:specter_mobile/app/widgets/LightTab.dart';
 
 import '../../../../../utils.dart';
@@ -108,13 +108,12 @@ class WalletInfoView extends GetView<WalletInfoController> {
 
   Widget getContent() {
     return Obx(() => Container(
-      padding: EdgeInsets.only(top: 10),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+            padding: EdgeInsets.symmetric(horizontal: 15),
             child: LightTab(
               tabs: [
                 LightTabNode('Info', key: WALLET_INFO_TAB.INFO.toString()),
@@ -128,10 +127,7 @@ class WalletInfoView extends GetView<WalletInfoController> {
             ),
           ),
           Expanded(
-            child: Container(
-              padding: EdgeInsets.all(15),
-              child: getTabContent()
-            )
+            child: getTabContent()
           )
         ]
       )
@@ -146,7 +142,7 @@ class WalletInfoView extends GetView<WalletInfoController> {
       case WALLET_INFO_TAB.ADDRESSES:
         return WalletInfoAddressesView();
       case WALLET_INFO_TAB.TRANSACTIONS:
-        return WalletInfoTransactions();
+        return WalletInfoTransactionsView();
     }
   }
 }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:specter_mobile/app/modules/wallets/walletInfo/controllers/wallet_info_details_controller.dart';
+import 'package:specter_mobile/app/modules/wallets/walletInfo/widgets/details/wallet_info_details_controller.dart';
 
 class WalletInfoDetailsView extends GetView<WalletInfoDetailsController> {
   final WalletInfoDetailsController controller = Get.put(WalletInfoDetailsController());
@@ -15,8 +15,11 @@ class WalletInfoDetailsView extends GetView<WalletInfoDetailsController> {
       ));
     });
 
-    return Column(
-      children: rows
+    return Container(
+      padding: EdgeInsets.only(top: 15, left: 15, right: 15),
+      child: Column(
+        children: rows
+      ),
     );
   }
 }
