@@ -33,7 +33,7 @@ class WalletInfoAddressesItem extends StatelessWidget {
                 child: getBottomPanel()
               )
             ]
-          ),
+          )
         ),
         Container(
           child: getRightArrow()
@@ -63,7 +63,7 @@ class WalletInfoAddressesItem extends StatelessWidget {
   }
 
   Widget getBottomPanel() {
-    TextStyle style = TextStyle(color: Colors.white);
+    TextStyle style = TextStyle(color: Colors.white.withOpacity(0.5));
     return Container(
       child: Text('key...', style: style)
     );

@@ -53,7 +53,7 @@ class WalletInfoAddressesView extends GetView<WalletInfoAddressesController> {
         return Text('CHANGE');
       }
     }*/
-    return  ListView.builder(
+    return ListView.builder(
       itemCount: controller.items.length,
       itemBuilder: (context, index) {
         return Container(

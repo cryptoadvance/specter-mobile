@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:specter_mobile/app/modules/wallets/walletInfo/widgets/details/wallet_info_details_controller.dart';
+import 'package:specter_mobile/app/modules/wallets/walletInfo/widgets/details/controllers/wallet_info_details_controller.dart';
 
 class WalletInfoDetailsView extends GetView<WalletInfoDetailsController> {
   final WalletInfoDetailsController controller = Get.put(WalletInfoDetailsController());

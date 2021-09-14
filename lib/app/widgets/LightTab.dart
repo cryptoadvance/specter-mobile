@@ -102,7 +102,7 @@ class LightTabItemTabView extends StatelessWidget {
               decoration: BoxDecoration(
                 color: isActive?Colors.white.withOpacity(0.95):Colors.transparent
               ),
-              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+              padding: EdgeInsets.symmetric(horizontal: 15, vertical: 7),
               child: Text(item.title, style: TextStyle(color: isActive?Colors.grey[700]:Colors.white))
             )
           ),
@@ -151,8 +151,8 @@ class LightTabItemToggleView extends StatelessWidget {
               decoration: BoxDecoration(
                 color: isActive?Colors.white.withOpacity(0.95):Colors.white.withOpacity(0.25)
               ),
-              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-              child: Text(item.title, style: TextStyle(color: isActive?Colors.grey[700]:Colors.white))
+              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 7),
+              child: Text(item.title, textAlign: TextAlign.center, style: TextStyle(color: isActive?Colors.grey[700]:Colors.white))
             )
           ),
         )

@@ -8,6 +8,8 @@ enum WALLET_INFO_TRANSACTIONS_TAB {
 class WalletInfoTransactionsController extends GetxController {
   var currentTab = WALLET_INFO_TRANSACTIONS_TAB.HISTORY.obs;
 
+  var items = [1, 2, 3, 4];
+
   @override
   void onInit() {
     super.onInit();

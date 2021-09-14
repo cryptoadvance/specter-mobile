@@ -4,8 +4,8 @@ import 'package:flutter_svg/svg.dart';
 
 import 'package:get/get.dart';
 import 'package:specter_mobile/app/modules/wallets/walletInfo/widgets/addresses/views/wallet_info_addresses_view.dart';
-import 'package:specter_mobile/app/modules/wallets/walletInfo/widgets/details/wallet_info_details_view.dart';
-import 'package:specter_mobile/app/modules/wallets/walletInfo/widgets/transactions/wallet_info_transactions_view.dart';
+import 'package:specter_mobile/app/modules/wallets/walletInfo/widgets/details/views/wallet_info_details_view.dart';
+import 'package:specter_mobile/app/modules/wallets/walletInfo/widgets/transactions/views/wallet_info_transactions_view.dart';
 import 'package:specter_mobile/app/widgets/LightTab.dart';
 
 import '../../../../../utils.dart';
