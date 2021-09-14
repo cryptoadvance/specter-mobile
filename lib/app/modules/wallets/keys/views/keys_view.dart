@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:specter_mobile/app/modules/wallets/keys/widgets/AccountItem.dart';
 import 'package:specter_mobile/app/modules/wallets/keys/widgets/WalletsList.dart';
 import 'package:specter_mobile/app/widgets/BottomMenu.dart';
 import 'package:specter_mobile/app/widgets/LightButton.dart';
@@ -33,7 +34,22 @@ class KeysView extends GetView<KeysController> {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        Expanded(child: getScrollArea()),
         SafeArea(
+          top: false,
+          bottom: false,
+          child: Container(
+            padding: EdgeInsets.all(20),
+            child: getActionsPanel()
+          ),
+        )
+      ]
+    );
+  }
+
+  Widget getScrollArea() {
+    /*
+    SafeArea(
           bottom: false,
           child: Container(
             padding: EdgeInsets.all(20),
@@ -44,16 +60,35 @@ class KeysView extends GetView<KeysController> {
           child: Container(
             child: WalletsList(),
           ),
-        ),
-        SafeArea(
-          top: false,
-          bottom: false,
-          child: Container(
-            padding: EdgeInsets.all(20),
-            child: getActionsPanel()
-          ),
         )
+     */
+    return CustomScrollView(
+      slivers: <Widget>[
+        SliverAppBar(
+          pinned: true,
+          expandedHeight: 150.0,
+          backgroundColor: Colors.grey[900]!.withOpacity(0.85),
+          automaticallyImplyLeading: false,
+          flexibleSpace: FlexibleSpaceBar(
+            titlePadding: EdgeInsetsDirectional.only(start: 20, bottom: 20),
+            title: getTopStatePanel()
+          )
+        ),
+        SliverList(
+          delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
+            return Container(
+              margin: EdgeInsets.only(top: (index == 0)?15:0, left: 15, right: 15, bottom: 15),
+              child: AccountItem()
+            );
+          }, childCount: 2
+        ))
       ]
+    );
+  }
+
+  Widget getTopStatePanel() {
+    return Container(
+      child: Text('Offline', style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold))
     );
   }
 
