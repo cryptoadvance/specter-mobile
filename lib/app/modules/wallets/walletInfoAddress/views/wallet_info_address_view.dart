@@ -1,18 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-
 import 'package:get/get.dart';
-import 'package:specter_mobile/app/modules/wallets/walletInfo/widgets/addresses/views/wallet_info_addresses_view.dart';
-import 'package:specter_mobile/app/modules/wallets/walletInfo/widgets/details/views/wallet_info_details_view.dart';
-import 'package:specter_mobile/app/modules/wallets/walletInfo/widgets/transactions/views/wallet_info_transactions_view.dart';
+
 import 'package:specter_mobile/app/widgets/LightTab.dart';
 
-import '../../../../../utils.dart';
-import '../controllers/wallet_info_controller.dart';
+import '../widgets/descriptor/views/wallet_info_address_descriptor_view.dart';
+import '../widgets/details/views/wallet_info_address_details_view.dart';
+import '../widgets/qrcode/views/wallet_info_address_qrcode_view.dart';
 
-class WalletInfoView extends GetView<WalletInfoController> {
-  final WalletInfoController controller = Get.put(WalletInfoController());
+import '../controllers/wallet_info_address_controller.dart';
+
+class WalletInfoAddressView extends GetView<WalletInfoAddressController> {
+  final WalletInfoAddressController controller = Get.put(WalletInfoAddressController());
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +59,7 @@ class WalletInfoView extends GetView<WalletInfoController> {
                     child: SvgPicture.asset('assets/icons/bitcoin.svg', color: Colors.white),
                   ),
                   Container(
-                    child: Text('My wallet', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold))
+                    child: Text('My address #1', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold))
                   )
                 ]
               ),
@@ -101,7 +101,7 @@ class WalletInfoView extends GetView<WalletInfoController> {
         height: 45,
         alignment: Alignment.centerRight,
         padding: EdgeInsets.only(right: 5),
-        child: SvgPicture.asset('assets/icons/top_right_icon.svg', color: Colors.white, height: 35)
+        child: SvgPicture.asset('assets/icons/edit.svg', color: Colors.white, height: 30)
       )
     );
   }
@@ -116,9 +116,9 @@ class WalletInfoView extends GetView<WalletInfoController> {
             padding: EdgeInsets.symmetric(horizontal: 15),
             child: LightTab(
               tabs: [
-                LightTabNode('Info', key: WALLET_INFO_TAB.DETAILS.toString()),
-                LightTabNode('Addresses', key: WALLET_INFO_TAB.ADDRESSES.toString()),
-                LightTabNode('Transactions', key: WALLET_INFO_TAB.TRANSACTIONS.toString())
+                LightTabNode('Info', key: WALLET_INFO_ADDRESS_TAB.DETAILS.toString()),
+                LightTabNode('QR Code', key: WALLET_INFO_ADDRESS_TAB.QR_CODE.toString()),
+                LightTabNode('Descriptor', key: WALLET_INFO_ADDRESS_TAB.DESCRIPTOR.toString())
               ],
               tabKey: controller.currentTab.toString(),
               onSelect: (String key) {
@@ -136,13 +136,12 @@ class WalletInfoView extends GetView<WalletInfoController> {
 
   Widget getTabContent() {
     switch(controller.currentTab.value) {
-      case WALLET_INFO_TAB.DETAILS: {
-        return WalletInfoDetailsView();
-      }
-      case WALLET_INFO_TAB.ADDRESSES:
-        return WalletInfoAddressesView();
-      case WALLET_INFO_TAB.TRANSACTIONS:
-        return WalletInfoTransactionsView();
+      case WALLET_INFO_ADDRESS_TAB.DETAILS:
+        return WalletInfoAddressDetailsView();
+      case WALLET_INFO_ADDRESS_TAB.QR_CODE:
+        return WalletInfoAddressQRCodeView();
+      case WALLET_INFO_ADDRESS_TAB.DESCRIPTOR:
+        return WalletInfoAddressDescriptorView();
     }
   }
 }

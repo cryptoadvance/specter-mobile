@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:specter_mobile/app/modules/wallets/walletInfoAddress/views/wallet_info_address_view.dart';
 
 class WalletInfoAddressesItem extends StatelessWidget {
   @override
@@ -77,5 +79,7 @@ class WalletInfoAddressesItem extends StatelessWidget {
   }
 
   void openItem() {
+    Get.to(WalletInfoAddressView(), arguments: {
+    });
   }
 }

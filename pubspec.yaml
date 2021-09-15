@@ -32,6 +32,7 @@ flutter:
     - assets/icons/coolicon.svg
     - assets/icons/bitcoin.svg
     - assets/icons/top_right_icon.svg
+    - assets/icons/edit.svg
 
   fonts:
     - family: Mulish

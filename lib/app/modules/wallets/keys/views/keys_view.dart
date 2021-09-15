@@ -66,7 +66,7 @@ class KeysView extends GetView<KeysController> {
       slivers: <Widget>[
         SliverAppBar(
           pinned: true,
-          expandedHeight: 150.0,
+          expandedHeight: 100.0,
           backgroundColor: Colors.grey[900]!.withOpacity(0.85),
           automaticallyImplyLeading: false,
           flexibleSpace: FlexibleSpaceBar(

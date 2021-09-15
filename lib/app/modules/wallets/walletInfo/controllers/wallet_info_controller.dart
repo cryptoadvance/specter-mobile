@@ -1,13 +1,13 @@
 import 'package:get/get.dart';
 
 enum WALLET_INFO_TAB {
-  INFO,
+  DETAILS,
   ADDRESSES,
   TRANSACTIONS
 }
 
 class WalletInfoController extends GetxController {
-  var currentTab = WALLET_INFO_TAB.INFO.obs;
+  var currentTab = WALLET_INFO_TAB.DETAILS.obs;
 
   @override
   void onInit() {
@@ -29,7 +29,7 @@ class WalletInfoController extends GetxController {
 
   WALLET_INFO_TAB? getTabKey(String key) {
     switch(key) {
-      case 'WALLET_INFO_TAB.INFO': return WALLET_INFO_TAB.INFO;
+      case 'WALLET_INFO_TAB.DETAILS': return WALLET_INFO_TAB.DETAILS;
       case 'WALLET_INFO_TAB.ADDRESSES': return WALLET_INFO_TAB.ADDRESSES;
       case 'WALLET_INFO_TAB.TRANSACTIONS': return WALLET_INFO_TAB.TRANSACTIONS;
     }

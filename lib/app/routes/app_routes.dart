@@ -10,6 +10,7 @@ abstract class Routes {
   static const GENERATE_SEED = _Paths.GENERATE_SEED;
   static const KEYS = _Paths.KEYS;
   static const WALLET_INFO = _Paths.WALLET_INFO;
+  static const WALLET_INFO_ADDRESS = _Paths.WALLET_INFO_ADDRESS;
 }
 
 abstract class _Paths {
@@ -19,4 +20,5 @@ abstract class _Paths {
   static const GENERATE_SEED = '/generate-seed';
   static const KEYS = '/keys';
   static const WALLET_INFO = '/wallet-info';
+  static const WALLET_INFO_ADDRESS = '/wallet-info-address';
 }
