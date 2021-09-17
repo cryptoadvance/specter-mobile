@@ -10,10 +10,10 @@ import 'package:specter_mobile/app/widgets/LightButton.dart';
 import '../controllers/generate_seed_controller.dart';
 
 class GenerateSeedView extends GetView<GenerateSeedController> {
+  final GenerateSeedController controller = Get.put(GenerateSeedController());
+
   @override
   Widget build(BuildContext context) {
-    final GenerateSeedController controller = Get.put(GenerateSeedController());
-
     return Scaffold(
         body: SafeArea(
             child: Container(
@@ -68,6 +68,8 @@ class GenerateSeedView extends GetView<GenerateSeedController> {
   Widget getControlComplexityPanel(GenerateSeedController controller) {
     return Row(
         mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Expanded(
               child: Container(
@@ -90,8 +92,8 @@ class GenerateSeedView extends GetView<GenerateSeedController> {
                     onChanged: (bool val) {
                         controller.setComplexityState(val?SEED_COMPLEXITY.WORDS_24:SEED_COMPLEXITY.SIMPLE);
                     },
-                    activeTrackColor: Colors.yellow,
-                    activeColor: Colors.orangeAccent,
+                    activeTrackColor: Colors.blueGrey,
+                    activeColor: Colors.white
                   )
                 )
               )

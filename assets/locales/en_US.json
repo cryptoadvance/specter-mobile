@@ -27,5 +27,15 @@
       "prev_page": "BACK",
       "next_page": "DONE"
     }
+  },
+  "wallet_info_address": {
+  	"labels": {
+  		"qrcode_title": "Address",
+  		"details_title": "Address",
+  		"descriptor_title": "Address descriptor"
+  	},
+  	"buttons": {
+  		"details_copy": "Copy"
+  	}
   }
 }

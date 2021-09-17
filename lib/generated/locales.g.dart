@@ -35,6 +35,14 @@ class LocaleKeys {
       'generate_seed_buttons_prev_page';
   static const generate_seed_buttons_next_page =
       'generate_seed_buttons_next_page';
+  static const wallet_info_address_labels_qrcode_title =
+      'wallet_info_address_labels_qrcode_title';
+  static const wallet_info_address_labels_details_title =
+      'wallet_info_address_labels_details_title';
+  static const wallet_info_address_labels_descriptor_title =
+      'wallet_info_address_labels_descriptor_title';
+  static const wallet_info_address_buttons_details_copy =
+      'wallet_info_address_buttons_details_copy';
 }
 
 class Locales {
@@ -57,5 +65,9 @@ class Locales {
         'Generates a 24-word seed phrase containing 256 bits of entropy instead of 128 in a 12-word variant.',
     'generate_seed_buttons_prev_page': 'BACK',
     'generate_seed_buttons_next_page': 'DONE',
+    'wallet_info_address_labels_qrcode_title': 'Address',
+    'wallet_info_address_labels_details_title': 'Address',
+    'wallet_info_address_labels_descriptor_title': 'Address descriptor',
+    'wallet_info_address_buttons_details_copy': 'Copy',
   };
 }

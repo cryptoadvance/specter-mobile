@@ -14,6 +14,7 @@ dependencies:
   get: 4.3.8
   cupertino_icons: ^1.0.3
   flutter_svg: ^0.22.0
+  qr_flutter: ^4.0.0
 
 dev_dependencies: 
   flutter_test: 
@@ -33,6 +34,7 @@ flutter:
     - assets/icons/bitcoin.svg
     - assets/icons/top_right_icon.svg
     - assets/icons/edit.svg
+    - assets/icons/content_copy.svg
 
   fonts:
     - family: Mulish

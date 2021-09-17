@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:specter_mobile/app/modules/wallets/keys/widgets/AccountItem.dart';
-import 'package:specter_mobile/app/modules/wallets/keys/widgets/WalletsList.dart';
 import 'package:specter_mobile/app/widgets/BottomMenu.dart';
 import 'package:specter_mobile/app/widgets/LightButton.dart';
 
@@ -48,20 +47,6 @@ class KeysView extends GetView<KeysController> {
   }
 
   Widget getScrollArea() {
-    /*
-    SafeArea(
-          bottom: false,
-          child: Container(
-            padding: EdgeInsets.all(20),
-            child: Text('Offline', style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold))
-          ),
-        ),
-        Expanded(
-          child: Container(
-            child: WalletsList(),
-          ),
-        )
-     */
     return CustomScrollView(
       slivers: <Widget>[
         SliverAppBar(
