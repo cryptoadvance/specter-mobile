@@ -139,10 +139,12 @@ class WalletInfoView extends GetView<WalletInfoController> {
       case WALLET_INFO_TAB.DETAILS: {
         return WalletInfoDetailsView();
       }
-      case WALLET_INFO_TAB.ADDRESSES:
+      case WALLET_INFO_TAB.ADDRESSES: {
         return WalletInfoAddressesView();
-      case WALLET_INFO_TAB.TRANSACTIONS:
+      }
+      case WALLET_INFO_TAB.TRANSACTIONS: {
         return WalletInfoTransactionsView();
+      }
     }
   }
 }

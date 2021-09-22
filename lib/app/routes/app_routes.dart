@@ -11,6 +11,7 @@ abstract class Routes {
   static const KEYS = _Paths.KEYS;
   static const WALLET_INFO = _Paths.WALLET_INFO;
   static const WALLET_INFO_ADDRESS = _Paths.WALLET_INFO_ADDRESS;
+  static const WALLET_INFO_TRANSACTIONS = _Paths.WALLET_INFO_TRANSACTIONS;
 }
 
 abstract class _Paths {
@@ -21,4 +22,5 @@ abstract class _Paths {
   static const KEYS = '/keys';
   static const WALLET_INFO = '/wallet-info';
   static const WALLET_INFO_ADDRESS = '/wallet-info-address';
+  static const WALLET_INFO_TRANSACTIONS = '/wallet-info-transactions';
 }

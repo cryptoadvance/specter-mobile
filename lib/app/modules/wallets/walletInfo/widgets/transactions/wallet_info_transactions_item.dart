@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:specter_mobile/app/modules/wallets/walletInfoTransaction/views/wallet_info_transactions_view.dart';
 
 class WalletInfoTransactionsItem extends StatelessWidget {
   @override
@@ -74,5 +76,7 @@ class WalletInfoTransactionsItem extends StatelessWidget {
   }
 
   void openItem() {
+    Get.to(WalletInfoTransactionView(), arguments: {
+    });
   }
 }
