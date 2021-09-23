@@ -4,8 +4,11 @@ import 'package:flutter_svg/svg.dart';
 
 import 'package:get/get.dart';
 import 'package:specter_mobile/app/widgets/LightTab.dart';
-
 import '../controllers/wallet_info_transactions_controller.dart';
+
+import '../widgets/info/views/wallet_info_transaction_info_view.dart';
+import '../widgets/inputs/views/wallet_info_transaction_inputs_view.dart';
+import '../widgets/outputs/views/wallet_info_transaction_outputs_view.dart';
 
 class WalletInfoTransactionView extends GetView<WalletInfoTransactionController> {
   final WalletInfoTransactionController controller = Get.put(WalletInfoTransactionController());
@@ -131,6 +134,13 @@ class WalletInfoTransactionView extends GetView<WalletInfoTransactionController>
   }
 
   Widget getTabContent() {
-    return Text('-');
+    switch(controller.currentTab.value) {
+      case WALLET_INFO_TRANSACTIONS_TAB.INFO:
+        return WalletInfoTransactionInfoView();
+      case WALLET_INFO_TRANSACTIONS_TAB.INPUTS:
+        return WalletInfoTransactionInputsView();
+      case WALLET_INFO_TRANSACTIONS_TAB.OUTPUTS:
+        return WalletInfoTransactionOutputsView();
+    }
   }
 }
