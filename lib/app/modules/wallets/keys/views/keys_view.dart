@@ -85,7 +85,7 @@ class KeysView extends GetView<KeysController> {
             Icon(CupertinoIcons.plus),
             Container(
               margin: EdgeInsets.only(left: 5),
-              child: Text('ADD WALLET')
+              child: Text('ADD WALLET', style: TextStyle(color: Colors.white))
             )
           ]
         ),

@@ -1,8 +1,7 @@
 {
   "verification": {
   	"labels": {
-  		"top_title": "Welcome",
-  		"chose_your_pin_code": "Please chose your PIN-code",
+  		"top_title": "Welcome! Please chose your PIN-code",
   		"remember_these_words": "Remember these words. They will stay the same on this device unless it has been tampered."
   	}
   },

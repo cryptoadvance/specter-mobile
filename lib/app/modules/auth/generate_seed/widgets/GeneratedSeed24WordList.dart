@@ -41,6 +41,9 @@ class GeneratedSeed24WordList extends StatelessWidget {
         ));
     }
     return Row(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: columns
     );
   }

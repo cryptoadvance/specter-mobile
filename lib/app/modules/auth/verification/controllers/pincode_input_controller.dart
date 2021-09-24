@@ -6,7 +6,7 @@ import '../../../../../utils.dart';
 
 class PinCodeInputController extends GetxController {
   final RxList<int> _pinCode = [
-    0, 0, 0, 0, 0, 0
+    0, 0, 0, 0
   ].obs;
 
   int _currentInputIdx = 0;

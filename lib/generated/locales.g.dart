@@ -11,8 +11,6 @@ class AppTranslation {
 class LocaleKeys {
   LocaleKeys._();
   static const verification_labels_top_title = 'verification_labels_top_title';
-  static const verification_labels_chose_your_pin_code =
-      'verification_labels_chose_your_pin_code';
   static const verification_labels_remember_these_words =
       'verification_labels_remember_these_words';
   static const recovery_select_labels_top_title =
@@ -47,8 +45,7 @@ class LocaleKeys {
 
 class Locales {
   static const en_US = {
-    'verification_labels_top_title': 'Welcome',
-    'verification_labels_chose_your_pin_code': 'Please chose your PIN-code',
+    'verification_labels_top_title': 'Welcome! Please chose your PIN-code',
     'verification_labels_remember_these_words':
         'Remember these words. They will stay the same on this device unless it has been tampered.',
     'recovery_select_labels_top_title':

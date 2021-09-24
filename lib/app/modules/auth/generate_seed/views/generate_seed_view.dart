@@ -7,6 +7,7 @@ import 'package:specter_mobile/app/modules/auth/generate_seed/widgets/GeneratedS
 import 'package:specter_mobile/app/modules/wallets/keys/views/keys_view.dart';
 import 'package:specter_mobile/app/widgets/LightButton.dart';
 
+import '../../../../../utils.dart';
 import '../controllers/generate_seed_controller.dart';
 
 class GenerateSeedView extends GetView<GenerateSeedController> {
@@ -23,24 +24,19 @@ class GenerateSeedView extends GetView<GenerateSeedController> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Container(
-                        child: Text('generate_seed_labels_top_title'.tr, style: TextStyle(fontSize: 20)),
+                        child: Text('generate_seed_labels_top_title'.tr, style: TextStyle(fontSize: 24)),
                       ),
                       Container(
-                        margin: EdgeInsets.only(top: 20),
-                        decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.3),
-                            borderRadius: BorderRadius.all(Radius.circular(5))
-                        ),
-                        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                        margin: EdgeInsets.only(top: 40),
                         child: Text('generate_seed_labels_recovery_warning'.tr, style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white
+                            fontSize: 16, fontWeight: FontWeight.bold, color: Utils.hexToColor('#F7BF60')
                         )),
                       ),
                       Container(
                           constraints: BoxConstraints(
                               maxHeight: 300
                           ),
-                          margin: EdgeInsets.only(top: 20),
+                          margin: EdgeInsets.only(top: 40),
                           child: SingleChildScrollView(
                               scrollDirection: Axis.vertical,
                               child: Obx(() => (controller.seed_complexity == SEED_COMPLEXITY.SIMPLE) ? (
@@ -51,12 +47,12 @@ class GenerateSeedView extends GetView<GenerateSeedController> {
                           )
                       ),
                       Container(
-                          margin: EdgeInsets.only(top: 20),
+                          margin: EdgeInsets.only(top: 30),
                           child: getControlComplexityPanel(controller)
                       ),
                       Container(
-                          margin: EdgeInsets.only(top: 20),
-                          child: getBottomButtonsPanel()
+                          margin: EdgeInsets.only(top: 40),
+                          child: getBottomButtonsPanel(context)
                       )
                     ]
                 )
@@ -102,7 +98,7 @@ class GenerateSeedView extends GetView<GenerateSeedController> {
     );
   }
 
-  Widget getBottomButtonsPanel() {
+  Widget getBottomButtonsPanel(BuildContext context) {
     return Row(
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.center,
@@ -130,11 +126,14 @@ class GenerateSeedView extends GetView<GenerateSeedController> {
             child: LightButton(
                 child: Row(
                     children: [
+                      Icon(CupertinoIcons.check_mark, color: Theme.of(context).accentColor),
                       Container(
-                          margin: EdgeInsets.only(right: 5),
-                          child: Text('generate_seed_buttons_next_page'.tr)
-                      ),
-                      Icon(CupertinoIcons.check_mark)
+                          margin: EdgeInsets.only(left: 5),
+                          child: Text(
+                            'generate_seed_buttons_next_page'.tr,
+                            style: TextStyle(color: Theme.of(context).accentColor)
+                          )
+                      )
                     ]
                 ),
                 style: LightButtonStyle.PRIMARY,

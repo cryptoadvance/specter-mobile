@@ -38,7 +38,11 @@ class RecoverySelectView extends GetView<RecoverySelectController> {
                 width: double.infinity,
                 margin: EdgeInsets.only(top: 30),
                 child: LightButton(
-                  child: Text('recovery_select_buttons_generate_new_seed'.tr, textAlign: TextAlign.center),
+                  child: Text(
+                    'recovery_select_buttons_generate_new_seed'.tr,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: Theme.of(context).accentColor)
+                  ),
                   isInline: false,
                   onTap: () {
                     Get.to(GenerateSeedView(), arguments: {

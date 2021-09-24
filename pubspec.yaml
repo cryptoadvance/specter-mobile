@@ -35,7 +35,8 @@ flutter:
     - assets/icons/top_right_icon.svg
     - assets/icons/edit.svg
     - assets/icons/content_copy.svg
-    - assets/icons/globe-1.svg
+    - assets/icons/globe_1.svg
+    - assets/icons/chevron_right.svg
 
   fonts:
     - family: Mulish

@@ -25,7 +25,7 @@ class LightButton extends StatelessWidget {
     Color bgColor;
     switch (style) {
       case LightButtonStyle.PRIMARY: {
-        bgColor = Utils.hexToColor('#D5E6FB');
+        bgColor = Utils.hexToColor('#4A90E2');
         break;
       }
       case LightButtonStyle.WHITE_OUTLINE:

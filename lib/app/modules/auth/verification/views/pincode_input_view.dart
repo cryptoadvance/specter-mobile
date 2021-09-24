@@ -25,15 +25,16 @@ class PinCodeInputView extends GetView<PinCodeInputController> {
     for (int i = 0; i < passwordLen; i++) {
       bool isActive = (currentItemIndex == i);
       rows.add(Container(
-        width: buttonWidth,
+        //width: buttonWidth,
         padding: EdgeInsets.only(left: 4, right: 4),
         child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
           decoration: BoxDecoration(
-            border: Border.all(
+            /*border: Border.all(
               color: isActive?Colors.white:Utils.hexToColor('#7B8794')
-            ),
-            borderRadius: BorderRadius.all(Radius.circular(8))
+            ),*/
+            color: isActive?Utils.hexToColor('#263044'):Utils.hexToColor('#0A121B'),
+            borderRadius: BorderRadius.all(Radius.circular(27))
           ),
           child: Text(
             pinCode[i].toString(),
@@ -44,6 +45,8 @@ class PinCodeInputView extends GetView<PinCodeInputController> {
       ));
     }
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: rows
     );
   }

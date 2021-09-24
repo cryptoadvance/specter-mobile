@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 import 'package:get/get.dart';
 import 'package:specter_mobile/app/modules/auth/recovery_select/views/recovery_select_view.dart';
@@ -42,29 +43,23 @@ class VerificationView extends GetView<VerificationController> {
             Container(
               margin: EdgeInsets.only(top: 32),
               child: Text('verification_labels_top_title'.tr, style: TextStyle(
-                fontSize: 32, fontWeight: FontWeight.bold, color: Theme.of(context).accentColor
+                fontSize: 24, fontWeight: FontWeight.bold, color: Theme.of(context).accentColor
               ))
             ),
             Container(
-              margin: EdgeInsets.only(top: 15),
-              child: Text('verification_labels_chose_your_pin_code'.tr, style: TextStyle(
-                fontSize: 16, color: Theme.of(context).accentColor
-              )),
-            ),
-            Container(
-              margin: EdgeInsets.only(top: 24),
+              margin: EdgeInsets.only(top: 40),
               child: PinCodeInputView(),
             ),
             Container(
               margin: EdgeInsets.only(top: 50),
               child: Text(
                 'verification_labels_remember_these_words'.tr,
-                style: TextStyle(fontSize: 16, color: Theme.of(context).accentColor)
+                style: TextStyle(fontSize: 16, color: Theme.of(context).hintColor)
               ),
             ),
             Container(
               width: double.infinity,
-              margin: EdgeInsets.only(top: 4),
+              margin: EdgeInsets.only(top: 16),
               child: Text(
                 'common black orchard kick raw',
                 textAlign: TextAlign.center,
@@ -89,10 +84,10 @@ class VerificationView extends GetView<VerificationController> {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Text('NEXT', style: TextStyle(fontSize: 15, color: Utils.hexToColor('#1264D1'))),
+        Text('NEXT', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: Colors.white)),
         Container(
-          margin: EdgeInsets.only(left: 10),
-          child: Icon(CupertinoIcons.chevron_forward, size: 20, color: Utils.hexToColor('#1264D1'))
+          margin: EdgeInsets.only(left: 5),
+          child: SvgPicture.asset('assets/icons/chevron_right.svg', color: Colors.white)
         )
       ],
     ),
@@ -105,7 +100,10 @@ class VerificationView extends GetView<VerificationController> {
   Widget getBottomPanel() {
     return Container(
       width: double.infinity,
-      color: Utils.hexToColor('#D1D5DB').withOpacity(0.9),
+      decoration: BoxDecoration(
+        color: Utils.hexToColor('#202B40'),
+        borderRadius: BorderRadius.all(Radius.circular(30))
+      ),
       child: SafeArea(
         top: false,
         child: PinCodeKeyboard()

@@ -12,11 +12,12 @@ class GeneratedSeedSimpleList extends StatelessWidget {
     values.forEach((el) {
       rows.add(Container(
           child: Row(
+              mainAxisSize: MainAxisSize.min,
               children: [
-                Text((idx + 1).toString(), style: TextStyle(fontSize: 18)),
+                Text((idx + 1).toString(), style: TextStyle(fontSize: 16)),
                 Container(
                     margin: EdgeInsets.only(left: 10),
-                    child: Text(el, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold))
+                    child: Text(el, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold))
                 )
               ]
           )
@@ -24,6 +25,9 @@ class GeneratedSeedSimpleList extends StatelessWidget {
       idx++;
     });
     return Column(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: rows
     );
   }
