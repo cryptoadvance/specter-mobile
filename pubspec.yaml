@@ -37,6 +37,8 @@ flutter:
     - assets/icons/content_copy.svg
     - assets/icons/globe_1.svg
     - assets/icons/chevron_right.svg
+    - assets/stickers/key-x512.png
+    - assets/stickers/pacman_long_3d-x512.png
 
   fonts:
     - family: Mulish

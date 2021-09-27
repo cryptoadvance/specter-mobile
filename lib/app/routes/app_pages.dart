@@ -1,32 +1,32 @@
 import 'package:get/get.dart';
 
-import 'package:specter_mobile/app/modules/auth/generate_seed/bindings/generate_seed_binding.dart';
-import 'package:specter_mobile/app/modules/auth/generate_seed/views/generate_seed_view.dart';
+import 'package:specter_mobile/app/modules/000_hello/bindings/hello_binding.dart';
+import 'package:specter_mobile/app/modules/000_hello/views/hello_view.dart';
 
-import 'package:specter_mobile/app/modules/auth/recovery_select/bindings/recovery_select_binding.dart';
-import 'package:specter_mobile/app/modules/auth/recovery_select/views/recovery_select_view.dart';
+import 'package:specter_mobile/app/modules/100_auth/100_verification/bindings/verification_binding.dart';
+import 'package:specter_mobile/app/modules/100_auth/100_verification/views/verification_view.dart';
 
-import 'package:specter_mobile/app/modules/auth/verification/bindings/verification_binding.dart';
-import 'package:specter_mobile/app/modules/auth/verification/views/verification_view.dart';
+import 'package:specter_mobile/app/modules/100_auth/101_recovery_select/bindings/recovery_select_binding.dart';
+import 'package:specter_mobile/app/modules/100_auth/101_recovery_select/views/recovery_select_view.dart';
 
-import 'package:specter_mobile/app/modules/wallets/keys/bindings/keys_binding.dart';
-import 'package:specter_mobile/app/modules/wallets/keys/views/keys_view.dart';
+import 'package:specter_mobile/app/modules/100_auth/102_generate_seed/bindings/generate_seed_binding.dart';
+import 'package:specter_mobile/app/modules/100_auth/102_generate_seed/views/generate_seed_view.dart';
 
-import 'package:specter_mobile/app/modules/wallets/walletInfo/bindings/wallet_info_binding.dart';
-import 'package:specter_mobile/app/modules/wallets/walletInfo/views/wallet_info_view.dart';
-
-import 'package:specter_mobile/app/modules/wallets/walletInfoAddress/bindings/wallet_info_address_binding.dart';
-import 'package:specter_mobile/app/modules/wallets/walletInfoAddress/views/wallet_info_address_view.dart';
-
-import 'package:specter_mobile/app/modules/wallets/walletInfoTransaction/bindings/wallet_info_transactions_binding.dart';
-import 'package:specter_mobile/app/modules/wallets/walletInfoTransaction/views/wallet_info_transactions_view.dart';
+import 'package:specter_mobile/app/modules/200_wallets/keys/bindings/keys_binding.dart';
+import 'package:specter_mobile/app/modules/200_wallets/keys/views/keys_view.dart';
+import 'package:specter_mobile/app/modules/200_wallets/walletInfo/bindings/wallet_info_binding.dart';
+import 'package:specter_mobile/app/modules/200_wallets/walletInfo/views/wallet_info_view.dart';
+import 'package:specter_mobile/app/modules/200_wallets/walletInfoAddress/bindings/wallet_info_address_binding.dart';
+import 'package:specter_mobile/app/modules/200_wallets/walletInfoAddress/views/wallet_info_address_view.dart';
+import 'package:specter_mobile/app/modules/200_wallets/walletInfoTransaction/bindings/wallet_info_transactions_binding.dart';
+import 'package:specter_mobile/app/modules/200_wallets/walletInfoTransaction/views/wallet_info_transactions_view.dart';
 
 part 'app_routes.dart';
 
 class AppPages {
   AppPages._();
 
-  static const INITIAL = Routes.VERIFICATION;
+  static const INITIAL = Routes.HELLO;
 
   static final routes = [
     GetPage(
@@ -63,6 +63,11 @@ class AppPages {
       name: _Paths.WALLET_INFO_TRANSACTIONS,
       page: () => WalletInfoTransactionView(),
       binding: WalletInfoTransactionBinding(),
+    ),
+    GetPage(
+      name: _Paths.HELLO,
+      page: () => HelloView(),
+      binding: HelloBinding(),
     ),
   ];
 }
