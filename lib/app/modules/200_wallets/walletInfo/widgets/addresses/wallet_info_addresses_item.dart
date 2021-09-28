@@ -1,7 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:specter_mobile/app/modules/200_wallets/walletInfoAddress/views/wallet_info_address_view.dart';
+
+import '../../../../../../utils.dart';
 
 class WalletInfoAddressesItem extends StatelessWidget {
   @override
@@ -10,7 +11,7 @@ class WalletInfoAddressesItem extends StatelessWidget {
       onTap: openItem,
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.blueGrey.withOpacity(0.85),
+          color: Utils.hexToColor('#202A40'),
           borderRadius: BorderRadius.all(Radius.circular(10))
         ),
         padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),

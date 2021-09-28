@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../../utils.dart';
 import 'AccountWalletItem.dart';
 
 class AccountItem extends StatelessWidget {
@@ -7,7 +8,7 @@ class AccountItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
         decoration: BoxDecoration(
-            color: Colors.white,
+            color: Utils.hexToColor('#202A40'),
             borderRadius: BorderRadius.all(Radius.circular(5))
         ),
         padding: EdgeInsets.symmetric(vertical: 10),
@@ -17,7 +18,7 @@ class AccountItem extends StatelessWidget {
           children: [
             Container(
               padding: EdgeInsets.only(left: 15, right: 15),
-              child: getTopPanel(),
+              child: getTopPanel(context)
             ),
             Container(
               width: double.infinity,
@@ -28,16 +29,16 @@ class AccountItem extends StatelessWidget {
     );
   }
 
-  Widget getTopPanel() {
+  Widget getTopPanel(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
-          child: Text('ACCOUNT #1', style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Colors.grey[700])),
+          child: Text('ACCOUNT #1', style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Theme.of(context).accentColor)),
         ),
         Container(
-          child: Text('Primary', style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Colors.grey[700])),
+          child: Text('Primary', style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Theme.of(context).accentColor)),
         )
       ]
     );

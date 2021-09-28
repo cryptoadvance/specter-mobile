@@ -29,18 +29,20 @@ class KeysView extends GetView<KeysController> {
   }
 
   Widget getTopPanel() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
+    return Stack(
       children: [
-        Expanded(child: getScrollArea()),
-        SafeArea(
-          top: false,
-          bottom: false,
-          child: Container(
-            padding: EdgeInsets.all(20),
-            child: getActionsPanel()
-          ),
+        getScrollArea(),
+        Positioned(
+          right: 0,
+          bottom: 0,
+          child: SafeArea(
+            top: false,
+            bottom: false,
+            child: Container(
+                padding: EdgeInsets.all(20),
+                child: getActionsPanel()
+            ),
+          )
         )
       ]
     );
@@ -50,9 +52,9 @@ class KeysView extends GetView<KeysController> {
     return CustomScrollView(
       slivers: <Widget>[
         SliverAppBar(
-          pinned: true,
-          expandedHeight: 100.0,
-          backgroundColor: Colors.grey[900]!.withOpacity(0.85),
+          pinned: false,
+          expandedHeight: 150.0,
+          backgroundColor: Colors.transparent,
           automaticallyImplyLeading: false,
           flexibleSpace: FlexibleSpaceBar(
             titlePadding: EdgeInsetsDirectional.only(start: 20, bottom: 20),
@@ -73,7 +75,64 @@ class KeysView extends GetView<KeysController> {
 
   Widget getTopStatePanel() {
     return Container(
-      child: Text('Offline', style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold))
+      width: double.infinity,
+      height: 95,
+      child: Stack(
+        children: [
+          Positioned(
+            left: 0,
+            top: 20,
+            child: Text('Offline', style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold))
+          ),
+          Positioned(
+            left: 0,
+            right: 0,
+            bottom: 0,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                  constraints: BoxConstraints(
+                    maxWidth: 60
+                  ),
+                  child: Image.asset('assets/stickers/pacman_long_3d_left-x512.png')
+                )
+              ]
+            )
+          ),
+          Positioned(
+            left: 40,
+            bottom: 0,
+            child: Container(
+              constraints: BoxConstraints(
+                 maxWidth: 30
+              ),
+              child: Image.asset('assets/stickers/bitcoin-1.png')
+            )
+          ),
+          Positioned(
+            right: 60,
+            bottom: 30,
+            child: Container(
+              constraints: BoxConstraints(
+                maxWidth: 30
+              ),
+              child: Image.asset('assets/stickers/bitcoin-2.png')
+            )
+          ),
+          Positioned(
+            right: 30,
+            bottom: 0,
+            child: Container(
+              constraints: BoxConstraints(
+                maxWidth: 30
+              ),
+              child: Image.asset('assets/stickers/bitcoin-3.png')
+            )
+          )
+        ]
+      )
     );
   }
 
@@ -82,7 +141,7 @@ class KeysView extends GetView<KeysController> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(CupertinoIcons.plus),
+            Icon(CupertinoIcons.plus, color: Colors.white),
             Container(
               margin: EdgeInsets.only(left: 5),
               child: Text('ADD WALLET', style: TextStyle(color: Colors.white))

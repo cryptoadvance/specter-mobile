@@ -39,6 +39,10 @@ flutter:
     - assets/icons/chevron_right.svg
     - assets/stickers/key-x512.png
     - assets/stickers/pacman_long_3d-x512.png
+    - assets/stickers/pacman_long_3d_left-x512.png
+    - assets/stickers/bitcoin-1.png
+    - assets/stickers/bitcoin-2.png
+    - assets/stickers/bitcoin-3.png
 
   fonts:
     - family: Mulish

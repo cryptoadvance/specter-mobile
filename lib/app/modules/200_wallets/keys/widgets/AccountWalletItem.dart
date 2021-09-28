@@ -22,11 +22,11 @@ class AccountWalletItem extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    child: getTopPanel(),
+                    child: getTopPanel(context),
                   ),
                   Container(
                     width: double.infinity,
-                    child: getOperationsList(),
+                    child: getOperationsList(context),
                   )
                 ]
               ),
@@ -34,7 +34,7 @@ class AccountWalletItem extends StatelessWidget {
             Positioned(
               top: 3,
               right: 10,
-              child: Icon(CupertinoIcons.right_chevron, color: Colors.grey[700], size: 20)
+              child: Icon(CupertinoIcons.right_chevron, size: 20, color: Theme.of(context).accentColor)
             )
           ]
         ),
@@ -42,7 +42,7 @@ class AccountWalletItem extends StatelessWidget {
     );
   }
 
-  Widget getTopPanel() {
+  Widget getTopPanel(BuildContext context) {
     return Row(
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.start,
@@ -59,7 +59,7 @@ class AccountWalletItem extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('My wallet 1', style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Colors.grey[700])),
+                Text('My wallet 1', style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Theme.of(context).accentColor)),
                 Container(
                   width: double.infinity,
                   padding: EdgeInsets.only(right: 20),
@@ -68,8 +68,8 @@ class AccountWalletItem extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Single key', style: TextStyle(fontSize: 14, color: Colors.grey[700])),
-                      Text('80h/1/0', style: TextStyle(fontSize: 14, color: Colors.grey[700]))
+                      Text('Single key', style: TextStyle(fontSize: 14, color: Theme.of(context).accentColor)),
+                      Text('80h/1/0', style: TextStyle(fontSize: 14, color: Theme.of(context).accentColor))
                     ]
                   )
                 )
@@ -81,7 +81,7 @@ class AccountWalletItem extends StatelessWidget {
     );
   }
 
-  Widget getOperationsList() {
+  Widget getOperationsList(BuildContext context) {
     List<Widget> rows = [];
     for (int i = 0; i < 3; i++) {
       rows.add(Container(
@@ -92,8 +92,8 @@ class AccountWalletItem extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('Dec, 12, 2020', style: TextStyle(fontSize: 14, color: Colors.grey[700])),
-            Text('send 0.01, change 0.100', style: TextStyle(fontSize: 14, color: Colors.grey[700])),
+            Text('Dec, 12, 2020', style: TextStyle(fontSize: 14, color: Theme.of(context).accentColor)),
+            Text('send 0.01, change 0.100', style: TextStyle(fontSize: 14, color: Theme.of(context).accentColor)),
           ]
         )
       ));
