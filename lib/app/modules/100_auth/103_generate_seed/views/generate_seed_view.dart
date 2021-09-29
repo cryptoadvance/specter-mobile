@@ -115,7 +115,7 @@ class GenerateSeedView extends GetView<GenerateSeedController> {
                         )
                       ]
                   ),
-                  style: LightButtonStyle.WHITE_OUTLINE,
+                  style: LightButtonStyle.SECONDARY,
                   onTap: () {
                     Get.back();
                   }
