@@ -33,7 +33,7 @@ class RecoverySelectView extends GetView<RecoverySelectController> {
               ),
               Container(
                 width: double.infinity,
-                margin: EdgeInsets.only(top: 30),
+                margin: EdgeInsets.only(top: 50),
                 child: LightButton(
                   child: Text(
                     'recovery_select_buttons_generate_new_seed'.tr,
@@ -48,13 +48,13 @@ class RecoverySelectView extends GetView<RecoverySelectController> {
               ),
               Container(
                 width: double.infinity,
-                margin: EdgeInsets.only(top: 10),
+                margin: EdgeInsets.only(top: 24),
                 child: LightButton(
                   child: Text('recovery_select_buttons_recovery_phrase'.tr, textAlign: TextAlign.center),
                   isInline: false,
-                  style: LightButtonStyle.WHITE_OUTLINE,
+                  style: LightButtonStyle.SECONDARY,
                   onTap: () {
-
+                    Get.toNamed('/enter-seed');
                   }
                 )
               )

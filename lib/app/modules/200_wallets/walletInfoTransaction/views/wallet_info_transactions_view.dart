@@ -33,11 +33,6 @@ class WalletInfoTransactionView extends GetView<WalletInfoTransactionController>
 
   Widget getTopTitle() {
     return Container(
-        decoration: BoxDecoration(
-            border: Border(
-                bottom: BorderSide(width: 1.0, color: Colors.white.withOpacity(0.5))
-            )
-        ),
         child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -65,7 +60,7 @@ class WalletInfoTransactionView extends GetView<WalletInfoTransactionController>
                   )
               ),
               Container(
-                  padding: EdgeInsets.only(right: 5),
+                  padding: EdgeInsets.only(right: 10),
                   child: getMenuButton()
               )
             ]

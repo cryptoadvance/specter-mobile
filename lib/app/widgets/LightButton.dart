@@ -4,7 +4,8 @@ import '../../utils.dart';
 
 enum LightButtonStyle {
   PRIMARY,
-  WHITE_OUTLINE
+  WHITE_OUTLINE,
+  SECONDARY
 }
 
 class LightButton extends StatelessWidget {
@@ -30,6 +31,9 @@ class LightButton extends StatelessWidget {
       }
       case LightButtonStyle.WHITE_OUTLINE:
         bgColor = Colors.white;
+        break;
+      case LightButtonStyle.SECONDARY:
+        bgColor = Utils.hexToColor('#202A40');
         break;
     }
 
