@@ -22,7 +22,7 @@ class HelloView extends GetView<HelloController> {
             constraints: BoxConstraints(
               maxWidth: 128
             ),
-            child: Image.asset('assets/stickers/pacman_long_3d-x512.png')
+            child: Image.asset('assets/stickers/ghost_char-x512.png')
           ),
           Container(
             width: double.infinity,

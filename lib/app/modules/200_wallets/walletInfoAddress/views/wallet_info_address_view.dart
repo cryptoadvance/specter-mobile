@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 import 'package:specter_mobile/app/widgets/LightTab.dart';
+import 'package:specter_mobile/app/widgets/TopSide.dart';
 
 import '../widgets/descriptor/views/wallet_info_address_descriptor_view.dart';
 import '../widgets/details/views/wallet_info_address_details_view.dart';
@@ -22,81 +23,12 @@ class WalletInfoAddressView extends GetView<WalletInfoAddressController> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            getTopTitle(),
+            TopSide(title: 'My address #1', titleType: TOP_SIDE_TITLE_TYPE.ADDRESS, menuType: TOP_SIDE_MENU_TYPE.OPTIONS),
             Expanded(
               child: getContent()
             )
           ]
         )
-      )
-    );
-  }
-
-  Widget getTopTitle() {
-    return Container(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Container(
-            padding: EdgeInsets.only(left: 10),
-            child: getBackButton()
-          ),
-          Expanded(
-            child: Container(
-              padding: EdgeInsets.symmetric(vertical: 15),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(right: 10),
-                    child: SvgPicture.asset('assets/icons/bitcoin.svg', color: Colors.white),
-                  ),
-                  Container(
-                    child: Text('My address #1', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold))
-                  )
-                ]
-              ),
-            )
-          ),
-          Container(
-            padding: EdgeInsets.only(right: 10),
-            child: getMenuButton()
-          )
-        ]
-      )
-    );
-  }
-
-  Widget getBackButton() {
-    return InkWell(
-      onTap: () {
-        Get.back();
-      },
-      child: Container(
-        //color: Colors.grey,
-        width: 50,
-        height: 45,
-        alignment: Alignment.centerLeft,
-        padding: EdgeInsets.only(left: 5),
-        child: Icon(CupertinoIcons.left_chevron, size: 26)
-      )
-    );
-  }
-
-  Widget getMenuButton() {
-    return InkWell(
-      onTap: () {
-        Get.back();
-      },
-      child: Container(
-        //color: Colors.grey,
-        width: 50,
-        height: 45,
-        alignment: Alignment.centerRight,
-        padding: EdgeInsets.only(right: 5),
-        child: SvgPicture.asset('assets/icons/edit.svg', color: Colors.white, height: 30)
       )
     );
   }
@@ -111,7 +43,7 @@ class WalletInfoAddressView extends GetView<WalletInfoAddressController> {
             padding: EdgeInsets.symmetric(horizontal: 15),
             child: LightTab(
               tabs: [
-                LightTabNode('Info', key: WALLET_INFO_ADDRESS_TAB.DETAILS.toString()),
+                LightTabNode('Information', key: WALLET_INFO_ADDRESS_TAB.DETAILS.toString()),
                 LightTabNode('QR Code', key: WALLET_INFO_ADDRESS_TAB.QR_CODE.toString()),
                 LightTabNode('Descriptor', key: WALLET_INFO_ADDRESS_TAB.DESCRIPTOR.toString())
               ],

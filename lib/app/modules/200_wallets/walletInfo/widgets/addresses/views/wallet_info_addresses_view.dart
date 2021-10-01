@@ -20,7 +20,7 @@ class WalletInfoAddressesView extends GetView<WalletInfoAddressesController> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            margin: EdgeInsets.only(left: 15, right: 15),
+            margin: EdgeInsets.only(left: 15, right: 15, top: 10),
             child: LightTab(
               view: LightTabView.TOGGLE,
               tabs: [
@@ -35,7 +35,7 @@ class WalletInfoAddressesView extends GetView<WalletInfoAddressesController> {
           ),
           Expanded(
             child: Container(
-              padding: EdgeInsets.only(top: 0),
+              padding: EdgeInsets.only(top: 10),
               child: getTabContent()
             )
           )
@@ -57,7 +57,7 @@ class WalletInfoAddressesView extends GetView<WalletInfoAddressesController> {
       itemCount: controller.items.length,
       itemBuilder: (context, index) {
         return Container(
-          margin: EdgeInsets.only(top: (index == 0)?0:10, left: 15, right: 15),
+          margin: EdgeInsets.only(top: (index == 0)?10:10, left: 15, right: 15),
           child: WalletInfoAddressesItem()
         );
       }

@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 
 import 'package:get/get.dart';
 import 'package:specter_mobile/app/widgets/LightTab.dart';
+import 'package:specter_mobile/app/widgets/TopSide.dart';
 import '../controllers/wallet_info_transactions_controller.dart';
 
 import '../widgets/info/views/wallet_info_transaction_info_view.dart';
@@ -21,7 +22,7 @@ class WalletInfoTransactionView extends GetView<WalletInfoTransactionController>
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  getTopTitle(),
+                  TopSide(title: 'Transaction details', titleType: TOP_SIDE_TITLE_TYPE.TRANSACTION, menuType: TOP_SIDE_MENU_TYPE.NONE),
                   Expanded(
                       child: getContent()
                   )

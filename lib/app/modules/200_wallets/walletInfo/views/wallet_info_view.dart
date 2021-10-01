@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 import 'package:get/get.dart';
+import 'package:specter_mobile/app/widgets/TopSide.dart';
 import '../widgets/addresses/views/wallet_info_addresses_view.dart';
 import '../widgets/details/views/wallet_info_details_view.dart';
 import '../widgets/transactions/views/wallet_info_transactions_view.dart';
@@ -22,81 +23,12 @@ class WalletInfoView extends GetView<WalletInfoController> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            getTopTitle(),
+            TopSide(title: 'My wallet', titleType: TOP_SIDE_TITLE_TYPE.WALLET, menuType: TOP_SIDE_MENU_TYPE.EDIT),
             Expanded(
               child: getContent()
             )
           ]
         )
-      )
-    );
-  }
-
-  Widget getTopTitle() {
-    return Container(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Container(
-            padding: EdgeInsets.only(left: 10),
-            child: getBackButton()
-          ),
-          Expanded(
-            child: Container(
-              padding: EdgeInsets.symmetric(vertical: 15),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(right: 10),
-                    child: SvgPicture.asset('assets/icons/bitcoin.svg', color: Colors.white),
-                  ),
-                  Container(
-                    child: Text('My wallet', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold))
-                  )
-                ]
-              ),
-            )
-          ),
-          Container(
-            padding: EdgeInsets.only(right: 10),
-            child: getMenuButton()
-          )
-        ]
-      )
-    );
-  }
-
-  Widget getBackButton() {
-    return InkWell(
-      onTap: () {
-        Get.back();
-      },
-      child: Container(
-        //color: Colors.grey,
-        width: 50,
-        height: 45,
-        alignment: Alignment.centerLeft,
-        padding: EdgeInsets.only(left: 5),
-        child: Icon(CupertinoIcons.left_chevron, size: 26)
-      )
-    );
-  }
-
-  Widget getMenuButton() {
-    return InkWell(
-      onTap: () {
-        Get.back();
-      },
-      child: Container(
-        //color: Colors.grey,
-        width: 50,
-        height: 45,
-        alignment: Alignment.centerRight,
-        padding: EdgeInsets.only(right: 5),
-        child: SvgPicture.asset('assets/icons/top_right_icon.svg', color: Colors.white, height: 35)
       )
     );
   }
@@ -111,7 +43,7 @@ class WalletInfoView extends GetView<WalletInfoController> {
             padding: EdgeInsets.symmetric(horizontal: 15),
             child: LightTab(
               tabs: [
-                LightTabNode('Info', key: WALLET_INFO_TAB.DETAILS.toString()),
+                LightTabNode('Information', key: WALLET_INFO_TAB.DETAILS.toString()),
                 LightTabNode('Addresses', key: WALLET_INFO_TAB.ADDRESSES.toString()),
                 LightTabNode('Transactions', key: WALLET_INFO_TAB.TRANSACTIONS.toString())
               ],

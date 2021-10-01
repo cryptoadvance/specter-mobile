@@ -94,9 +94,9 @@ class KeysView extends GetView<KeysController> {
               children: [
                 Container(
                   constraints: BoxConstraints(
-                    maxWidth: 60
+                    maxWidth: 75
                   ),
-                  child: Image.asset('assets/stickers/pacman_long_3d_left-x512.png')
+                  child: Image.asset('assets/stickers/ghost_normal_3d-x512.png')
                 )
               ]
             )

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../utils.dart';
+
 enum LightTabView {
   TABS,
   TOGGLE
@@ -50,17 +52,12 @@ class LightTab extends StatelessWidget {
 
     return Container(
       width: double.infinity,
-      padding: EdgeInsets.only(
-        bottom: (view == LightTabView.TABS)?0:0
+      padding: EdgeInsets.all(
+        (view == LightTabView.TOGGLE)?10:0
       ),
       decoration: BoxDecoration(
-        border: Border(
-          bottom: (view == LightTabView.TABS)?(
-            BorderSide(width: 1.0, color: Colors.white.withOpacity(0.5))
-          ):(
-            BorderSide.none
-          )
-        )
+          borderRadius: BorderRadius.all(Radius.circular((view == LightTabView.TOGGLE)?25:0)),
+        color: (view == LightTabView.TOGGLE)?Utils.hexToColor('#0A121B'):Colors.transparent
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -95,16 +92,17 @@ class LightTabItemTabView extends StatelessWidget {
         hoverColor: Colors.transparent,
         splashColor: Colors.transparent,
         child: Container(
-          padding: EdgeInsets.symmetric(vertical: 15),
-          child: ClipRRect(
-            borderRadius: BorderRadius.all(Radius.circular(5)),
-            child: Container(
-              decoration: BoxDecoration(
-                color: isActive?Colors.white.withOpacity(0.95):Colors.transparent
-              ),
-              padding: EdgeInsets.symmetric(horizontal: 15, vertical: 7),
-              child: Text(item.title, style: TextStyle(color: isActive?Colors.grey[700]:Colors.white))
-            )
+          padding: EdgeInsets.symmetric(vertical: 10),
+          margin: EdgeInsets.only(right: 5),
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.transparent,
+              border: Border(
+                bottom: isActive?BorderSide(width: 3.0, color: Utils.hexToColor('#4A90E2')):BorderSide.none
+              )
+            ),
+            padding: EdgeInsets.symmetric(horizontal: 5, vertical: 7),
+            child: Text(item.title, style: TextStyle(color: isActive?Utils.hexToColor('#4A90E2'):Colors.white))
           ),
         )
       ),
@@ -139,20 +137,15 @@ class LightTabItemToggleView extends StatelessWidget {
         hoverColor: Colors.transparent,
         splashColor: Colors.transparent,
         child: Container(
-          padding: EdgeInsets.symmetric(vertical: 15),
+          padding: EdgeInsets.symmetric(vertical: 5),
           child: ClipRRect(
-            borderRadius: BorderRadius.only(
-              topLeft: isFirst?radius:Radius.zero,
-              bottomLeft: isFirst?radius:Radius.zero,
-              topRight: isLast?radius:Radius.zero,
-              bottomRight: isLast?radius:Radius.zero
-            ),
+            borderRadius: BorderRadius.all(Radius.circular(25)),
             child: Container(
               decoration: BoxDecoration(
-                color: isActive?Colors.white.withOpacity(0.95):Colors.white.withOpacity(0.25)
+                color: isActive?Utils.hexToColor('#202A40'):Colors.transparent
               ),
-              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 7),
-              child: Text(item.title, textAlign: TextAlign.center, style: TextStyle(color: isActive?Colors.grey[700]:Colors.white))
+              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 16),
+              child: Text(item.title, textAlign: TextAlign.center, style: TextStyle(color: Theme.of(context).accentColor))
             )
           ),
         )

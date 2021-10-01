@@ -32,14 +32,15 @@ flutter:
     - assets/icons/qr_code_scanner.svg
     - assets/icons/coolicon.svg
     - assets/icons/bitcoin.svg
+    - assets/icons/account_tree.svg
     - assets/icons/top_right_icon.svg
     - assets/icons/edit.svg
     - assets/icons/content_copy.svg
     - assets/icons/globe_1.svg
     - assets/icons/chevron_right.svg
     - assets/stickers/key-x512.png
-    - assets/stickers/pacman_long_3d-x512.png
-    - assets/stickers/pacman_long_3d_left-x512.png
+    - assets/stickers/ghost_char-x512.png
+    - assets/stickers/ghost_normal_3d-x512.png
     - assets/stickers/bitcoin-1.png
     - assets/stickers/bitcoin-2.png
     - assets/stickers/bitcoin-3.png
