@@ -44,6 +44,7 @@ flutter:
     - assets/stickers/bitcoin-1.png
     - assets/stickers/bitcoin-2.png
     - assets/stickers/bitcoin-3.png
+    - assets/stickers/ghost_sad-x512.png
 
   fonts:
     - family: Mulish

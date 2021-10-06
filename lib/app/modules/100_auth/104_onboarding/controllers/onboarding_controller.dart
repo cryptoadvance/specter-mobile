@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 
-class EnterSeedController extends GetxController {
+class OnboardingController extends GetxController {
   @override
   void onInit() {
     super.onInit();
@@ -15,6 +15,6 @@ class EnterSeedController extends GetxController {
   void onClose() {}
 
   void openNextPage() {
-    Get.toNamed('/onboarding');
+    Get.toNamed('/keys');
   }
 }

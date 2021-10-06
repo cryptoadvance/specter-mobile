@@ -137,9 +137,7 @@ class GenerateSeedView extends GetView<GenerateSeedController> {
                     ]
                 ),
                 style: LightButtonStyle.PRIMARY,
-                onTap: () {
-                  Get.toNamed('/keys');
-                }
+                onTap: controller.openNextPage
             )
           )
         ]

@@ -82,9 +82,7 @@ class EnterSeedView extends GetView<EnterSeedController> {
                       ]
                   ),
                   style: LightButtonStyle.PRIMARY,
-                  onTap: () {
-                    Get.toNamed('/keys');
-                  }
+                  onTap: controller.openNextPage
               )
           )
         ]

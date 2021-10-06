@@ -27,6 +27,15 @@
       "next_page": "DONE"
     }
   },
+  "onboarding": {
+  	"labels": {
+  		"top_title": "Yayy!!!",
+  		"top_label": "Your wallet is ready to use."
+  	},
+  	"buttons": {
+  		"next_page": "OK"
+  	}
+  },
   "wallet_info_address": {
   	"labels": {
   		"qrcode_title": "Address",

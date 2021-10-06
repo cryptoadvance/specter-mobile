@@ -25,4 +25,8 @@ class GenerateSeedController extends GetxController {
     seed_complexity.value = seed_complexity_;
     update();
   }
+
+  void openNextPage() {
+    Get.toNamed('/onboarding');
+  }
 }
