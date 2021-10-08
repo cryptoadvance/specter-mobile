@@ -14,6 +14,8 @@ class WalletInfoAddressDetailsController extends GetxController {
     WalletInfoAddressDetailsNode('Amount, fiat', "4`183 USD")
   ];
 
+  final String transactionAddress = 'abcd1234abcd1234abcd1234abcd1234abcd1234abcd1230';
+
   @override
   void onInit() {
     super.onInit();

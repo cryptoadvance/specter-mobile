@@ -1,11 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:specter_mobile/app/widgets/LightButton.dart';
 
 import '../widgets/WalletInfoAddressDetailsList.dart';
 import '../controllers/wallet_info_address_details_controller.dart';
+
+import 'package:specter_mobile/globals.dart' as g;
 
 class WalletInfoAddressDetailsView extends GetView<WalletInfoAddressDetailsController> {
   final WalletInfoAddressDetailsController controller = Get.put(WalletInfoAddressDetailsController());
@@ -25,11 +28,11 @@ class WalletInfoAddressDetailsView extends GetView<WalletInfoAddressDetailsContr
           ),
           Container(
             margin: EdgeInsets.only(top: 10),
-            child: Text('abcd1234abcd1234abcd1234abcd1234abcd1234abcd1234')
+            child: Text(controller.transactionAddress)
           ),
           Container(
             margin: EdgeInsets.only(top: 20),
-            child: getCopyAddress()
+            child: getCopyAddress(context)
           ),
           Container(
             margin: EdgeInsets.only(top: 40),
@@ -40,7 +43,7 @@ class WalletInfoAddressDetailsView extends GetView<WalletInfoAddressDetailsContr
     );
   }
 
-  Widget getCopyAddress() {
+  Widget getCopyAddress(BuildContext context) {
     return LightButton(child: Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -50,7 +53,9 @@ class WalletInfoAddressDetailsView extends GetView<WalletInfoAddressDetailsContr
         ),
         Text('wallet_info_address_buttons_details_copy'.tr, style: TextStyle(color: Colors.white))
       ],
-    ), onTap: copyAddress);
+    ), onTap: () {
+      copyAddress(context);
+    });
   }
 
   Widget getDetailsPanel() {
@@ -59,7 +64,8 @@ class WalletInfoAddressDetailsView extends GetView<WalletInfoAddressDetailsContr
     );
   }
 
-  void copyAddress() {
-
+  void copyAddress(BuildContext context) {
+    Clipboard.setData(ClipboardData(text: controller.transactionAddress));
+    g.gNotificationService.addNotify(context, 'Address copied');
   }
 }

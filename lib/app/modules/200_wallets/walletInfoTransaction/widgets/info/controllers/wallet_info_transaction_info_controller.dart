@@ -14,6 +14,8 @@ class WalletInfoTransactionInfoController extends GetxController {
     WalletInfoAddressDetailsNode('Received', '0.01818284 BTC')
   ];
 
+  String transactionID = '4eacb1d3380c97a2f69c1204a9df86633b1d78adb180b258a84fff4b0df65bf0';
+
   @override
   void onInit() {
     super.onInit();

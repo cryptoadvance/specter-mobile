@@ -1,10 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:specter_mobile/app/modules/200_wallets/walletInfoAddress/widgets/details/widgets/WalletInfoAddressDetailsList.dart';
 import 'package:specter_mobile/app/widgets/LightButton.dart';
 import '../controllers/wallet_info_transaction_info_controller.dart';
+
+import 'package:specter_mobile/globals.dart' as g;
 
 class WalletInfoTransactionInfoView extends GetView<WalletInfoTransactionInfoController> {
   final WalletInfoTransactionInfoController controller = Get.put(WalletInfoTransactionInfoController());
@@ -20,7 +23,7 @@ class WalletInfoTransactionInfoView extends GetView<WalletInfoTransactionInfoCon
         Container(
           margin: EdgeInsets.only(top: 20),
           padding: EdgeInsets.only(left: 15, right: 15),
-          child: getAddressPanel()
+          child: getAddressPanel(context)
         ),
         Container(
           margin: EdgeInsets.only(top: 40),
@@ -57,19 +60,19 @@ class WalletInfoTransactionInfoView extends GetView<WalletInfoTransactionInfoCon
     );
   }
 
-  Widget getAddressPanel() {
+  Widget getAddressPanel(BuildContext context) {
     return Column(
       children: [
-        Text('4eacb1d3380c97a2f69c1204a9df86633b1d78adb180b258a84fff4b0df65bfb'),
+        Text(controller.transactionID),
         Container(
           margin: EdgeInsets.only(top: 20),
-          child: getCopyAddress()
+          child: getCopyAddress(context)
         )
       ]
     );
   }
 
-  Widget getCopyAddress() {
+  Widget getCopyAddress(BuildContext context) {
     return LightButton(child: Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -79,7 +82,9 @@ class WalletInfoTransactionInfoView extends GetView<WalletInfoTransactionInfoCon
         ),
         Text('COPY', style: TextStyle(color: Colors.white))
       ],
-    ), onTap: copyAddress);
+    ), onTap: () {
+      copyAddress(context);
+    });
   }
 
   Widget getDetailsPanel() {
@@ -88,6 +93,8 @@ class WalletInfoTransactionInfoView extends GetView<WalletInfoTransactionInfoCon
     );
   }
 
-  void copyAddress() {
+  void copyAddress(BuildContext context) {
+    Clipboard.setData(ClipboardData(text: controller.transactionID));
+    g.gNotificationService.addNotify(context, 'Transaction ID copied');
   }
 }

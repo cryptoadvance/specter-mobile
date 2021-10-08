@@ -18,4 +18,16 @@ class Utils {
     }
     return items;
   }
+
+  static int getTime() {
+    return (DateTime
+        .now()
+        .millisecondsSinceEpoch / 1000).round();
+  }
+
+  static int getTimeMs() {
+    return DateTime
+        .now()
+        .millisecondsSinceEpoch;
+  }
 }

@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:specter_mobile/app/widgets/LightButton.dart';
 import '../controllers/wallet_info_address_descriptor_controller.dart';
+
+import 'package:specter_mobile/globals.dart' as g;
 
 class WalletInfoAddressDescriptorView extends GetView<WalletInfoAddressDescriptorController> {
   final WalletInfoAddressDescriptorController controller = Get.put(WalletInfoAddressDescriptorController());
@@ -30,6 +35,10 @@ class WalletInfoAddressDescriptorView extends GetView<WalletInfoAddressDescripto
               Container(
                   margin: EdgeInsets.only(top: 20),
                   child: getControlPanel()
+              ),
+              Container(
+                  margin: EdgeInsets.only(top: 20),
+                  child: getCopyAddress(context)
               )
             ]
         )
@@ -41,7 +50,7 @@ class WalletInfoAddressDescriptorView extends GetView<WalletInfoAddressDescripto
         width: double.infinity,
         child: Center(
             child: QrImage(
-                data: "wpkh([f85ab0a4/84'/1'/0']tpubDCbEcqH6AdUMrVANGN2Zh7u81VqfEtY1TG1iskDHcS2JwDaLJ48Kx31nvEdn3VmyAkvqfeEjHEvQH6zxBDRL9QDs8BbgcvB5ukvTKpKa2Fh/0/0)#4lk8av2t",
+                data: controller.descriptor,
                 foregroundColor: Colors.white,
                 version: QrVersions.auto,
                 size: 250
@@ -51,7 +60,7 @@ class WalletInfoAddressDescriptorView extends GetView<WalletInfoAddressDescripto
   }
 
   Widget getAddressPanel() {
-    return Text("wpkh([f85ab0a4/84'/1'/0']tpubDCbEcqH6AdUMrVANGN2Zh7u81VqfEtY1TG1iskDHcS2JwDaLJ48Kx31nvEdn3VmyAkvqfeEjHEvQH6zxBDRL9QDs8BbgcvB5ukvTKpKa2Fh/0/0)#4lk8av2t");
+    return Text(controller.descriptor);
   }
 
   Widget getControlPanel() {
@@ -87,5 +96,25 @@ class WalletInfoAddressDescriptorView extends GetView<WalletInfoAddressDescripto
           )
         ]
     );
+  }
+
+  Widget getCopyAddress(BuildContext context) {
+    return LightButton(child: Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Container(
+          margin: EdgeInsets.only(right: 10),
+          child: SvgPicture.asset('assets/icons/content_copy.svg', color: Colors.white),
+        ),
+        Text('COPY', style: TextStyle(color: Colors.white))
+      ],
+    ), onTap: () {
+      copyAddress(context);
+    });
+  }
+
+  void copyAddress(BuildContext context) {
+    Clipboard.setData(ClipboardData(text: controller.descriptor));
+    g.gNotificationService.addNotify(context, 'Descriptor copied');
   }
 }
