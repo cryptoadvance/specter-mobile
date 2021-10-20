@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import '../controllers/wallet_info_transactions_controller.dart';
 import 'package:specter_mobile/app/widgets/LightTab.dart';
 
-import '../wallet_info_transactions_item.dart';
+import '../widgets/wallet_info_transactions_item.dart';
 
 
 

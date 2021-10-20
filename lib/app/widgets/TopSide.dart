@@ -40,12 +40,12 @@ class TopSide extends StatelessWidget {
                   child: Container(
                       padding: EdgeInsets.symmetric(vertical: 15),
                       child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             getShortIcon(),
                             Container(
-                                child: Text(title, style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold))
+                                child: Text(title, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold))
                             )
                           ]
                       )

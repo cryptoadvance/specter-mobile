@@ -32,43 +32,6 @@ class WalletInfoTransactionView extends GetView<WalletInfoTransactionController>
     );
   }
 
-  Widget getTopTitle() {
-    return Container(
-        child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Container(
-                  padding: EdgeInsets.only(left: 10),
-                  child: getBackButton()
-              ),
-              Expanded(
-                  child: Container(
-                    padding: EdgeInsets.symmetric(vertical: 15),
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Container(
-                            margin: EdgeInsets.only(right: 10),
-                            child: SvgPicture.asset('assets/icons/globe-1.svg', color: Colors.white),
-                          ),
-                          Container(
-                              child: Text('Transaction details', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold))
-                          )
-                        ]
-                    ),
-                  )
-              ),
-              Container(
-                  padding: EdgeInsets.only(right: 10),
-                  child: getMenuButton()
-              )
-            ]
-        )
-    );
-  }
-
   Widget getBackButton() {
     return InkWell(
         onTap: () {
@@ -111,7 +74,7 @@ class WalletInfoTransactionView extends GetView<WalletInfoTransactionController>
                 padding: EdgeInsets.symmetric(horizontal: 15),
                 child: LightTab(
                     tabs: [
-                      LightTabNode('Info', key: WALLET_INFO_TRANSACTIONS_TAB.INFO.toString()),
+                      LightTabNode('Information', key: WALLET_INFO_TRANSACTIONS_TAB.INFO.toString()),
                       LightTabNode('Inputs', key: WALLET_INFO_TRANSACTIONS_TAB.INPUTS.toString()),
                       LightTabNode('Outputs', key: WALLET_INFO_TRANSACTIONS_TAB.OUTPUTS.toString())
                     ],

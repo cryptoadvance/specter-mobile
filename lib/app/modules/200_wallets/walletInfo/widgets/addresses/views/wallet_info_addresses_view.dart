@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:specter_mobile/app/widgets/LightTab.dart';
 
 import '../contollers/wallet_info_addresses_controller.dart';
-import '../wallet_info_addresses_item.dart';
+import '../widgets/wallet_info_addresses_item.dart';
 
 class WalletInfoAddressesView extends GetView<WalletInfoAddressesController> {
   final WalletInfoAddressesController controller = Get.put(WalletInfoAddressesController());
@@ -45,14 +45,6 @@ class WalletInfoAddressesView extends GetView<WalletInfoAddressesController> {
   }
 
   Widget getTabContent() {
-    /*switch(controller.currentTab.value) {
-      case WALLET_INFO_ADDRESSES_TAB.RECEIVE: {
-        return Text('RECEIVE');
-      }
-      case WALLET_INFO_ADDRESSES_TAB.CHANGE: {
-        return Text('CHANGE');
-      }
-    }*/
     return ListView.builder(
       itemCount: controller.items.length,
       itemBuilder: (context, index) {

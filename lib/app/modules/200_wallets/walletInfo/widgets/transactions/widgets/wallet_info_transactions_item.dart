@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../../../../utils.dart';
+import '../../../../../../../utils.dart';
 
 class WalletInfoTransactionsItem extends StatelessWidget {
   @override
