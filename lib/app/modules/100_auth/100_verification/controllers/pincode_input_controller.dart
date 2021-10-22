@@ -53,4 +53,12 @@ class PinCodeInputController extends GetxController {
     }
     _currentInputIdx = 0;
   }
+
+  String getValue() {
+    String ret = '';
+    _pinCode.forEach((code) {
+      ret += code.toString();
+    });
+    return ret;
+  }
 }

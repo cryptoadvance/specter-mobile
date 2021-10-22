@@ -69,7 +69,7 @@ class VerificationView extends GetView<VerificationController> {
             Container(
               margin: EdgeInsets.only(top: 20),
               alignment: Alignment.topRight,
-              child: getNextButton()
+              child: getNextButton(context)
             )
           ],
         )
@@ -77,7 +77,7 @@ class VerificationView extends GetView<VerificationController> {
     );
   }
 
-  Widget getNextButton() {
+  Widget getNextButton(BuildContext context) {
     return LightButton(child: Row(
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,
@@ -91,7 +91,7 @@ class VerificationView extends GetView<VerificationController> {
       ],
     ),
     onTap: () {
-      Get.toNamed('/recovery-select');
+      controller.verifyAction(context);
     });
   }
 
