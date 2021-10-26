@@ -23,7 +23,7 @@ class WalletInfoView extends GetView<WalletInfoController> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            TopSide(title: 'My wallet', titleType: TOP_SIDE_TITLE_TYPE.WALLET, menuType: TOP_SIDE_MENU_TYPE.EDIT),
+            TopSide(title: 'My wallet', titleType: TOP_SIDE_TITLE_TYPE.WALLET, menuType: TOP_SIDE_MENU_TYPE.OPTIONS),
             Expanded(
               child: getContent()
             )

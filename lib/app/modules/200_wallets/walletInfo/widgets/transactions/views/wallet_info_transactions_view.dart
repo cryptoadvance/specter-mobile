@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:specter_mobile/app/widgets/LightFilter.dart';
+import '../../../../../../../utils.dart';
 import '../controllers/wallet_info_transactions_controller.dart';
 import 'package:specter_mobile/app/widgets/LightTab.dart';
 
@@ -35,6 +38,11 @@ class WalletInfoTransactionsView extends GetView<WalletInfoTransactionsControlle
               }
             ),
           ),
+          Container(
+            margin: EdgeInsets.only(left: 15, right: 15, top: 20),
+            padding: EdgeInsets.symmetric(horizontal: 20),
+            child: getFilterPanel()
+          ),
           Expanded(
             child: Container(
               padding: EdgeInsets.only(top: 10),
@@ -44,6 +52,46 @@ class WalletInfoTransactionsView extends GetView<WalletInfoTransactionsControlle
         ]
       )
     ));
+  }
+
+  Widget getFilterPanel() {
+    Color backgroundColor = Utils.hexToColor('#202A40');
+    Color activeIconColor = Utils.hexToColor('#0E1927');
+
+    return LightFilter(
+        onChange: (Map<String, String> filters) {
+
+        },
+        filters: [
+          LightFilterItemModel(
+              title: 'Sent',
+              key: 'sent',
+              iconColor: Utils.hexToColor('#70C098'),
+              backgroundColor: backgroundColor,
+              activeIconColor: activeIconColor,
+              activeBackgroundColor: Utils.hexToColor('#65AD89'),
+              icon: 'assets/icons/arrow-upload.svg'
+          ),
+          LightFilterItemModel(
+              title: 'Received',
+              key: 'received',
+              iconColor: Utils.hexToColor('#9B99F5'),
+              backgroundColor: backgroundColor,
+              activeIconColor: activeIconColor,
+              activeBackgroundColor: Utils.hexToColor('#8C8ADD'),
+              icon: 'assets/icons/arrow-download.svg'
+          ),
+          LightFilterItemModel(
+              title: 'Date',
+              key: 'date',
+              iconColor: Utils.hexToColor('#DAA970'),
+              backgroundColor: backgroundColor,
+              activeIconColor: activeIconColor,
+              activeBackgroundColor: Utils.hexToColor('#C59865'),
+              icon: 'assets/icons/business-calendar.svg'
+          )
+        ]
+    );
   }
 
   Widget getTabContent() {

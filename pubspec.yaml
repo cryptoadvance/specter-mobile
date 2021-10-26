@@ -44,6 +44,9 @@ flutter:
     - assets/icons/content_copy.svg
     - assets/icons/globe_1.svg
     - assets/icons/chevron_right.svg
+    - assets/icons/arrow-upload.svg
+    - assets/icons/arrow-download.svg
+    - assets/icons/business-calendar.svg
     - assets/stickers/key-x512.png
     - assets/stickers/ghost_char-x512.png
     - assets/stickers/ghost_normal_3d-x512.png
