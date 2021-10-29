@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:specter_mobile/app/widgets/DateSelector.dart';
 import 'package:specter_mobile/app/widgets/LightFilter.dart';
 import '../../../../../../../utils.dart';
 import '../controllers/wallet_info_transactions_controller.dart';
@@ -8,17 +9,17 @@ import 'package:specter_mobile/app/widgets/LightTab.dart';
 
 import '../widgets/wallet_info_transactions_item.dart';
 
-
+import 'package:specter_mobile/globals.dart' as g;
 
 class WalletInfoTransactionsView extends GetView<WalletInfoTransactionsController> {
   final WalletInfoTransactionsController controller = Get.put(WalletInfoTransactionsController());
 
   @override
   Widget build(BuildContext context) {
-    return Container(child: getContent());
+    return Container(child: getContent(context));
   }
 
-  Widget getContent() {
+  Widget getContent(BuildContext context) {
     return Obx(() => Container(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -41,7 +42,7 @@ class WalletInfoTransactionsView extends GetView<WalletInfoTransactionsControlle
           Container(
             margin: EdgeInsets.only(left: 15, right: 15, top: 20),
             padding: EdgeInsets.symmetric(horizontal: 20),
-            child: getFilterPanel()
+            child: getFilterPanel(context)
           ),
           Expanded(
             child: Container(
@@ -54,13 +55,13 @@ class WalletInfoTransactionsView extends GetView<WalletInfoTransactionsControlle
     ));
   }
 
-  Widget getFilterPanel() {
+  Widget getFilterPanel(BuildContext context) {
     Color backgroundColor = Utils.hexToColor('#202A40');
     Color activeIconColor = Utils.hexToColor('#0E1927');
 
     return LightFilter(
         onChange: (Map<String, String> filters) {
-
+          print('filters: ' + filters.toString());
         },
         filters: [
           LightFilterItemModel(
@@ -88,7 +89,10 @@ class WalletInfoTransactionsView extends GetView<WalletInfoTransactionsControlle
               backgroundColor: backgroundColor,
               activeIconColor: activeIconColor,
               activeBackgroundColor: Utils.hexToColor('#C59865'),
-              icon: 'assets/icons/business-calendar.svg'
+              icon: 'assets/icons/business-calendar.svg',
+              onSelect: () async {
+                return selectFilterDate(context);
+              }
           )
         ]
     );
@@ -113,5 +117,9 @@ class WalletInfoTransactionsView extends GetView<WalletInfoTransactionsControlle
           );
         }
     );
+  }
+
+  Future<String> selectFilterDate(BuildContext context) async {
+    return await g.gNotificationService.addDialog(context, child: DateSelector());
   }
 }

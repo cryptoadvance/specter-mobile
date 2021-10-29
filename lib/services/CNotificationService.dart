@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
@@ -57,6 +58,39 @@ class CNotificationService {
       );
     });
     Overlay.of(context)!.insert(overlayEntryMessage!);
+  }
+
+  OverlayEntry? overlayEntryDialog;
+  Future<dynamic> addDialog(BuildContext context, {required Widget child}) async {
+    Completer<dynamic> completer = Completer();
+
+    //
+    if (overlayEntryDialog != null) {
+      overlayEntryDialog!.remove();
+      overlayEntryDialog = null;
+    }
+    overlayEntryDialog = OverlayEntry(builder: (context) {
+      return Positioned(
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          child: getDialogLabel(
+            child: child,
+            closeDialog: () {
+              overlayEntryDialog!.remove();
+              overlayEntryDialog = null;
+
+              //
+              completer.complete('test');
+            }
+          )
+      );
+    });
+    Overlay.of(context)!.insert(overlayEntryDialog!);
+
+    //
+    return completer.future;
   }
 
   Widget getNotifyLabel({required String title}) {
@@ -152,6 +186,49 @@ class CNotificationService {
               )
           )
       )
+    );
+  }
+
+  Widget getDialogLabel({required Widget child, required Function closeDialog}) {
+    var msgDialog = Container(
+        width: double.infinity,
+        margin: EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+        decoration: BoxDecoration(
+            color: Utils.hexToColor('#233752'),
+            borderRadius: BorderRadius.all(Radius.circular(30))
+        ),
+        child: child
+    );
+
+    return Material(
+        color: Colors.transparent,
+        child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+            child: Stack(
+              children: [
+                Positioned(
+                  top: 0,
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  child: InkWell(
+                    onTap: () {
+                      closeDialog();
+                    },
+                    child: Container(
+                        color: Colors.transparent
+                    )
+                  )
+                ),
+                SafeArea(
+                    child: Center(
+                        child: msgDialog
+                    )
+                )
+              ]
+            )
+        )
     );
   }
 }

@@ -14,6 +14,8 @@ class LightFilterItemModel {
 
   final Color activeIconColor, activeBackgroundColor;
 
+  final Function? onSelect;
+
   LightFilterItemModel({
     required this.title,
     required this.key,
@@ -21,7 +23,8 @@ class LightFilterItemModel {
     required this.iconColor,
     required this.backgroundColor,
     required this.activeIconColor,
-    required this.activeBackgroundColor
+    required this.activeBackgroundColor,
+    this.onSelect
   });
 }
 
@@ -51,6 +54,9 @@ class LightFilterState extends State<LightFilter> {
           filterValue: filterValue,
           onItemSelect: () {
             itemSelected(el.key);
+          },
+          onItemSetValue: (String val) {
+            itemSetValue(el.key, val);
           }
         )
       ));
@@ -76,6 +82,17 @@ class LightFilterState extends State<LightFilter> {
     wasModified();
   }
 
+  void itemSetValue(String filterKey, String val) {
+    filtersStates[filterKey] = val;
+
+    //
+    setState(() {
+    });
+
+    //
+    wasModified();
+  }
+
   void wasModified() {
     widget.onChange(filtersStates);
   }
@@ -83,10 +100,10 @@ class LightFilterState extends State<LightFilter> {
 
 class LightFilterItem extends StatelessWidget {
   final LightFilterItemModel filterItem;
-  final Function onItemSelect;
   final String? filterValue;
+  final Function onItemSelect, onItemSetValue;
 
-  LightFilterItem({required this.filterItem, required this.onItemSelect, this.filterValue});
+  LightFilterItem({required this.filterItem, required this.onItemSelect, required this.onItemSetValue, this.filterValue});
 
   @override
   Widget build(BuildContext context) {
@@ -102,7 +119,18 @@ class LightFilterItem extends StatelessWidget {
     var roundBox = Material(
       color: Colors.transparent,
       child: InkWell(
-          onTap: () {
+          onTap: () async {
+            if (filterItem.onSelect != null) {
+              if (!isActive) {
+                String val = await filterItem.onSelect!();
+                onItemSetValue(val);
+              } else {
+                onItemSelect();
+              }
+              return;
+            }
+
+            //
             onItemSelect();
           },
           splashColor: Colors.transparent,
