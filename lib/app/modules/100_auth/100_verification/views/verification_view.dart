@@ -36,11 +36,11 @@ class VerificationView extends GetView<VerificationController> {
       child: SafeArea(
         bottom: false,
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              margin: EdgeInsets.only(top: 32),
+              margin: EdgeInsets.only(top: 0),
               child: Text('verification_labels_top_title'.tr, style: TextStyle(
                 fontSize: 24, fontWeight: FontWeight.bold, color: Theme.of(context).accentColor
               ))
@@ -50,7 +50,7 @@ class VerificationView extends GetView<VerificationController> {
               child: PinCodeInputView(),
             ),
             Container(
-              margin: EdgeInsets.only(top: 50),
+              margin: EdgeInsets.only(top: 30),
               child: Text(
                 'verification_labels_remember_these_words'.tr,
                 style: TextStyle(fontSize: 16, color: Theme.of(context).hintColor)
@@ -65,13 +65,12 @@ class VerificationView extends GetView<VerificationController> {
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Theme.of(context).accentColor),
               ),
             ),
-            Expanded(child: Container()),
             Container(
               margin: EdgeInsets.only(top: 20),
               alignment: Alignment.topRight,
               child: getNextButton(context)
             )
-          ],
+          ]
         )
       ),
     );

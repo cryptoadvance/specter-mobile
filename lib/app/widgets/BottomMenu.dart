@@ -4,6 +4,10 @@ import 'package:flutter_svg/svg.dart';
 
 import '../../utils.dart';
 
+import 'package:specter_mobile/globals.dart' as g;
+
+import 'QRCodeScanner.dart';
+
 enum BOTTOM_MENU_ITEM {
   WALLETS,
   QR_SCAN,
@@ -33,7 +37,10 @@ class BottomMenu extends StatelessWidget {
             child: BottomMenuItem(
               label: 'Wallets',
               isActive: (item == BOTTOM_MENU_ITEM.WALLETS),
-              icon: 'assets/icons/account_balance_wallet.svg'
+              icon: 'assets/icons/account_balance_wallet.svg',
+              onSelect: () {
+
+              }
             )
           ),
           Container(
@@ -43,7 +50,10 @@ class BottomMenu extends StatelessWidget {
             child: BottomMenuItem(
               label: 'QR Scan',
               isActive: (item == BOTTOM_MENU_ITEM.QR_SCAN),
-              icon: 'assets/icons/qr_code_scanner.svg'
+              icon: 'assets/icons/qr_code_scanner.svg',
+              onSelect: () {
+                g.gNotificationService.addDialog(context, child: QRCodeScanner());
+              }
             )
           ),
           Container(
@@ -53,7 +63,10 @@ class BottomMenu extends StatelessWidget {
             child: BottomMenuItem(
               label: 'More',
               isActive: (item == BOTTOM_MENU_ITEM.MORE),
-              icon: 'assets/icons/coolicon.svg'
+              icon: 'assets/icons/coolicon.svg',
+              onSelect: () {
+
+              }
             )
           )
         ]
@@ -67,47 +80,59 @@ class BottomMenuItem extends StatelessWidget {
   final String label;
   final String? icon;
   final bool isActive;
+  final Function onSelect;
 
-  BottomMenuItem({this.child, required this.label, this.icon, required this.isActive});
+  BottomMenuItem({
+    this.child,
+    required this.label,
+    this.icon,
+    required this.isActive,
+    required this.onSelect
+  });
 
   @override
   Widget build(BuildContext context) {
     Color iconColor = (isActive)?Utils.hexToColor('#62AAFF'):Utils.hexToColor('#C0CAD7');
 
-    return ClipRRect(
-      borderRadius: BorderRadius.all(Radius.circular(10)),
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 20),
-        child: Stack(
-          children: [
-            Positioned(
-              left: 0,
-              right: 0,
-              top: 0,
-              bottom: 20,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Container(
-                    child: SvgPicture.asset(icon!, color: iconColor)
-                  )
-                ]
+    return InkWell(
+      onTap: () {
+        onSelect();
+      },
+      child: ClipRRect(
+        borderRadius: BorderRadius.all(Radius.circular(10)),
+        child: Container(
+          padding: EdgeInsets.symmetric(horizontal: 20),
+          child: Stack(
+            children: [
+              Positioned(
+                left: 0,
+                right: 0,
+                top: 0,
+                bottom: 20,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Container(
+                      child: SvgPicture.asset(icon!, color: iconColor)
+                    )
+                  ]
+                )
+              ),
+              Positioned(
+                left: 0,
+                right: 0,
+                bottom: 8,
+                child: Text(
+                    label,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: iconColor)
+                )
               )
-            ),
-            Positioned(
-              left: 0,
-              right: 0,
-              bottom: 8,
-              child: Text(
-                  label,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(color: iconColor)
-              )
-            )
-          ]
+            ]
+          )
         )
-      )
+      ),
     );
   }
 }
