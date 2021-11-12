@@ -30,4 +30,16 @@ class Utils {
         .now()
         .millisecondsSinceEpoch;
   }
+
+  static List<String> splitStringByChunk(String str, int chunkSize) {
+    List<String> data = [];
+    for (int i = 0; i < str.length; i+= chunkSize) {
+      int maxSize = i + chunkSize;
+      if (maxSize >= str.length) {
+        maxSize = str.length;
+      }
+      data.add(str.substring(i, maxSize));
+    }
+    return data;
+  }
 }

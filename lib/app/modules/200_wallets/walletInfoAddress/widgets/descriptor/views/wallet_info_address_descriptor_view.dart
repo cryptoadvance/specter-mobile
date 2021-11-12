@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:specter_mobile/app/widgets/LightButton.dart';
+import 'package:specter_mobile/app/widgets/QRCodeGenerator.dart';
 import '../controllers/wallet_info_address_descriptor_controller.dart';
 
 import 'package:specter_mobile/globals.dart' as g;
@@ -49,11 +50,13 @@ class WalletInfoAddressDescriptorView extends GetView<WalletInfoAddressDescripto
     return Container(
         width: double.infinity,
         child: Center(
-            child: QrImage(
-                data: controller.descriptor,
-                foregroundColor: Colors.white,
-                version: QrVersions.auto,
-                size: 250
+            child: Container(
+                constraints: BoxConstraints(
+                    maxWidth: 200
+                ),
+                child: QRCodeGenerator(
+                    data: controller.descriptor
+                )
             )
         )
     );

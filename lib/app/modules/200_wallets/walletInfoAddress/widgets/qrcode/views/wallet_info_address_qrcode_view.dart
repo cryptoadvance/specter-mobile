@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:specter_mobile/app/widgets/QRCodeGenerator.dart';
 import '../controllers/wallet_info_address_qrcode_controller.dart';
 
 class WalletInfoAddressQRCodeView extends GetView<WalletInfoAddressQRCodeController> {
@@ -40,11 +41,13 @@ class WalletInfoAddressQRCodeView extends GetView<WalletInfoAddressQRCodeControl
     return Container(
         width: double.infinity,
         child: Center(
-            child: QrImage(
-                data: "1234567890",
-                foregroundColor: Colors.white,
-                version: QrVersions.auto,
-                size: 250
+            child: Container(
+              constraints: BoxConstraints(
+                  maxWidth: 200
+              ),
+              child: QRCodeGenerator(
+                  data: '1234567890'
+              )
             )
         )
     );
