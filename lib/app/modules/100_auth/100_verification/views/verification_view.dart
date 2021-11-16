@@ -41,7 +41,7 @@ class VerificationView extends GetView<VerificationController> {
           children: [
             Container(
               margin: EdgeInsets.only(top: 0),
-              child: Text('verification_labels_top_title'.tr, style: TextStyle(
+              child: Text(controller.isNeedInitAuth?'verification_labels_top_title'.tr:'verification_labels_top_title_ready'.tr, style: TextStyle(
                 fontSize: 24, fontWeight: FontWeight.bold, color: Theme.of(context).accentColor
               ))
             ),

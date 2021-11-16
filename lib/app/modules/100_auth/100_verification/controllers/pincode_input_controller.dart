@@ -61,4 +61,12 @@ class PinCodeInputController extends GetxController {
     });
     return ret;
   }
+
+  int getCurrentInputIndex() {
+    return _currentInputIdx;
+  }
+
+  bool isFilled() {
+    return _currentInputIdx >= _pinCode.length;
+  }
 }

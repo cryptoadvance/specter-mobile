@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
-import 'package:specter_mobile/app/modules/100_auth/100_verification/views/verification_view.dart';
+
+import 'package:specter_mobile/globals.dart' as g;
 
 class HelloController extends GetxController {
   var labelOpacity = 0.1.obs;
@@ -11,8 +12,14 @@ class HelloController extends GetxController {
       labelOpacity.value = 1.0;
     });
 
-    Future.delayed(Duration(milliseconds: 1500), () {
-      Get.offAllNamed('/verification');
+    Future.delayed(Duration(milliseconds: 1000), () async {
+      await g.gCryptoService.init();
+      bool isNeedInitAuth = !(await g.gCryptoService.isAuthInit());
+      Get.offAllNamed('/verification',
+        arguments: {
+          'isNeedInitAuth': isNeedInitAuth
+        }
+      );
     });
   }
 

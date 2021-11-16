@@ -2,6 +2,7 @@
   "verification": {
   	"labels": {
   		"top_title": "Welcome! Please chose your PIN-code",
+  		"top_title_ready": "Welcome! Please enter your PIN-code",
   		"remember_these_words": "Remember these words. They will stay the same on this device unless it has been tampered."
   	}
   },

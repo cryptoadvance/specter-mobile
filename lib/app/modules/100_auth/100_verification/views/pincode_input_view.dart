@@ -5,8 +5,6 @@ import '../../../../../utils.dart';
 import '../controllers/pincode_input_controller.dart';
 
 class PinCodeInputView extends GetView<PinCodeInputController> {
-  final int currentItemIndex = 0;
-
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {
@@ -23,16 +21,13 @@ class PinCodeInputView extends GetView<PinCodeInputController> {
     List<int> pinCode = controller.pinCode;
     print('build');
     for (int i = 0; i < passwordLen; i++) {
-      bool isActive = (currentItemIndex == i);
+      bool isActive = (controller.getCurrentInputIndex() == i);
       rows.add(Container(
         //width: buttonWidth,
         padding: EdgeInsets.only(left: 4, right: 4),
         child: Container(
           padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
           decoration: BoxDecoration(
-            /*border: Border.all(
-              color: isActive?Colors.white:Utils.hexToColor('#7B8794')
-            ),*/
             color: isActive?Utils.hexToColor('#263044'):Utils.hexToColor('#0A121B'),
             borderRadius: BorderRadius.all(Radius.circular(27))
           ),
