@@ -1,81 +1,163 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:biometric_storage/biometric_storage.dart';
 import 'package:crypto/crypto.dart';
 import 'package:encrypt/encrypt.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:specter_mobile/app/models/CryptoContainerModel.dart';
 
 import '../utils.dart';
 
 enum CryptoContainerType {
-  NONE, PIN_CODE
+  PIN_CODE,
+  BIOMETRIC
+}
+
+extension ParseToString on CryptoContainerType {
+  String toShortString() {
+    return this.toString().split('.').last;
+  }
 }
 
 class CCryptoService {
   SharedPreferences? prefs;
-  final storage = new FlutterSecureStorage();
-
-  CryptoContainerType currentCryptoContainerType = CryptoContainerType.NONE;
 
   init() async {
     prefs = await SharedPreferences.getInstance();
-    await getCryptoContainerDetails();
-    print('crypto container type: ' + currentCryptoContainerType.toString());
+    await _openCryptoContainer();
   }
 
-  Future<void> getCryptoContainerDetails() async {
-    String? type = await prefs!.getString('type');
-    switch(type) {
-      case 'CryptoContainerType.PIN_CODE': {
-        currentCryptoContainerType = CryptoContainerType.PIN_CODE;
-        break;
+  Future<void> _openCryptoContainer() async {
+    List<String>? types = await prefs!.getStringList('types');
+
+    List<CryptoContainerType> authTypes = [];
+    types?.forEach((authType) {
+      switch(authType) {
+        case 'PIN_CODE': {
+          authTypes.add(CryptoContainerType.PIN_CODE);
+          break;
+        }
+        case 'BIOMETRIC': {
+          authTypes.add(CryptoContainerType.BIOMETRIC);
+          break;
+        }
       }
-      default: {
-        currentCryptoContainerType = CryptoContainerType.NONE;
-        break;
-      }
-    }
+    });
+
+    print('load authTypes: ' + authTypes.toString());
+
+    cryptoContainerModel = CryptoContainerModel(
+        authTypes: authTypes
+    );
   }
 
   Future<bool> isAuthInit() async {
-    return (currentCryptoContainerType != CryptoContainerType.NONE);
+    return cryptoContainerModel!.getAuthTypes().isNotEmpty;
   }
 
-  /*
-   * 1. Create crypto container
-   * 2. Encrypt crypto container data with pincode
-   */
-  void initCryptoContainer(CryptoContainerType cryptoContainerType, String pinCode) async {
-    var containerData = {
-      'version': 1,
-      'type': cryptoContainerType.toString(),
-      'wallets': []
-    };
+  BiometricStorageFile? store;
+  CryptoContainerModel? cryptoContainerModel;
+
+  Future<bool> addCryptoContainerAuth(CryptoContainerType authType) async {
+    final authenticate = await _checkAuthenticate();
+    if (authenticate == CanAuthenticateResponse.unsupported) {
+      print('Unable to use authenticate. Unable to get storage.');
+      return false;
+    }
 
     //
-    int timeStart = Utils.getTimeMs();
-    String pinCodeSalted = saltPinCode(pinCode, 1000 * 10);
-    int pinCodeGenTime = Utils.getTimeMs() - timeStart;
-    print('pinCodeSalted: ' + pinCodeSalted.toString() + ', gen time: ' + pinCodeGenTime.toString() + ' ms');
+    if (store == null) {
+      await _initCryptoContainerAuth();
+    }
 
     //
-    final salt = Uint8List(16);
-    final key = Key.fromUtf8(pinCode).stretch(32, salt: salt);
+    cryptoContainerModel!.authTypes.add(authType);
 
     //
-    final iv = IV.fromLength(16);
-
-    //encrypt
-    final encrypt = Encrypter(AES(key));
-    final encrypted = encrypt.encrypt(jsonEncode(containerData), iv: iv);
-
-    //sign
-    var digest = sha256.convert(encrypted.bytes);
-    print('digest: ' + digest.toString());
+    if (!await _saveCryptoContainer()) {
+      return false;
+    }
 
     //
-    await prefs!.setString('type', cryptoContainerType.toString());
+    await prefs!.setStringList('types', cryptoContainerModel!.getAuthTypes());
+    return true;
+  }
+
+  _initCryptoContainerAuth() async {
+    if (store != null) {
+      throw "already init";
+    }
+
+    store = await BiometricStorage().getStorage('storage',
+        options: StorageFileInitOptions(
+            androidBiometricOnly: true,
+            authenticationRequired: true,
+            authenticationValidityDurationSeconds: 10
+        ),
+        promptInfo: const PromptInfo(
+            iosPromptInfo: IosPromptInfo(
+              saveTitle: 'Custom save title',
+              accessTitle: 'Custom access title.',
+            ),
+            androidPromptInfo: AndroidPromptInfo(
+              title: 'Verify your identity',
+              description: 'Touch the fingerprint sensor',
+              negativeButton: 'Cancel',
+            )
+        )
+    );
+  }
+
+  Future<bool> _saveCryptoContainer() async {
+    String containerData = cryptoContainerModel.toString();
+
+    try {
+      store!.write(containerData);
+
+      //
+      print('saveCryptoContainer: ' + containerData);
+      return true;
+    } on AuthException catch(e) {
+      print(e.toString());
+    }
+    return false;
+  }
+
+  Future<bool> _readCryptoContainer() async {
+    try {
+      String? containerData = await store!.read();
+      if (containerData == null) {
+        return false;
+      }
+
+      //
+      print('readCryptoContainer: ' + containerData);
+      return true;
+    } on AuthException catch(e) {
+      print(e.toString());
+    }
+    return false;
+  }
+
+  Future<CanAuthenticateResponse> _checkAuthenticate() async {
+    final response = await BiometricStorage().canAuthenticate();
+    return response;
+  }
+
+  Future<bool> authCryptoContainer() async {
+    if (store == null) {
+      await _initCryptoContainerAuth();
+    }
+
+    if (!(await _readCryptoContainer())) {
+      print('authCryptoContainer - error');
+      return false;
+    }
+
+    print('authCryptoContainer - success');
+    return true;
   }
 
   String saltPinCode(String pinCode, int rounds) {
