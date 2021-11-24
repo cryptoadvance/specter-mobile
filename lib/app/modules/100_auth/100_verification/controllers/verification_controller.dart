@@ -1,3 +1,4 @@
+import 'package:biometric_storage/biometric_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -24,7 +25,7 @@ class VerificationController extends GetxController {
   @override
   void onClose() {}
 
-  void verifyAction(BuildContext context) {
+  void verifyAction(BuildContext context) async {
     PinCodeInputController pinCodeInputController = Get.find<PinCodeInputController>();
     if (!pinCodeInputController.isFilled()) {
       g.gNotificationService.addMessage(
@@ -45,12 +46,14 @@ class VerificationController extends GetxController {
 
     //
     if (isNeedInitAuth) {
-      g.gCryptoService.initCryptoContainer(CryptoContainerType.PIN_CODE, pinCode);
+      if (await g.gCryptoService.addCryptoContainerAuth(CryptoContainerType.BIOMETRIC)) {
+        openNextPage();
+      }
       return;
     }
 
     //
-    if (true) {
+    if (!(await g.gCryptoService.authCryptoContainer())) {
       g.gNotificationService.addMessage(
           context, 'Oops!!', 'The PIN-code is not correct. \nPlease try again.',
           actionTitle: 'Try Again'
@@ -59,6 +62,10 @@ class VerificationController extends GetxController {
     }
 
     //
+    openNextPage();
+  }
+
+  void openNextPage() {
     Get.offAllNamed('/recovery-select');
   }
 }
