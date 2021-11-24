@@ -15,6 +15,6 @@ class EnterSeedController extends GetxController {
   void onClose() {}
 
   void openNextPage() {
-    Get.toNamed('/onboarding');
+    Get.offAllNamed('/onboarding');
   }
 }

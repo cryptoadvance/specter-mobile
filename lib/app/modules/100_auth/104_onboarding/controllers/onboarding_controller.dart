@@ -15,6 +15,6 @@ class OnboardingController extends GetxController {
   void onClose() {}
 
   void openNextPage() {
-    Get.toNamed('/keys');
+    Get.offAllNamed('/keys');
   }
 }

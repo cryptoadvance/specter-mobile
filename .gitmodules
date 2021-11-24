@@ -1,0 +1,3 @@
+[submodule "external/biometric_storage"]
+	path = external/biometric_storage
+	url = git@github.com:AleksMx/biometric_storage.git

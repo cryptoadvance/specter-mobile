@@ -15,7 +15,7 @@ class HelloController extends GetxController {
     Future.delayed(Duration(milliseconds: 1000), () async {
       await g.gCryptoService.init();
       bool isNeedInitAuth = !(await g.gCryptoService.isAuthInit());
-      Get.offAllNamed('/verification',
+      await Get.offAllNamed('/verification',
         arguments: {
           'isNeedInitAuth': isNeedInitAuth
         }

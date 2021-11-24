@@ -5,7 +5,6 @@ import 'package:biometric_storage/biometric_storage.dart';
 import 'package:crypto/crypto.dart';
 import 'package:encrypt/encrypt.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:specter_mobile/app/models/CryptoContainerModel.dart';
 
 import '../utils.dart';
@@ -114,7 +113,7 @@ class CCryptoService {
     String containerData = cryptoContainerModel.toString();
 
     try {
-      store!.write(containerData);
+      await store!.write(containerData);
 
       //
       print('saveCryptoContainer: ' + containerData);

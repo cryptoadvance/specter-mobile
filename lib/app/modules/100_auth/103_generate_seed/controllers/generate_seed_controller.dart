@@ -33,6 +33,6 @@ class GenerateSeedController extends GetxController {
   }
 
   void openNextPage() {
-    Get.toNamed('/onboarding');
+    Get.offAllNamed('/onboarding');
   }
 }
