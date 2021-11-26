@@ -9,10 +9,11 @@ import '../views/pincode_input_view.dart';
 import '../widgets/PinCodeKeyboard.dart';
 
 import '../../../../../utils.dart';
-import '../controllers/verification_controller.dart';
+import '../controllers/verification_pincode_controller.dart';
 
-class VerificationView extends GetView<VerificationController> {
-  final VerificationController controller = Get.find<VerificationController>();
+class VerificationPinCodeView extends GetView<VerificationPinCodeController> {
+  @override
+  final VerificationPinCodeController controller = Get.find<VerificationPinCodeController>();
 
   @override
   Widget build(BuildContext context) {

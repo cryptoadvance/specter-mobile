@@ -5,7 +5,8 @@ abstract class Routes {
   Routes._();
 
   static const HOME = _Paths.HOME;
-  static const VERIFICATION = _Paths.VERIFICATION;
+  static const VERIFICATION_PINCODE = _Paths.VERIFICATION_PINCODE;
+  static const VERIFICATION_BIOMETRIC = _Paths.VERIFICATION_BIOMETRIC;
   static const RECOVERY_SELECT = _Paths.RECOVERY_SELECT;
   static const GENERATE_SEED = _Paths.GENERATE_SEED;
   static const KEYS = _Paths.KEYS;
@@ -20,7 +21,8 @@ abstract class Routes {
 
 abstract class _Paths {
   static const HOME = '/home';
-  static const VERIFICATION = '/verification';
+  static const VERIFICATION_PINCODE = '/verification-pincode';
+  static const VERIFICATION_BIOMETRIC = '/verification-biometric';
   static const RECOVERY_SELECT = '/recovery-select';
   static const GENERATE_SEED = '/generate-seed';
   static const KEYS = '/keys';

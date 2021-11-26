@@ -2,8 +2,10 @@ import 'package:get/get.dart';
 
 import 'package:specter_mobile/app/modules/000_hello/bindings/hello_binding.dart';
 import 'package:specter_mobile/app/modules/000_hello/views/hello_view.dart';
-import 'package:specter_mobile/app/modules/100_auth/100_verification/bindings/verification_binding.dart';
-import 'package:specter_mobile/app/modules/100_auth/100_verification/views/verification_view.dart';
+import 'package:specter_mobile/app/modules/100_auth/100_verification_pincode/bindings/verification_pincode_binding.dart';
+import 'package:specter_mobile/app/modules/100_auth/100_verification_pincode/views/verification_pincode_view.dart';
+import 'package:specter_mobile/app/modules/100_auth/100_verification_biometric/bindings/verification_biometric_binding.dart';
+import 'package:specter_mobile/app/modules/100_auth/100_verification_biometric/views/verification_biometric_view.dart';
 import 'package:specter_mobile/app/modules/100_auth/101_recovery_select/bindings/recovery_select_binding.dart';
 import 'package:specter_mobile/app/modules/100_auth/101_recovery_select/views/recovery_select_view.dart';
 import 'package:specter_mobile/app/modules/100_auth/102_enter_seed/bindings/enter_seed_binding.dart';
@@ -30,9 +32,9 @@ class AppPages {
 
   static final routes = [
     GetPage(
-      name: _Paths.VERIFICATION,
-      page: () => VerificationView(),
-      binding: VerificationBinding(),
+      name: _Paths.VERIFICATION_PINCODE,
+      page: () => VerificationPinCodeView(),
+      binding: VerificationPinCodeBinding(),
     ),
     GetPage(
       name: _Paths.RECOVERY_SELECT,
@@ -78,6 +80,11 @@ class AppPages {
       name: _Paths.ONBOARDING,
       page: () => OnboardingView(),
       binding: OnboardingBinding(),
+    ),
+    GetPage(
+      name: _Paths.VERIFICATION_BIOMETRIC,
+      page: () => VerificationBiometricView(),
+      binding: VerificationBiometricBinding(),
     ),
   ];
 }

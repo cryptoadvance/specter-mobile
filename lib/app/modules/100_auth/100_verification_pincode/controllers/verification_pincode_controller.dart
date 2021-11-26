@@ -9,7 +9,7 @@ import 'package:specter_mobile/services/CCryptoService.dart';
 import 'pincode_input_controller.dart';
 
 
-class VerificationController extends GetxController {
+class VerificationPinCodeController extends GetxController {
   bool isNeedInitAuth = Get.arguments['isNeedInitAuth'];
 
   @override
