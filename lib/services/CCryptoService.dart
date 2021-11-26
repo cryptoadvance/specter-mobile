@@ -107,6 +107,9 @@ class CCryptoService {
             )
         )
     );
+
+    String details = (await store!.getDetails())!;
+    print('details: ' + details);
   }
 
   Future<bool> _saveCryptoContainer() async {
