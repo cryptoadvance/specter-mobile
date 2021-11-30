@@ -14,8 +14,16 @@ class HelloController extends GetxController {
 
     Future.delayed(Duration(milliseconds: 1000), () async {
       await g.gCryptoService.init();
-      bool isNeedInitAuth = !(await g.gCryptoService.isAuthInit());
-      await Get.offAllNamed('/verification-biometric',
+      bool isNeedInitAuth = !g.gCryptoService.isAuthInit();
+      bool isAddedBiometricAuth = g.gCryptoService.isAddedBiometricAuth();
+
+      print('isNeedInitAuth: ' + isNeedInitAuth.toString());
+      print('isAddedBiometricAuth: ' + isAddedBiometricAuth.toString());
+
+      String openPage = (isAddedBiometricAuth || isNeedInitAuth)?'/verification-biometric':'/verification-pincode';
+
+      //
+      await Get.offAllNamed(openPage,
         arguments: {
           'isNeedInitAuth': isNeedInitAuth
         }

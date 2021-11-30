@@ -67,6 +67,7 @@ class VerificationPinCodeView extends GetView<VerificationPinCodeController> {
               ),
             ),
             Container(
+              width: double.infinity,
               margin: EdgeInsets.only(top: 20),
               alignment: Alignment.topRight,
               child: getNextButton(context)
@@ -75,6 +76,22 @@ class VerificationPinCodeView extends GetView<VerificationPinCodeController> {
         )
       ),
     );
+  }
+
+  Widget getBackButton(BuildContext context) {
+    return LightButton(
+        style: LightButtonStyle.WHITE_OUTLINE,
+        child: Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text('Use Biometric', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: Colors.grey[700]))
+            ]
+        ),
+        onTap: () {
+          controller.openPrevPage();
+        });
   }
 
   Widget getNextButton(BuildContext context) {
@@ -104,7 +121,12 @@ class VerificationPinCodeView extends GetView<VerificationPinCodeController> {
       ),
       child: SafeArea(
         top: false,
-        child: PinCodeKeyboard()
+        child: PinCodeKeyboard(
+          viewBiometricAuthButton: controller.viewBiometricAuthButton,
+          openBiometricAuth: () {
+            controller.openPrevPage();
+          }
+        )
       )
     );
   }

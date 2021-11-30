@@ -6,6 +6,14 @@ import 'package:get/get.dart';
 import '../controllers/pincode_input_controller.dart';
 
 class PinCodeKeyboard extends StatelessWidget {
+  final bool viewBiometricAuthButton;
+  final Function openBiometricAuth;
+
+  PinCodeKeyboard({
+    required this.viewBiometricAuthButton,
+    required this.openBiometricAuth
+  });
+
   @override
   Widget build(BuildContext context) {
     final PinCodeInputController controller = Get.find<PinCodeInputController>();
@@ -104,13 +112,17 @@ class PinCodeKeyboard extends StatelessWidget {
   }
   
   Widget getBiometricAuthButton(BuildContext context) {
+    if (!viewBiometricAuthButton) {
+      return Container();
+    }
+
     return ClipRRect(
         borderRadius: BorderRadius.all(Radius.circular(5)),
         child: Container(
             color: Colors.transparent,
             child: TextButton(
                 onPressed: () {
-                  print('auth');
+                  openBiometricAuth();
                 },
                 style: TextButton.styleFrom(
                     padding: EdgeInsets.zero,

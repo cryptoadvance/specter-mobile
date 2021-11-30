@@ -33,6 +33,11 @@ class VerificationBiometricView extends GetView<VerificationBiometricController>
                 margin: EdgeInsets.only(top: 40),
                 alignment: Alignment.center,
                 child: getNextButton(context)
+              ),
+              Container(
+                margin: EdgeInsets.only(top: 20),
+                alignment: Alignment.center,
+                child: getPinCodeButton(context)
               )
             ]
           ),
@@ -52,6 +57,26 @@ class VerificationBiometricView extends GetView<VerificationBiometricController>
     ),
     onTap: () {
       controller.verifyAction(context);
+    });
+  }
+
+  Widget getPinCodeButton(BuildContext context) {
+    if (!controller.viewPinCodeButton) {
+      return Container();
+    }
+
+    return LightButton(
+    style: LightButtonStyle.WHITE_OUTLINE,
+    child: Row(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Text('Use PIN code', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: Colors.grey[700]))
+        ]
+    ),
+    onTap: () {
+      controller.openPinCodePage();
     });
   }
 }

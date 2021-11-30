@@ -11,9 +11,15 @@ import 'pincode_input_controller.dart';
 
 class VerificationPinCodeController extends GetxController {
   bool isNeedInitAuth = Get.arguments['isNeedInitAuth'];
+  bool viewBiometricAuthButton = false;
 
   @override
   void onInit() {
+    if (isNeedInitAuth) {
+      viewBiometricAuthButton = true;
+    } else {
+      viewBiometricAuthButton = false;
+    }
     super.onInit();
   }
 
@@ -46,7 +52,7 @@ class VerificationPinCodeController extends GetxController {
 
     //
     if (isNeedInitAuth) {
-      if (await g.gCryptoService.addCryptoContainerAuth(CryptoContainerType.BIOMETRIC)) {
+      if (await g.gCryptoService.addCryptoContainerAuth(CryptoContainerType.PIN_CODE)) {
         openNextPage();
       }
       return;
@@ -67,5 +73,9 @@ class VerificationPinCodeController extends GetxController {
 
   void openNextPage() {
     Get.offAllNamed('/recovery-select');
+  }
+
+  void openPrevPage() {
+    Get.back();
   }
 }

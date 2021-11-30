@@ -7,8 +7,11 @@ import 'package:specter_mobile/services/CCryptoService.dart';
 class VerificationBiometricController extends GetxController {
   bool isNeedInitAuth = Get.arguments['isNeedInitAuth'];
 
+  bool viewPinCodeButton = true;
+
   @override
   void onInit() {
+    viewPinCodeButton = g.gCryptoService.isAddedPinCodeAuth() || !g.gCryptoService.isAuthInit();
     super.onInit();
   }
 
@@ -43,5 +46,11 @@ class VerificationBiometricController extends GetxController {
 
   void openNextPage() {
     Get.offAllNamed('/recovery-select');
+  }
+
+  void openPinCodePage() {
+    Get.toNamed('/verification-pincode', arguments: {
+      'isNeedInitAuth': isNeedInitAuth
+    });
   }
 }

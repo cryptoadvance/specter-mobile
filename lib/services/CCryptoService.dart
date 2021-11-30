@@ -1,3 +1,4 @@
+import 'dart:collection';
 import 'dart:convert';
 import 'dart:typed_data';
 
@@ -16,20 +17,24 @@ enum CryptoContainerType {
 
 extension ParseToString on CryptoContainerType {
   String toShortString() {
-    return this.toString().split('.').last;
+    return toString().split('.').last;
   }
 }
 
 class CCryptoService {
   SharedPreferences? prefs;
 
-  init() async {
+  CryptoContainerType? currentAuthType;
+  CryptoContainerModel? cryptoContainerModel;
+  Map<CryptoContainerType, BiometricStorageFile> stores = HashMap();
+
+  Future<void> init() async {
     prefs = await SharedPreferences.getInstance();
     await _openCryptoContainer();
   }
 
   Future<void> _openCryptoContainer() async {
-    List<String>? types = await prefs!.getStringList('types');
+    List<String>? types = prefs!.getStringList('types');
 
     List<CryptoContainerType> authTypes = [];
     types?.forEach((authType) {
@@ -52,12 +57,20 @@ class CCryptoService {
     );
   }
 
-  Future<bool> isAuthInit() async {
-    return cryptoContainerModel!.getAuthTypes().isNotEmpty;
+  bool isAuthInit() {
+    List<String> authTypes = cryptoContainerModel!.getAuthTypes();
+    return authTypes.isNotEmpty;
   }
 
-  BiometricStorageFile? store;
-  CryptoContainerModel? cryptoContainerModel;
+  bool isAddedBiometricAuth() {
+    List<String> authTypes = cryptoContainerModel!.getAuthTypes();
+    return authTypes.contains(CryptoContainerType.BIOMETRIC.toShortString());
+  }
+
+  bool isAddedPinCodeAuth() {
+    List<String> authTypes = cryptoContainerModel!.getAuthTypes();
+    return authTypes.contains(CryptoContainerType.PIN_CODE.toShortString());
+  }
 
   Future<bool> addCryptoContainerAuth(CryptoContainerType authType) async {
     final authenticate = await _checkAuthenticate();
@@ -67,9 +80,8 @@ class CCryptoService {
     }
 
     //
-    if (store == null) {
-      await _initCryptoContainerAuth();
-    }
+    currentAuthType = authType;
+    BiometricStorageFile store = await _getCryptoContainer(authType);
 
     //
     cryptoContainerModel!.authTypes.add(authType);
@@ -84,12 +96,51 @@ class CCryptoService {
     return true;
   }
 
-  _initCryptoContainerAuth() async {
-    if (store != null) {
-      throw "already init";
+  Future<BiometricStorageFile> _getCurrentCryptoContainer() {
+    return _getCryptoContainer(currentAuthType!);
+  }
+
+  Future<BiometricStorageFile> _getCryptoContainer(CryptoContainerType authType) async {
+    if (stores.containsKey(authType)) {
+      return stores[authType]!;
     }
 
-    store = await BiometricStorage().getStorage('storage',
+    BiometricStorageFile store;
+    switch(authType) {
+      case CryptoContainerType.BIOMETRIC: {
+        store = await _initCryptoContainerBiometric();
+        break;
+      }
+      case CryptoContainerType.PIN_CODE:
+        store = await _initCryptoContainerPinCode();
+        break;
+    }
+
+    try {
+      String details = (await store.getDetails())!;
+      print('details: ' + details);
+    }
+    catch(e) {
+      print(e.toString());
+    }
+
+    stores[authType] = store;
+    return stores[authType]!;
+  }
+
+  Future<BiometricStorageFile> _initCryptoContainerPinCode() async {
+    BiometricStorageFile store = await BiometricStorage().getStorage('storage_pincode',
+        options: StorageFileInitOptions(
+            androidBiometricOnly: false,
+            authenticationRequired: false,
+            authenticationValidityDurationSeconds: 10
+        )
+    );
+    return store;
+  }
+
+  Future<BiometricStorageFile> _initCryptoContainerBiometric() async {
+    BiometricStorageFile store = await BiometricStorage().getStorage('storage_biometric',
         options: StorageFileInitOptions(
             androidBiometricOnly: true,
             authenticationRequired: true,
@@ -107,16 +158,16 @@ class CCryptoService {
             )
         )
     );
-
-    String details = (await store!.getDetails())!;
-    print('details: ' + details);
+    return store;
   }
 
   Future<bool> _saveCryptoContainer() async {
     String containerData = cryptoContainerModel.toString();
 
+    BiometricStorageFile store = await _getCurrentCryptoContainer();
+
     try {
-      await store!.write(containerData);
+      await store.write(containerData);
 
       //
       print('saveCryptoContainer: ' + containerData);
@@ -128,8 +179,10 @@ class CCryptoService {
   }
 
   Future<bool> _readCryptoContainer() async {
+    BiometricStorageFile store = await _getCurrentCryptoContainer();
+
     try {
-      String? containerData = await store!.read();
+      String? containerData = await store.read();
       if (containerData == null) {
         return false;
       }
@@ -149,9 +202,14 @@ class CCryptoService {
   }
 
   Future<bool> authCryptoContainer() async {
-    if (store == null) {
-      await _initCryptoContainerAuth();
+    if (isAddedPinCodeAuth()) {
+      currentAuthType = CryptoContainerType.PIN_CODE;
+    } else {
+      currentAuthType = CryptoContainerType.BIOMETRIC;
     }
+
+    //
+    BiometricStorageFile store = await _getCurrentCryptoContainer();
 
     if (!(await _readCryptoContainer())) {
       print('authCryptoContainer - error');
