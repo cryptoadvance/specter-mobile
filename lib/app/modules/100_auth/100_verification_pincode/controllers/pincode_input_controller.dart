@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:get/get.dart';
 
 import '../../../../../utils.dart';
@@ -15,7 +13,7 @@ class PinCodeInputController extends GetxController {
 
   List<int> get pinCode => _pinCode;
 
-  get codes => _codes;
+  List<int> get codes => _codes;
 
   @override
   void onInit() {

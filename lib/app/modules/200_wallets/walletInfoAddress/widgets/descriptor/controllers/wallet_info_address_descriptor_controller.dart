@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 
 class WalletInfoAddressDescriptorController extends GetxController {
-  Rx<bool> _useForVerification = false.obs;
+  final Rx<bool> _useForVerification = false.obs;
 
   bool get useForVerification => _useForVerification.value;
 

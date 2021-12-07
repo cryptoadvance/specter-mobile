@@ -1,14 +1,12 @@
 import 'dart:collection';
 import 'dart:convert';
-import 'dart:typed_data';
 
 import 'package:biometric_storage/biometric_storage.dart';
 import 'package:crypto/crypto.dart';
-import 'package:encrypt/encrypt.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:specter_mobile/app/models/CryptoContainerModel.dart';
 
-import '../utils.dart';
+import 'CCryptoLocalSign.dart';
 
 enum CryptoContainerType {
   PIN_CODE,
@@ -28,9 +26,14 @@ class CCryptoService {
   CryptoContainerModel? cryptoContainerModel;
   Map<CryptoContainerType, BiometricStorageFile> stores = HashMap();
 
+  final CCryptoLocalSign _cryptoLocalSign = CCryptoLocalSign();
+
   Future<void> init() async {
     prefs = await SharedPreferences.getInstance();
     await _openCryptoContainer();
+
+    CCryptoLocalSignResult? signResult = await _cryptoLocalSign.getLocalCryptoSign(CCryptoLocalSignPurpose.PIN_CODE, 'test');
+    print('local sign test: ' + signResult.toString());
   }
 
   Future<void> _openCryptoContainer() async {
@@ -73,10 +76,12 @@ class CCryptoService {
   }
 
   Future<bool> addCryptoContainerAuth(CryptoContainerType authType) async {
-    final authenticate = await _checkAuthenticate();
-    if (authenticate == CanAuthenticateResponse.unsupported) {
-      print('Unable to use authenticate. Unable to get storage.');
-      return false;
+    if (authType == CryptoContainerType.BIOMETRIC) {
+      final authenticate = await _checkBiometricAuthenticate();
+      if (authenticate == CanAuthenticateResponse.unsupported) {
+        print('Unable to use authenticate. Unable to get storage.');
+        return false;
+      }
     }
 
     //
@@ -84,16 +89,52 @@ class CCryptoService {
     BiometricStorageFile store = await _getCryptoContainer(authType);
 
     //
-    cryptoContainerModel!.authTypes.add(authType);
+    cryptoContainerModel!.addAuthType(authType);
 
     //
-    if (!await _saveCryptoContainer()) {
+    if (!(await _saveCryptoContainer())) {
       return false;
     }
 
     //
     await prefs!.setStringList('types', cryptoContainerModel!.getAuthTypes());
     return true;
+  }
+
+  Future<bool> setCryptoContainerPinCode(String pinCode) async {
+    if (currentAuthType != CryptoContainerType.PIN_CODE) {
+      return false;
+    }
+
+    CCryptoLocalSignResult? signResult = await _cryptoLocalSign.getLocalCryptoSign(CCryptoLocalSignPurpose.PIN_CODE, pinCode);
+    if (signResult == null) {
+      return false;
+    }
+
+    print('pinCodeSign: ' + signResult.sign!);
+
+    cryptoContainerModel!.setCryptoContainerPinCodeSign(signResult.sign!);
+
+    if (!(await _saveCryptoContainer())) {
+      return false;
+    }
+
+    return true;
+  }
+
+  Future<bool> verifyCryptoContainerPinCode(String pinCode) async {
+    if (currentAuthType != CryptoContainerType.PIN_CODE) {
+      return false;
+    }
+
+    CCryptoLocalSignResult? signResult = await _cryptoLocalSign.getLocalCryptoSign(CCryptoLocalSignPurpose.PIN_CODE, pinCode);
+    if (signResult == null) {
+      return false;
+    }
+
+    print('pinCodeSign: ' + signResult.sign!);
+
+    return cryptoContainerModel!.verifyCryptoContainerPinCodeSign(signResult.sign!);
   }
 
   Future<BiometricStorageFile> _getCurrentCryptoContainer() {
@@ -188,7 +229,12 @@ class CCryptoService {
       }
 
       //
+      Map<String, dynamic> data = jsonDecode(containerData);
+      cryptoContainerModel!.loadStore(data);
+
+      //
       print('readCryptoContainer: ' + containerData);
+      print('loadedCryptoContainer: ' + cryptoContainerModel.toString());
       return true;
     } on AuthException catch(e) {
       print(e.toString());
@@ -196,7 +242,7 @@ class CCryptoService {
     return false;
   }
 
-  Future<CanAuthenticateResponse> _checkAuthenticate() async {
+  Future<CanAuthenticateResponse> _checkBiometricAuthenticate() async {
     final response = await BiometricStorage().canAuthenticate();
     return response;
   }
@@ -229,4 +275,6 @@ class CCryptoService {
     }
     return sign.toString();
   }
+
+
 }

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 
 import 'package:get/get.dart';
 import 'package:specter_mobile/app/widgets/LightButton.dart';
@@ -35,27 +34,27 @@ class RecoverySelectView extends GetView<RecoverySelectController> {
                 width: double.infinity,
                 margin: EdgeInsets.only(top: 50),
                 child: LightButton(
+                  isInline: false,
+                  onTap: () {
+                    Get.toNamed('/generate-seed');
+                  },
                   child: Text(
                     'recovery_select_buttons_generate_new_seed'.tr,
                     textAlign: TextAlign.center,
                     style: TextStyle(color: Theme.of(context).accentColor)
-                  ),
-                  isInline: false,
-                  onTap: () {
-                    Get.toNamed('/generate-seed');
-                  }
+                  )
                 ),
               ),
               Container(
                 width: double.infinity,
                 margin: EdgeInsets.only(top: 24),
                 child: LightButton(
-                  child: Text('recovery_select_buttons_recovery_phrase'.tr, textAlign: TextAlign.center),
                   isInline: false,
                   style: LightButtonStyle.SECONDARY,
                   onTap: () {
                     Get.toNamed('/enter-seed');
-                  }
+                  },
+                  child: Text('recovery_select_buttons_recovery_phrase'.tr, textAlign: TextAlign.center)
                 )
               )
             ]

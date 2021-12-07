@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import '../controllers/hello_controller.dart';
 
 class HelloView extends GetView<HelloController> {
+  @override
   final HelloController controller = Get.put(HelloController());
 
   @override

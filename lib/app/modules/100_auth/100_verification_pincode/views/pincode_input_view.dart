@@ -17,7 +17,7 @@ class PinCodeInputView extends GetView<PinCodeInputController> {
 
     List<Widget> rows = [];
     int passwordLen = controller.pinCodeLength();
-    double buttonWidth = width / passwordLen;
+    //double buttonWidth = width / passwordLen;
     List<int> pinCode = controller.pinCode;
     print('build');
     for (int i = 0; i < passwordLen; i++) {

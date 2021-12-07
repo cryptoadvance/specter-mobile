@@ -11,6 +11,7 @@ import '../widgets/GeneratedSeed24WordList.dart';
 import '../../../../../utils.dart';
 
 class GenerateSeedView extends GetView<GenerateSeedController> {
+  @override
   final GenerateSeedController controller = Get.find<GenerateSeedController>();
 
   @override

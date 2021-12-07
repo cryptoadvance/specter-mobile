@@ -33,7 +33,7 @@ class VerificationBiometricController extends GetxController {
 
     //
     if (!(await g.gCryptoService.authCryptoContainer())) {
-      g.gNotificationService.addMessage(
+      await g.gNotificationService.addMessage(
           context, 'Oops!!', 'Please try again.',
           actionTitle: 'Try Again'
       );

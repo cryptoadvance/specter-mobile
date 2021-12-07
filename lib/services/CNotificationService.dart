@@ -35,7 +35,10 @@ class CNotificationService {
   }
 
   OverlayEntry? overlayEntryMessage;
-  void addMessage(BuildContext context, String title, String msg, {String? actionTitle}) {
+  Future<bool> addMessage(BuildContext context, String title, String msg, {String? actionTitle}) async {
+    Completer<bool> completer = Completer();
+
+    //
     if (overlayEntryMessage != null) {
       overlayEntryMessage!.remove();
       overlayEntryMessage = null;
@@ -52,12 +55,18 @@ class CNotificationService {
             actionTitle: actionTitle,
             closeDialog: () {
               overlayEntryMessage!.remove();
-              overlayEntryMessage= null;
+              overlayEntryMessage = null;
+
+              //
+              completer.complete(true);
             }
           )
       );
     });
     Overlay.of(context)!.insert(overlayEntryMessage!);
+
+    //
+    return completer.future;
   }
 
   OverlayEntry? overlayEntryDialog;
