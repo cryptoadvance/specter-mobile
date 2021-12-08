@@ -14,6 +14,6 @@ public class SwiftSpecterRustPlugin: NSObject, FlutterPlugin {
 
   public func intertMethodToEnforceBundling() {
     // This will never be executed
-    rust_greeting("");
+    //rust_greeting("");
   }
 }

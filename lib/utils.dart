@@ -1,5 +1,13 @@
 import 'dart:math';
 import 'dart:ui';
+import 'dart:io' show Platform;
+
+enum PlatformType {
+  web,
+  android,
+  ios,
+  unknown
+}
 
 class Utils {
   static final random = new Random.secure();
@@ -41,5 +49,46 @@ class Utils {
       data.add(str.substring(i, maxSize));
     }
     return data;
+  }
+
+  static PlatformType? _platformType;
+  static getPlatformType () {
+    if (_platformType != null) {
+      return _platformType;
+    }
+    try {
+      if (Platform.isIOS) {
+        return PlatformType.ios;
+      }
+      if (Platform.isAndroid) {
+        return PlatformType.android;
+      }
+    }
+    catch (e) {
+      return PlatformType.web;
+    }
+    return PlatformType.unknown;
+  }
+
+  static String getPlatformName() {
+    PlatformType type = getPlatformType();
+    if (type == PlatformType.ios) {
+      return 'ios';
+    }
+    if (type == PlatformType.android) {
+      return 'android';
+    }
+    if (type == PlatformType.web) {
+      return 'web';
+    }
+    return 'unknown';
+  }
+
+  static isIOS() {
+    return (getPlatformType() == PlatformType.ios);
+  }
+
+  static isWeb() {
+    return (getPlatformType() == PlatformType.web);
   }
 }

@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:specter_mobile/app/models/CryptoContainerModel.dart';
 
 import 'CCryptoLocalSign.dart';
+import '../utils.dart';
 
 enum CryptoContainerType {
   PIN_CODE,
@@ -32,8 +33,8 @@ class CCryptoService {
     prefs = await SharedPreferences.getInstance();
     await _openCryptoContainer();
 
-    CCryptoLocalSignResult? signResult = await _cryptoLocalSign.getLocalCryptoSign(CCryptoLocalSignPurpose.PIN_CODE, 'test');
-    print('local sign test: ' + signResult.toString());
+    //CCryptoLocalSignResult? signResult = await _cryptoLocalSign.getLocalCryptoSign(CCryptoLocalSignPurpose.PIN_CODE, 'test');
+    //print('local sign test: ' + signResult.toString());
   }
 
   Future<void> _openCryptoContainer() async {
@@ -157,12 +158,14 @@ class CCryptoService {
         break;
     }
 
-    try {
-      String details = (await store.getDetails())!;
-      print('details: ' + details);
-    }
-    catch(e) {
-      print(e.toString());
+    if (!Utils.isIOS()) {
+      try {
+        String details = (await store.getDetails())!;
+        print('details: ' + details);
+      }
+      catch(e) {
+        print(e.toString());
+      }
     }
 
     stores[authType] = store;
@@ -189,8 +192,8 @@ class CCryptoService {
         ),
         promptInfo: const PromptInfo(
             iosPromptInfo: IosPromptInfo(
-              saveTitle: 'Custom save title',
-              accessTitle: 'Custom access title.',
+              saveTitle: 'Verify your identity',
+              accessTitle: 'Verify your identity',
             ),
             androidPromptInfo: AndroidPromptInfo(
               title: 'Verify your identity',
