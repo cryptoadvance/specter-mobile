@@ -1,0 +1,16 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "SecureCommunications",
+        "repositoryURL": "https://github.com/supakonoha/SecureCommunications",
+        "state": {
+          "branch": null,
+          "revision": "04dcfaf9313a567ac6f37c370adbdc7924d004c5",
+          "version": "1.0.0"
+        }
+      }
+    ]
+  },
+  "version": 1
+}

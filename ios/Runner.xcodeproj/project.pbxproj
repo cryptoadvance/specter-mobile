@@ -3,11 +3,12 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 51;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */ = {isa = PBXBuildFile; fileRef = 1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */; };
+		22F31AC727636989007F61AB /* SecureCommunications in Frameworks */ = {isa = PBXBuildFile; productRef = 22F31AC627636989007F61AB /* SecureCommunications */; };
 		3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */; };
 		41E9E109BDE59F634680788A /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 33B20393B63CDCC693A3AC20 /* Pods_Runner.framework */; };
 		74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74858FAE1ED2DC5600515810 /* AppDelegate.swift */; };
@@ -54,6 +55,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				22F31AC727636989007F61AB /* SecureCommunications in Frameworks */,
 				41E9E109BDE59F634680788A /* Pods_Runner.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -143,8 +145,12 @@
 			buildRules = (
 			);
 			dependencies = (
+				22F31AC9276369F9007F61AB /* PBXTargetDependency */,
 			);
 			name = Runner;
+			packageProductDependencies = (
+				22F31AC627636989007F61AB /* SecureCommunications */,
+			);
 			productName = Runner;
 			productReference = 97C146EE1CF9000F007C117D /* Runner.app */;
 			productType = "com.apple.product-type.application";
@@ -173,6 +179,9 @@
 				Base,
 			);
 			mainGroup = 97C146E51CF9000F007C117D;
+			packageReferences = (
+				22F31AC527636989007F61AB /* XCRemoteSwiftPackageReference "SecureCommunications" */,
+			);
 			productRefGroup = 97C146EF1CF9000F007C117D /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -278,6 +287,13 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		22F31AC9276369F9007F61AB /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = 22F31AC8276369F9007F61AB /* SecureCommunications */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin PBXVariantGroup section */
 		97C146FA1CF9000F007C117D /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
@@ -359,6 +375,7 @@
 				DEVELOPMENT_TEAM = X29UV655BJ;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -490,6 +507,7 @@
 				DEVELOPMENT_TEAM = X29UV655BJ;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -513,6 +531,7 @@
 				DEVELOPMENT_TEAM = X29UV655BJ;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -549,6 +568,30 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		22F31AC527636989007F61AB /* XCRemoteSwiftPackageReference "SecureCommunications" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/supakonoha/SecureCommunications";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		22F31AC627636989007F61AB /* SecureCommunications */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 22F31AC527636989007F61AB /* XCRemoteSwiftPackageReference "SecureCommunications" */;
+			productName = SecureCommunications;
+		};
+		22F31AC8276369F9007F61AB /* SecureCommunications */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 22F31AC527636989007F61AB /* XCRemoteSwiftPackageReference "SecureCommunications" */;
+			productName = SecureCommunications;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 97C146E61CF9000F007C117D /* Project object */;
 }
