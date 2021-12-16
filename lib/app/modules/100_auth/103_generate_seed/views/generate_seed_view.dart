@@ -49,7 +49,11 @@ class GenerateSeedView extends GetView<GenerateSeedController> {
                       ),
                       Container(
                           margin: EdgeInsets.only(top: 30),
-                          child: getControlComplexityPanel(controller)
+                          child: getControlComplexityPanel(context, controller)
+                      ),
+                      Container(
+                          margin: EdgeInsets.only(top: 30),
+                          child: getControlEntropyGenerationPanel(context, controller)
                       ),
                       Container(
                           margin: EdgeInsets.only(top: 40),
@@ -62,7 +66,7 @@ class GenerateSeedView extends GetView<GenerateSeedController> {
     );
   }
 
-  Widget getControlComplexityPanel(GenerateSeedController controller) {
+  Widget getControlComplexityPanel(BuildContext context, GenerateSeedController controller) {
     return Row(
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.start,
@@ -99,6 +103,43 @@ class GenerateSeedView extends GetView<GenerateSeedController> {
     );
   }
 
+  Widget getControlEntropyGenerationPanel(BuildContext context, GenerateSeedController controller) {
+    return Row(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+              child: Container(
+                  child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('generate_seed_labels_entropy_suggest'.tr, style: TextStyle(fontSize: 16)),
+                        Text('generate_seed_labels_entropy_description'.tr, style: TextStyle(color: Colors.grey[300]))
+                      ]
+                  )
+              )
+          ),
+          Expanded(
+              flex: 0,
+              child: Container(
+                  child: Obx(() => Switch(
+                      value: (controller.entropy_source == ENTROPY_SOURCE.CAMERA),
+                      onChanged: (bool val) {
+                        controller.setEntropySource(context, val?ENTROPY_SOURCE.CAMERA:ENTROPY_SOURCE.NONE);
+                      },
+                      activeTrackColor: Colors.blueGrey,
+                      activeColor: Colors.white
+                  )
+                )
+              )
+          )
+        ]
+    );
+  }
+
   Widget getBottomButtonsPanel(BuildContext context) {
     return Row(
         mainAxisSize: MainAxisSize.max,
@@ -107,6 +148,10 @@ class GenerateSeedView extends GetView<GenerateSeedController> {
         children: [
           Container(
               child: LightButton(
+                  style: LightButtonStyle.SECONDARY,
+                  onTap: () {
+                    Get.back();
+                  },
                   child: Row(
                       children: [
                         Icon(CupertinoIcons.back),
@@ -115,16 +160,14 @@ class GenerateSeedView extends GetView<GenerateSeedController> {
                             child: Text('generate_seed_buttons_prev_page'.tr)
                         )
                       ]
-                  ),
-                  style: LightButtonStyle.SECONDARY,
-                  onTap: () {
-                    Get.back();
-                  }
+                  )
               )
           ),
           Container(
             margin: EdgeInsets.only(left: 10),
             child: LightButton(
+                style: LightButtonStyle.PRIMARY,
+                onTap: controller.openNextPage,
                 child: Row(
                     children: [
                       Icon(CupertinoIcons.check_mark, color: Theme.of(context).accentColor),
@@ -136,9 +179,7 @@ class GenerateSeedView extends GetView<GenerateSeedController> {
                           )
                       )
                     ]
-                ),
-                style: LightButtonStyle.PRIMARY,
-                onTap: controller.openNextPage
+                )
             )
           )
         ]

@@ -3,13 +3,23 @@ import 'package:convert/convert.dart';
 import 'package:crypto/crypto.dart';
 
 import 'package:camera/camera.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class CEntropyGenerationService {
   CameraController? _controller;
   late Future<void> _initializeControllerFuture;
 
-  void init() async {
+  Future<bool> init() async {
     print('CEntropyGenerationService init');
+
+    Map<Permission, PermissionStatus> statuses = await [
+      Permission.camera
+    ].request();
+    print(statuses[Permission.camera]);
+
+    if (!(await Permission.camera.request().isGranted)) {
+      return false;
+    }
 
     var cameras = await availableCameras();
     var firstCamera = cameras.first;
@@ -20,6 +30,7 @@ class CEntropyGenerationService {
     await _initializeControllerFuture;
 
     await _controller!.startImageStream(processImageFrame);
+    return true;
   }
 
   void processImageFrame(CameraImage img) {
@@ -37,8 +48,9 @@ class CEntropyGenerationService {
     print('digest: ' + digest.toString());
   }
 
-  void close() {
+  Future<void> close() async {
     print('CEntropyGenerationService close');
-    _controller?.dispose();
+    await _controller?.dispose();
+    return;
   }
 }

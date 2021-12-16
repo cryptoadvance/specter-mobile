@@ -31,6 +31,10 @@ class LocaleKeys {
       'generate_seed_labels_complexity_suggest';
   static const generate_seed_labels_complexity_description =
       'generate_seed_labels_complexity_description';
+  static const generate_seed_labels_entropy_suggest =
+      'generate_seed_labels_entropy_suggest';
+  static const generate_seed_labels_entropy_description =
+      'generate_seed_labels_entropy_description';
   static const generate_seed_buttons_prev_page =
       'generate_seed_buttons_prev_page';
   static const generate_seed_buttons_next_page =
@@ -67,6 +71,9 @@ class Locales {
     'generate_seed_labels_complexity_suggest': 'Use 24 words',
     'generate_seed_labels_complexity_description':
         'Generates a 24-word seed phrase containing 256 bits of entropy instead of 128 in a 12-word variant.',
+    'generate_seed_labels_entropy_suggest': 'Use camera entropy source',
+    'generate_seed_labels_entropy_description':
+        'Generates entropy based on camera data',
     'generate_seed_buttons_prev_page': 'BACK',
     'generate_seed_buttons_next_page': 'DONE',
     'onboarding_labels_top_title': 'Yayy!!!',

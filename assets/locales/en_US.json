@@ -21,7 +21,9 @@
       "top_title": "Your recovery phrase",
       "recovery_warning": "Write it down and never show to anybody!",
       "complexity_suggest": "Use 24 words",
-      "complexity_description": "Generates a 24-word seed phrase containing 256 bits of entropy instead of 128 in a 12-word variant."
+      "complexity_description": "Generates a 24-word seed phrase containing 256 bits of entropy instead of 128 in a 12-word variant.",
+      "entropy_suggest": "Use camera entropy source",
+      "entropy_description": "Generates entropy based on camera data"
     },
     "buttons": {
       "prev_page": "BACK",
