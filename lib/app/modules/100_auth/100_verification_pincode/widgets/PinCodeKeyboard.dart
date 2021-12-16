@@ -25,7 +25,7 @@ class PinCodeKeyboard extends StatelessWidget {
           children: [
             getTopButtons(context, constraints.maxWidth),
             Container(
-              margin: EdgeInsets.only(top: 10),
+              margin: EdgeInsets.only(top: 5),
               child: getBottomButtons(context, constraints.maxWidth),
             )
           ],
@@ -47,7 +47,7 @@ class PinCodeKeyboard extends StatelessWidget {
         ));
       }
       rows.add(Container(
-        margin: EdgeInsets.only(top: rows.isEmpty?0:10),
+        margin: EdgeInsets.only(top: rows.isEmpty?0:5),
         child: Row(
           children: columns
         ),
@@ -101,7 +101,7 @@ class PinCodeKeyboard extends StatelessWidget {
             backgroundColor: Colors.transparent
           ),
           child: Container(
-            padding: EdgeInsets.symmetric(vertical: 15),
+            padding: EdgeInsets.symmetric(vertical: 10),
             child: Center(
               child: Text(code.toString(), style: TextStyle(fontSize: 26, color: Theme.of(context).accentColor)),
             )
@@ -131,7 +131,7 @@ class PinCodeKeyboard extends StatelessWidget {
                     backgroundColor: Colors.transparent
                 ),
                 child: Container(
-                    padding: EdgeInsets.symmetric(vertical: 15),
+                    padding: EdgeInsets.symmetric(vertical: 10),
                     child: Center(
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -171,7 +171,7 @@ class PinCodeKeyboard extends StatelessWidget {
                     backgroundColor: Colors.transparent
                 ),
                 child: Container(
-                    padding: EdgeInsets.symmetric(vertical: 15),
+                    padding: EdgeInsets.symmetric(vertical: 10),
                     child: Center(
                         child: SvgPicture.asset('assets/icons/delete.svg', color: Theme.of(context).accentColor, width: 30)
                     )

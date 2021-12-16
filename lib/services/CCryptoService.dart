@@ -33,8 +33,8 @@ class CCryptoService {
     prefs = await SharedPreferences.getInstance();
     await _openCryptoContainer();
 
-    //CCryptoLocalSignResult? signResult = await _cryptoLocalSign.getLocalCryptoSign(CCryptoLocalSignPurpose.PIN_CODE, 'test');
-    //print('local sign test: ' + signResult.toString());
+    CCryptoLocalSignResult? signResult = await _cryptoLocalSign.getLocalCryptoSign(CCryptoLocalSignPurpose.PIN_CODE, 'test');
+    print('local sign test: ' + signResult.toString());
   }
 
   Future<void> _openCryptoContainer() async {
