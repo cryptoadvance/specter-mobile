@@ -12,9 +12,9 @@ class HelloController extends GetxController {
     });
 
     Future.delayed(Duration(milliseconds: 1000), () async {
-      await CServices.gCryptoService.init();
-      bool isNeedInitAuth = !CServices.gCryptoService.isAuthInit();
-      bool isAddedBiometricAuth = CServices.gCryptoService.isAddedBiometricAuth();
+      await CServices.init();
+      bool isNeedInitAuth = !CServices.gCryptoContainer.isAuthInit();
+      bool isAddedBiometricAuth = CServices.gCryptoContainer.isAddedBiometricAuth();
 
       print('isNeedInitAuth: ' + isNeedInitAuth.toString());
       print('isAddedBiometricAuth: ' + isAddedBiometricAuth.toString());

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'package:specter_mobile/services/CCryptoService.dart';
+import 'package:specter_mobile/services/cryptoContainer/CCryptoContainer.dart';
 import 'package:specter_mobile/services/CServices.dart';
 
 import 'pincode_input_controller.dart';
@@ -49,11 +49,11 @@ class VerificationPinCodeController extends GetxController {
 
     //
     if (isNeedInitAuth) {
-      if (!await CServices.gCryptoService.addCryptoContainerAuth(CryptoContainerType.PIN_CODE)) {
+      if (!await CServices.gCryptoContainer.addCryptoContainerAuth(CryptoContainerType.PIN_CODE)) {
         return;
       }
 
-      if (!await CServices.gCryptoService.setCryptoContainerPinCode(pinCode)) {
+      if (!await CServices.gCryptoContainer.setCryptoContainerPinCode(pinCode)) {
         return;
       }
 
@@ -62,7 +62,7 @@ class VerificationPinCodeController extends GetxController {
     }
 
     //
-    if (!(await CServices.gCryptoService.authCryptoContainer())) {
+    if (!(await CServices.gCryptoContainer.authCryptoContainer())) {
       await CServices.gNotificationService.addMessage(
           context, 'Oops!!', 'Can not load crypto container.',
           actionTitle: 'Try Again'
@@ -70,7 +70,7 @@ class VerificationPinCodeController extends GetxController {
       return;
     }
 
-    if (!await CServices.gCryptoService.verifyCryptoContainerPinCode(pinCode)) {
+    if (!await CServices.gCryptoContainer.verifyCryptoContainerPinCode(pinCode)) {
       await CServices.gNotificationService.addMessage(
           context, 'Oops!!', 'The PIN-code is not correct. \nPlease try again.',
           actionTitle: 'Try Again'

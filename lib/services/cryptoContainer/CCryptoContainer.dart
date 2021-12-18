@@ -7,7 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:specter_mobile/app/models/CryptoContainerModel.dart';
 
 import 'CCryptoLocalSign.dart';
-import '../utils.dart';
+import '../../utils.dart';
 
 enum CryptoContainerType {
   PIN_CODE,
@@ -20,7 +20,10 @@ extension ParseToString on CryptoContainerType {
   }
 }
 
-class CCryptoService {
+/*
+ * Manages data storage in the secure storage
+ */
+class CCryptoContainer {
   SharedPreferences? prefs;
 
   CryptoContainerType? currentAuthType;
@@ -268,16 +271,4 @@ class CCryptoService {
     print('authCryptoContainer - success');
     return true;
   }
-
-  String saltPinCode(String pinCode, int rounds) {
-    var sign;
-    var bytes = utf8.encode(pinCode);
-    for (int i = 0; i < rounds; i++) {
-      sign = sha256.convert(bytes);
-      bytes = sign.bytes;
-    }
-    return sign.toString();
-  }
-
-
 }

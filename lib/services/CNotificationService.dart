@@ -10,8 +10,7 @@ import '../utils.dart';
 class CNotificationService {
   int currentIdx = 0;
 
-  CNotificationService() {
-  }
+  CNotificationService();
 
   void addNotify(BuildContext context, String title) {
     int idx = currentIdx;

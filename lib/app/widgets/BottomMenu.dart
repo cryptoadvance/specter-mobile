@@ -1,10 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:specter_mobile/services/CServices.dart';
 
 import '../../utils.dart';
-
-import 'package:specter_mobile/globals.dart' as g;
 
 import 'QRCodeScanner.dart';
 
@@ -52,7 +51,7 @@ class BottomMenu extends StatelessWidget {
               isActive: (item == BOTTOM_MENU_ITEM.QR_SCAN),
               icon: 'assets/icons/qr_code_scanner.svg',
               onSelect: () {
-                g.gNotificationService.addDialog(context, child: QRCodeScanner());
+                CServices.gNotificationService.addDialog(context, child: QRCodeScanner());
               }
             )
           ),

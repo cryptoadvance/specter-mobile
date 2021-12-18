@@ -42,6 +42,9 @@ class CCryptoLocalSignResult {
   }
 }
 
+/*
+ * Controls the execution of cryptographic operations in the KeyStore (Android), Secure Enclave (iOS)
+ */
 class CCryptoLocalSign {
   static const platform = MethodChannel('specter.mobile/service');
 

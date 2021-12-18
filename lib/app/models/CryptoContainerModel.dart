@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:specter_mobile/services/CCryptoService.dart';
+import 'package:specter_mobile/services/cryptoContainer/CCryptoContainer.dart';
 
 class CryptoContainerModel {
   final version = 1;
