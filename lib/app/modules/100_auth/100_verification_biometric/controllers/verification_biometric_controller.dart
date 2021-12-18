@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'package:specter_mobile/globals.dart' as g;
 import 'package:specter_mobile/services/CCryptoService.dart';
+import 'package:specter_mobile/services/CServices.dart';
 
 class VerificationBiometricController extends GetxController {
   bool isNeedInitAuth = Get.arguments['isNeedInitAuth'];
@@ -11,7 +11,7 @@ class VerificationBiometricController extends GetxController {
 
   @override
   void onInit() {
-    viewPinCodeButton = g.gCryptoService.isAddedPinCodeAuth() || !g.gCryptoService.isAuthInit();
+    viewPinCodeButton = CServices.gCryptoService.isAddedPinCodeAuth() || !CServices.gCryptoService.isAuthInit();
     super.onInit();
   }
 
@@ -25,15 +25,15 @@ class VerificationBiometricController extends GetxController {
 
   void verifyAction(BuildContext context) async {
     if (isNeedInitAuth) {
-      if (await g.gCryptoService.addCryptoContainerAuth(CryptoContainerType.BIOMETRIC)) {
+      if (await CServices.gCryptoService.addCryptoContainerAuth(CryptoContainerType.BIOMETRIC)) {
         openNextPage();
       }
       return;
     }
 
     //
-    if (!(await g.gCryptoService.authCryptoContainer())) {
-      await g.gNotificationService.addMessage(
+    if (!(await CServices.gCryptoService.authCryptoContainer())) {
+      await CServices.gNotificationService.addMessage(
           context, 'Oops!!', 'Please try again.',
           actionTitle: 'Try Again'
       );

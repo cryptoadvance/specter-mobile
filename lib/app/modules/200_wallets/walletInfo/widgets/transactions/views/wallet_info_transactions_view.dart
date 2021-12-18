@@ -3,13 +3,12 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:specter_mobile/app/widgets/DateSelector.dart';
 import 'package:specter_mobile/app/widgets/LightFilter.dart';
+import 'package:specter_mobile/services/CServices.dart';
 import '../../../../../../../utils.dart';
 import '../controllers/wallet_info_transactions_controller.dart';
 import 'package:specter_mobile/app/widgets/LightTab.dart';
 
 import '../widgets/wallet_info_transactions_item.dart';
-
-import 'package:specter_mobile/globals.dart' as g;
 
 class WalletInfoTransactionsView extends GetView<WalletInfoTransactionsController> {
   final WalletInfoTransactionsController controller = Get.put(WalletInfoTransactionsController());
@@ -120,6 +119,6 @@ class WalletInfoTransactionsView extends GetView<WalletInfoTransactionsControlle
   }
 
   Future<String> selectFilterDate(BuildContext context) async {
-    return await g.gNotificationService.addDialog(context, child: DateSelector());
+    return await CServices.gNotificationService.addDialog(context, child: DateSelector());
   }
 }

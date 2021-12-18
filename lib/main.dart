@@ -6,8 +6,6 @@ import 'package:specter_mobile/utils.dart';
 import 'app/routes/app_pages.dart';
 import 'generated/locales.g.dart';
 
-import 'package:specter_mobile/globals.dart' as g;
-
 void main() {
   ThemeData _darkTheme = ThemeData(
     fontFamily: 'Mulish',

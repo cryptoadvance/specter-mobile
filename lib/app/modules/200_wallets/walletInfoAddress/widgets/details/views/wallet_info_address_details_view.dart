@@ -4,11 +4,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:specter_mobile/app/widgets/LightButton.dart';
+import 'package:specter_mobile/services/CServices.dart';
 
 import '../widgets/WalletInfoAddressDetailsList.dart';
 import '../controllers/wallet_info_address_details_controller.dart';
-
-import 'package:specter_mobile/globals.dart' as g;
 
 class WalletInfoAddressDetailsView extends GetView<WalletInfoAddressDetailsController> {
   final WalletInfoAddressDetailsController controller = Get.put(WalletInfoAddressDetailsController());
@@ -66,6 +65,6 @@ class WalletInfoAddressDetailsView extends GetView<WalletInfoAddressDetailsContr
 
   void copyAddress(BuildContext context) {
     Clipboard.setData(ClipboardData(text: controller.transactionAddress));
-    g.gNotificationService.addNotify(context, 'Address copied');
+    CServices.gNotificationService.addNotify(context, 'Address copied');
   }
 }

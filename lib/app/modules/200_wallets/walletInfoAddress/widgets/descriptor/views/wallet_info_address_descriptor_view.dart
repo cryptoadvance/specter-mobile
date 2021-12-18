@@ -5,9 +5,8 @@ import 'package:get/get.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:specter_mobile/app/widgets/LightButton.dart';
 import 'package:specter_mobile/app/widgets/QRCodeGenerator.dart';
+import 'package:specter_mobile/services/CServices.dart';
 import '../controllers/wallet_info_address_descriptor_controller.dart';
-
-import 'package:specter_mobile/globals.dart' as g;
 
 class WalletInfoAddressDescriptorView extends GetView<WalletInfoAddressDescriptorController> {
   final WalletInfoAddressDescriptorController controller = Get.put(WalletInfoAddressDescriptorController());
@@ -118,6 +117,6 @@ class WalletInfoAddressDescriptorView extends GetView<WalletInfoAddressDescripto
 
   void copyAddress(BuildContext context) {
     Clipboard.setData(ClipboardData(text: controller.descriptor));
-    g.gNotificationService.addNotify(context, 'Descriptor copied');
+    CServices.gNotificationService.addNotify(context, 'Descriptor copied');
   }
 }

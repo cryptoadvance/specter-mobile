@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'package:specter_mobile/globals.dart' as g;
 import 'package:specter_mobile/services/CCryptoService.dart';
+import 'package:specter_mobile/services/CServices.dart';
 
 import 'pincode_input_controller.dart';
 
@@ -31,7 +31,7 @@ class VerificationPinCodeController extends GetxController {
   void verifyAction(BuildContext context) async {
     PinCodeInputController pinCodeInputController = Get.find<PinCodeInputController>();
     if (!pinCodeInputController.isFilled()) {
-      await g.gNotificationService.addMessage(
+      await CServices.gNotificationService.addMessage(
           context, 'Oops!!', 'The PIN-code is not entered.',
           actionTitle: 'Try Again'
       );
@@ -40,7 +40,7 @@ class VerificationPinCodeController extends GetxController {
 
     String pinCode = pinCodeInputController.getValue();
     if (pinCode == '0000') {
-      await g.gNotificationService.addMessage(
+      await CServices.gNotificationService.addMessage(
           context, 'Oops!!', 'The PIN-code is wrong.',
           actionTitle: 'Try Again'
       );
@@ -49,11 +49,11 @@ class VerificationPinCodeController extends GetxController {
 
     //
     if (isNeedInitAuth) {
-      if (!await g.gCryptoService.addCryptoContainerAuth(CryptoContainerType.PIN_CODE)) {
+      if (!await CServices.gCryptoService.addCryptoContainerAuth(CryptoContainerType.PIN_CODE)) {
         return;
       }
 
-      if (!await g.gCryptoService.setCryptoContainerPinCode(pinCode)) {
+      if (!await CServices.gCryptoService.setCryptoContainerPinCode(pinCode)) {
         return;
       }
 
@@ -62,16 +62,16 @@ class VerificationPinCodeController extends GetxController {
     }
 
     //
-    if (!(await g.gCryptoService.authCryptoContainer())) {
-      await g.gNotificationService.addMessage(
+    if (!(await CServices.gCryptoService.authCryptoContainer())) {
+      await CServices.gNotificationService.addMessage(
           context, 'Oops!!', 'Can not load crypto container.',
           actionTitle: 'Try Again'
       );
       return;
     }
 
-    if (!await g.gCryptoService.verifyCryptoContainerPinCode(pinCode)) {
-      await g.gNotificationService.addMessage(
+    if (!await CServices.gCryptoService.verifyCryptoContainerPinCode(pinCode)) {
+      await CServices.gNotificationService.addMessage(
           context, 'Oops!!', 'The PIN-code is not correct. \nPlease try again.',
           actionTitle: 'Try Again'
       );

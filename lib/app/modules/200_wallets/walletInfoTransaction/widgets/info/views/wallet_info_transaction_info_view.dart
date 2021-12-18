@@ -5,9 +5,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:specter_mobile/app/modules/200_wallets/walletInfoAddress/widgets/details/widgets/WalletInfoAddressDetailsList.dart';
 import 'package:specter_mobile/app/widgets/LightButton.dart';
+import 'package:specter_mobile/services/CServices.dart';
 import '../controllers/wallet_info_transaction_info_controller.dart';
-
-import 'package:specter_mobile/globals.dart' as g;
 
 class WalletInfoTransactionInfoView extends GetView<WalletInfoTransactionInfoController> {
   final WalletInfoTransactionInfoController controller = Get.put(WalletInfoTransactionInfoController());
@@ -95,6 +94,6 @@ class WalletInfoTransactionInfoView extends GetView<WalletInfoTransactionInfoCon
 
   void copyAddress(BuildContext context) {
     Clipboard.setData(ClipboardData(text: controller.transactionID));
-    g.gNotificationService.addNotify(context, 'Transaction ID copied');
+    CServices.gNotificationService.addNotify(context, 'Transaction ID copied');
   }
 }

@@ -1,7 +1,6 @@
 import 'package:get/get.dart';
 import 'package:specter_mobile/services/CEntropyGenerationService.dart';
-
-import 'package:specter_mobile/globals.dart' as g;
+import 'package:specter_mobile/services/CServices.dart';
 
 enum SEED_COMPLEXITY {
   SIMPLE,
@@ -47,7 +46,7 @@ class GenerateSeedController extends GetxController {
           update();
 
           //
-          g.gNotificationService.addNotify(context, 'Can not connect to the camera');
+          CServices.gNotificationService.addNotify(context, 'Can not connect to the camera');
         }
       });
     }
