@@ -1,6 +1,11 @@
+import 'dart:async';
+
 import 'package:get/get.dart';
+import 'package:specter_mobile/services/cryptoService/CCryptoService.dart';
 import 'package:specter_mobile/services/CEntropyGenerationService.dart';
 import 'package:specter_mobile/services/CServices.dart';
+import 'package:specter_mobile/services/cryptoService/CGenerateSeedService.dart';
+import 'package:specter_mobile/services/cryptoService/providers/CCryptoProvider.dart';
 
 enum SEED_COMPLEXITY {
   SIMPLE,
@@ -18,9 +23,16 @@ class GenerateSeedController extends GetxController {
 
   CEntropyGenerationService entropyGenerationService = CEntropyGenerationService();
 
+  late StreamSubscription<SGenerateSeedEvent> _streamSubscription;
+
   @override
   void onInit() {
     super.onInit();
+
+    _streamSubscription = CServices.gCryptoService.startGenerateSeed((SGenerateSeedEvent generateSeedEvent) {
+      print('generate seed event: ' + generateSeedEvent.toString());
+      update();
+    });
   }
 
   @override
@@ -30,6 +42,8 @@ class GenerateSeedController extends GetxController {
 
   @override
   void onClose() {
+    CServices.gCryptoService.stopGenerateSeed();
+    _streamSubscription.cancel();
     entropyGenerationService.close();
   }
 
