@@ -27,9 +27,14 @@ abstract class SCryptoProviderSubEvent {
 }
 
 class SGenerateSeedEvent extends SCryptoProviderSubEvent {
+  List<String> seedWords;
+  SGenerateSeedEvent({required this.seedWords});
+
   @override
   String toString() {
-    return '{}';
+    return jsonEncode({
+      'seedWords': seedWords
+    });
   }
 }
 

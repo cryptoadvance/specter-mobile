@@ -1,25 +1,23 @@
 import 'package:flutter/material.dart';
 
 class GeneratedSeed24WordList extends StatelessWidget {
+  final List<String> seedWords;
+  GeneratedSeed24WordList({required this.seedWords});
+
   @override
   Widget build(BuildContext context) {
-    var values = [
-        'A', 'B', 'C', 'D', 'A', 'B', 'C', 'D',  'A', 'B', 'C', 'D',
-        'A', 'B', 'C', 'D',  'A', 'B', 'C', 'D',  'A', 'B', 'C', 'D'
-    ];
-
     int inColumnLength = 12;
-    int columnsCount = (values.length / inColumnLength).ceil();
+    int columnsCount = (seedWords.length / inColumnLength).ceil();
 
     var idx = 0;
     List<Widget> columns = [];
     for (int columnIdx = 0; columnIdx < columnsCount; columnIdx++) {
         List<Widget> rows = [];
         for (var i = 0; i < inColumnLength; i++) {
-            if (idx >= values.length) {
+            if (idx >= seedWords.length) {
               break;
             }
-            var el = values[idx];
+            var el = seedWords[idx];
             rows.add(Container(
                 child: Row(
                     children: [

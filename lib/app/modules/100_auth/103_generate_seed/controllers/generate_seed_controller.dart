@@ -25,14 +25,13 @@ class GenerateSeedController extends GetxController {
 
   late StreamSubscription<SGenerateSeedEvent> _streamSubscription;
 
+  RxList<String> seedWords = RxList.empty();
+
   @override
   void onInit() {
     super.onInit();
 
-    _streamSubscription = CServices.gCryptoService.startGenerateSeed((SGenerateSeedEvent generateSeedEvent) {
-      print('generate seed event: ' + generateSeedEvent.toString());
-      update();
-    });
+    _streamSubscription = CServices.gCryptoService.startGenerateSeed(processGenerateSeedEvent);
   }
 
   @override
@@ -45,6 +44,12 @@ class GenerateSeedController extends GetxController {
     CServices.gCryptoService.stopGenerateSeed();
     _streamSubscription.cancel();
     entropyGenerationService.close();
+  }
+
+  void processGenerateSeedEvent(SGenerateSeedEvent generateSeedEvent) {
+    print('generate seed event: ' + generateSeedEvent.toString());
+    seedWords.value = generateSeedEvent.seedWords;
+    update();
   }
 
   void setComplexityState(SEED_COMPLEXITY seed_complexity_) {

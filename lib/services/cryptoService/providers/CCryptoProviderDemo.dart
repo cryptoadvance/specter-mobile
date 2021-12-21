@@ -4,6 +4,7 @@ import 'CCryptoProvider.dart';
 
 class CCryptoProviderDemo extends CCryptoProvider {
   Timer? timerGenerateSeed;
+  int generateDemoIdx = 0;
 
   @override
   void startGenerateSeed() {
@@ -11,8 +12,14 @@ class CCryptoProviderDemo extends CCryptoProvider {
       throw 'generate seed already started';
     }
 
+    generateDemoIdx = 0;
+
     timerGenerateSeed = Timer.periodic(Duration(milliseconds: 300), (_) async {
-      addEvent(CryptoProviderEventType.GENERATE_SEED_EVENT, SGenerateSeedEvent());
+      var seedWords = [
+        'A' + generateDemoIdx.toString(), 'B', 'C', 'D',  'A', 'B', 'C', 'D'
+      ];
+      addEvent(CryptoProviderEventType.GENERATE_SEED_EVENT, SGenerateSeedEvent(seedWords: seedWords));
+      generateDemoIdx++;
     });
   }
 

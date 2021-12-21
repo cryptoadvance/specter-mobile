@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 import 'package:specter_mobile/app/widgets/LightButton.dart';
 
 import '../controllers/generate_seed_controller.dart';
-import '../widgets/GeneratedSeedSimpleList.dart';
 import '../widgets/GeneratedSeed24WordList.dart';
 
 import '../../../../../utils.dart';
@@ -39,12 +38,9 @@ class GenerateSeedView extends GetView<GenerateSeedController> {
                           ),
                           margin: EdgeInsets.only(top: 40),
                           child: SingleChildScrollView(
+                              key: UniqueKey(),
                               scrollDirection: Axis.vertical,
-                              child: Obx(() => (controller.seed_complexity == SEED_COMPLEXITY.SIMPLE) ? (
-                                  GeneratedSeedSimpleList()
-                              ):(
-                                  GeneratedSeed24WordList()
-                              ))
+                              child: Obx(() => GeneratedSeed24WordList(seedWords: controller.seedWords.value))
                           )
                       ),
                       Container(
