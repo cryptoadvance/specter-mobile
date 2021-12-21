@@ -1,24 +1,53 @@
 import 'dart:async';
+import 'dart:math';
 
+import '../CGenerateSeedService.dart';
 import 'CCryptoProvider.dart';
 
 class CCryptoProviderDemo extends CCryptoProvider {
   Timer? timerGenerateSeed;
   int generateDemoIdx = 0;
+  int maxGenerateIterations = 100;
+  double completePercent = 0;
+  GenerateSeedOptions? currentGenerateSeedOptions;
 
   @override
   void startGenerateSeed() {
     if (timerGenerateSeed != null) {
       throw 'generate seed already started';
     }
+    if (currentGenerateSeedOptions == null) {
+      throw 'generateSeedOptions is not set';
+    }
 
     generateDemoIdx = 0;
 
-    timerGenerateSeed = Timer.periodic(Duration(milliseconds: 300), (_) async {
-      var seedWords = [
-        'A' + generateDemoIdx.toString(), 'B', 'C', 'D',  'A', 'B', 'C', 'D'
-      ];
-      addEvent(CryptoProviderEventType.GENERATE_SEED_EVENT, SGenerateSeedEvent(seedWords: seedWords));
+    List<String> demoWords = ['A', 'B', 'C', 'D',  'A', 'B', 'C', 'D'];
+
+    timerGenerateSeed = Timer.periodic(Duration(milliseconds: 200), (_) async {
+      if (completePercent == 100) {
+        return;
+      }
+
+      //
+      List<String> seedWords = [];
+      int wordsCount = (currentGenerateSeedOptions!.seedComplexity == SEED_COMPLEXITY.SIMPLE)?8:24;
+      for (int i = 0; i < wordsCount; i++) {
+        String word = demoWords[Random().nextInt(demoWords.length - 1)];
+        seedWords.add(word);
+      }
+
+      //
+      completePercent = (generateDemoIdx / maxGenerateIterations.toDouble()) * 100;
+      if (completePercent > 100) {
+        completePercent = 100;
+      }
+
+      //
+      addEvent(CryptoProviderEventType.GENERATE_SEED_EVENT, SGenerateSeedEvent(
+          seedWords: seedWords,
+          completePercent: completePercent
+      ));
       generateDemoIdx++;
     });
   }
@@ -27,5 +56,16 @@ class CCryptoProviderDemo extends CCryptoProvider {
   void stopGenerateSeed() {
     timerGenerateSeed!.cancel();
     timerGenerateSeed = null;
+  }
+
+  @override
+  void setGenerateSeedOptions(GenerateSeedOptions generateSeedOptions) {
+    currentGenerateSeedOptions = generateSeedOptions;
+    cleanDemoCounter();
+  }
+
+  void cleanDemoCounter() {
+    generateDemoIdx = 0;
+    completePercent = 0;
   }
 }

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:specter_mobile/app/widgets/LightButton.dart';
+import 'package:specter_mobile/services/cryptoService/CGenerateSeedService.dart';
 
 import '../controllers/generate_seed_controller.dart';
 import '../widgets/GeneratedSeed24WordList.dart';
@@ -40,12 +41,18 @@ class GenerateSeedView extends GetView<GenerateSeedController> {
                           child: SingleChildScrollView(
                               key: UniqueKey(),
                               scrollDirection: Axis.vertical,
-                              child: Obx(() => GeneratedSeed24WordList(seedWords: controller.seedWords.value))
+                              child: Obx(() => GeneratedSeed24WordList(seedWords: controller.lastGenerateSeedEvent!.value.seedWords))
                           )
                       ),
                       Container(
-                          margin: EdgeInsets.only(top: 30),
-                          child: getControlComplexityPanel(context, controller)
+                        margin: EdgeInsets.only(top: 10),
+                        child: Obx(() =>
+                            Text('Generate progress: ' + controller.lastGenerateSeedEvent!.value.completePercent.toStringAsFixed(0) + '%')
+                        )
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(top: 30),
+                        child: getControlComplexityPanel(context, controller)
                       ),
                       Container(
                           margin: EdgeInsets.only(top: 30),

@@ -7,16 +7,6 @@ import 'package:specter_mobile/services/CServices.dart';
 import 'package:specter_mobile/services/cryptoService/CGenerateSeedService.dart';
 import 'package:specter_mobile/services/cryptoService/providers/CCryptoProvider.dart';
 
-enum SEED_COMPLEXITY {
-  SIMPLE,
-  WORDS_24
-}
-
-enum ENTROPY_SOURCE {
-  NONE,
-  CAMERA
-}
-
 class GenerateSeedController extends GetxController {
   Rx<SEED_COMPLEXITY> seed_complexity = SEED_COMPLEXITY.SIMPLE.obs;
   Rx<ENTROPY_SOURCE> entropy_source = ENTROPY_SOURCE.NONE.obs;
@@ -25,13 +15,13 @@ class GenerateSeedController extends GetxController {
 
   late StreamSubscription<SGenerateSeedEvent> _streamSubscription;
 
-  RxList<String> seedWords = RxList.empty();
+  Rx<SGenerateSeedEvent>? lastGenerateSeedEvent = SGenerateSeedEvent(seedWords: []).obs;
 
   @override
   void onInit() {
     super.onInit();
 
-    _streamSubscription = CServices.gCryptoService.startGenerateSeed(processGenerateSeedEvent);
+    _streamSubscription = CServices.gCryptoService.generateSeedService.startGenerateSeed(processGenerateSeedEvent);
   }
 
   @override
@@ -41,19 +31,20 @@ class GenerateSeedController extends GetxController {
 
   @override
   void onClose() {
-    CServices.gCryptoService.stopGenerateSeed();
+    CServices.gCryptoService.generateSeedService.stopGenerateSeed();
     _streamSubscription.cancel();
     entropyGenerationService.close();
   }
 
   void processGenerateSeedEvent(SGenerateSeedEvent generateSeedEvent) {
     print('generate seed event: ' + generateSeedEvent.toString());
-    seedWords.value = generateSeedEvent.seedWords;
+    lastGenerateSeedEvent!.value = generateSeedEvent;
     update();
   }
 
   void setComplexityState(SEED_COMPLEXITY seed_complexity_) {
     seed_complexity.value = seed_complexity_;
+    CServices.gCryptoService.generateSeedService.setGenerateSeedComplexity(seed_complexity_);
     update();
   }
 

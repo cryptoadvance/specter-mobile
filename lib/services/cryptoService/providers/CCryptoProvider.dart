@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'dart:convert';
 
+import '../CGenerateSeedService.dart';
+
 enum CryptoProviderEventType {
   GENERATE_SEED_EVENT
 }
@@ -28,12 +30,15 @@ abstract class SCryptoProviderSubEvent {
 
 class SGenerateSeedEvent extends SCryptoProviderSubEvent {
   List<String> seedWords;
-  SGenerateSeedEvent({required this.seedWords});
+  double completePercent;
+
+  SGenerateSeedEvent({required this.seedWords, this.completePercent = 0});
 
   @override
   String toString() {
     return jsonEncode({
-      'seedWords': seedWords
+      'seedWords': seedWords,
+      'completePercent': completePercent.toString()
     });
   }
 }
@@ -62,4 +67,5 @@ abstract class CCryptoProvider {
 
   void startGenerateSeed();
   void stopGenerateSeed();
+  void setGenerateSeedOptions(GenerateSeedOptions generateSeedOptions);
 }
