@@ -11,12 +11,13 @@ enum LightButtonStyle {
 class LightButton extends StatelessWidget {
   final Widget child;
   final Function onTap;
-  final bool isInline;
+  final bool isInline, isDisabled;
   final LightButtonStyle style;
 
   LightButton({
     required this.child,
     this.isInline = true,
+    this.isDisabled = false,
     this.style = LightButtonStyle.PRIMARY,
     required this.onTap
   });
@@ -39,22 +40,29 @@ class LightButton extends StatelessWidget {
 
     return ClipRRect(
       borderRadius: BorderRadius.all(Radius.circular(100)),
-      child: Container(
-        color: bgColor,
-        child: TextButton(
-          onPressed: () {
-            onTap();
-          },
-          style: TextButton.styleFrom(
-            padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-            minimumSize: Size(50, 30),
-            alignment: Alignment.centerLeft
-          ),
-          child: Container(
-            width: (!isInline)?double.infinity:null,
-            child: child,
+      child: AnimatedOpacity(
+        duration: Duration(milliseconds: 250),
+        opacity: isDisabled?0.2:1.0,
+        child: Container(
+          color: bgColor,
+          child: TextButton(
+            onPressed: () {
+              if (isDisabled) {
+                return;
+              }
+              onTap();
+            },
+            style: TextButton.styleFrom(
+              padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+              minimumSize: Size(50, 30),
+              alignment: Alignment.centerLeft
+            ),
+            child: Container(
+              width: (!isInline)?double.infinity:null,
+              child: child,
+            )
           )
-        )
+        ),
       )
     );
   }

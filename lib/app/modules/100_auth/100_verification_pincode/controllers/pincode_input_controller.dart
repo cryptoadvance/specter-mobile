@@ -38,11 +38,15 @@ class PinCodeInputController extends GetxController {
     return _codes;
   }
 
-  void addCode(int num) {
+  bool addCode(int num) {
     if (_currentInputIdx >= _pinCode.length) {
-      return;
+      return false;
     }
     _pinCode[_currentInputIdx++] = num;
+    if (_currentInputIdx >= _pinCode.length) {
+      return false;
+    }
+    return true;
   }
 
   void clean() {

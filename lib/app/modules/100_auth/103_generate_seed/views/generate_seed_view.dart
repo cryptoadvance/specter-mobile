@@ -60,7 +60,7 @@ class GenerateSeedView extends GetView<GenerateSeedController> {
                       ),
                       Container(
                           margin: EdgeInsets.only(top: 40),
-                          child: getBottomButtonsPanel(context)
+                          child: Obx(() => getBottomButtonsPanel(context))
                       )
                     ]
                 )
@@ -144,6 +144,8 @@ class GenerateSeedView extends GetView<GenerateSeedController> {
   }
 
   Widget getBottomButtonsPanel(BuildContext context) {
+    bool isCompleted =  controller.lastGenerateSeedEvent!.value.completePercent == 100;
+
     return Row(
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.center,
@@ -170,6 +172,7 @@ class GenerateSeedView extends GetView<GenerateSeedController> {
             margin: EdgeInsets.only(left: 10),
             child: LightButton(
                 style: LightButtonStyle.PRIMARY,
+                isDisabled: !isCompleted,
                 onTap: controller.openNextPage,
                 child: Row(
                     children: [

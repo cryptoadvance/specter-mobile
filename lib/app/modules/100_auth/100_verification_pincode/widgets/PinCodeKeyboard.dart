@@ -7,11 +7,12 @@ import '../controllers/pincode_input_controller.dart';
 
 class PinCodeKeyboard extends StatelessWidget {
   final bool viewBiometricAuthButton;
-  final Function openBiometricAuth;
+  final Function openBiometricAuth, onComplete;
 
   PinCodeKeyboard({
     required this.viewBiometricAuthButton,
-    required this.openBiometricAuth
+    required this.openBiometricAuth,
+    required this.onComplete
   });
 
   @override
@@ -92,7 +93,9 @@ class PinCodeKeyboard extends StatelessWidget {
         color: Colors.transparent,
         child: TextButton(
           onPressed: () {
-            controller.addCode(code);
+            if (!controller.addCode(code)) {
+              onComplete();
+            }
           },
           style: TextButton.styleFrom(
             padding: EdgeInsets.zero,

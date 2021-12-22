@@ -7,7 +7,7 @@ import 'CCryptoProvider.dart';
 class CCryptoProviderDemo extends CCryptoProvider {
   Timer? timerGenerateSeed;
   int generateDemoIdx = 0;
-  int maxGenerateIterations = 100;
+  int maxGenerateIterations = 50;
   double completePercent = 0;
   GenerateSeedOptions? currentGenerateSeedOptions;
 

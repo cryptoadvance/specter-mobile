@@ -24,7 +24,7 @@ class VerificationPinCodeView extends GetView<VerificationPinCodeController> {
             child: getTopPanel(context)
           ),
           Container(
-            child: getBottomPanel()
+            child: getBottomPanel(context)
           )
         ]
       )
@@ -112,7 +112,7 @@ class VerificationPinCodeView extends GetView<VerificationPinCodeController> {
     });
   }
 
-  Widget getBottomPanel() {
+  Widget getBottomPanel(BuildContext context) {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
@@ -123,6 +123,9 @@ class VerificationPinCodeView extends GetView<VerificationPinCodeController> {
         top: false,
         child: PinCodeKeyboard(
           viewBiometricAuthButton: controller.viewBiometricAuthButton,
+          onComplete: () {
+            controller.verifyAction(context);
+          },
           openBiometricAuth: () {
             controller.openPrevPage();
           }
