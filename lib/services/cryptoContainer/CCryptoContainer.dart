@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:biometric_storage/biometric_storage.dart';
 import 'package:crypto/crypto.dart';
+import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:specter_mobile/app/models/CryptoContainerModel.dart';
 
@@ -270,5 +271,26 @@ class CCryptoContainer {
 
     print('authCryptoContainer - success');
     return true;
+  }
+
+  Future<bool> addSeed(String seedKey) async {
+    if (!(await cryptoContainerModel!.addSeed(seedKey))) {
+      return false;
+    }
+
+    if (!(await _saveCryptoContainer())) {
+      return false;
+    }
+
+    return true;
+  }
+
+  void openAfterAuthPage() {
+    if (cryptoContainerModel!.isSeedInit()) {
+      Get.offAllNamed('/keys');
+      return;
+    }
+
+    Get.offAllNamed('/recovery-select');
   }
 }

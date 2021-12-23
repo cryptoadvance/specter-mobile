@@ -173,7 +173,9 @@ class GenerateSeedView extends GetView<GenerateSeedController> {
             child: LightButton(
                 style: LightButtonStyle.PRIMARY,
                 isDisabled: !isCompleted,
-                onTap: controller.openNextPage,
+                onTap: () {
+                  controller.doneAction(context);
+                },
                 child: Row(
                     children: [
                       Icon(CupertinoIcons.check_mark, color: Theme.of(context).accentColor),

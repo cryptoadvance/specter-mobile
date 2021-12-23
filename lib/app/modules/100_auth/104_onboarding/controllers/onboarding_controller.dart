@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:specter_mobile/services/CServices.dart';
 
 class OnboardingController extends GetxController {
   @override
@@ -15,6 +16,6 @@ class OnboardingController extends GetxController {
   void onClose() {}
 
   void openNextPage() {
-    Get.offAllNamed('/keys');
+    CServices.gCryptoContainer.openAfterAuthPage();
   }
 }

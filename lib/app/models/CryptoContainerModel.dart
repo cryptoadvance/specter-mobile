@@ -6,6 +6,8 @@ class CryptoContainerModel {
   final version = 1;
   final List<CryptoContainerType> _authTypes;
   String? _pinCodeSign;
+  String? _seedKey;
+
 
   CryptoContainerModel({
     required authTypes
@@ -13,6 +15,7 @@ class CryptoContainerModel {
 
   void loadStore(Map<String, dynamic> data) {
     _pinCodeSign = data['pinCodeSign'];
+    _seedKey = data['seedKey'];
   }
 
   @override
@@ -21,6 +24,7 @@ class CryptoContainerModel {
       'version': 1,
       'authTypes': getAuthTypes(),
       'pinCodeSign': _pinCodeSign,
+      'seedKey': _seedKey,
       'wallets': []
     });
   }
@@ -50,5 +54,14 @@ class CryptoContainerModel {
       return false;
     }
     return true;
+  }
+
+  Future<bool> addSeed(String seedKey) async {
+    _seedKey = seedKey;
+    return true;
+  }
+
+  bool isSeedInit() {
+    return _seedKey != null;
   }
 }

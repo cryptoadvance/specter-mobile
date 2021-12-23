@@ -45,7 +45,7 @@ class VerificationBiometricController extends GetxController {
   }
 
   void openNextPage() {
-    Get.offAllNamed('/recovery-select');
+    CServices.gCryptoContainer.openAfterAuthPage();
   }
 
   void openPinCodePage() {

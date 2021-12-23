@@ -31,9 +31,11 @@ class CCryptoProviderDemo extends CCryptoProvider {
 
       //
       List<String> seedWords = [];
+      String seedKey = '';
       int wordsCount = (currentGenerateSeedOptions!.seedComplexity == SEED_COMPLEXITY.SIMPLE)?8:24;
       for (int i = 0; i < wordsCount; i++) {
         String word = demoWords[Random().nextInt(demoWords.length - 1)];
+        seedKey += word;
         seedWords.add(word);
       }
 
@@ -46,6 +48,7 @@ class CCryptoProviderDemo extends CCryptoProvider {
       //
       addEvent(CryptoProviderEventType.GENERATE_SEED_EVENT, SGenerateSeedEvent(
           seedWords: seedWords,
+          seedKey: seedKey,
           completePercent: completePercent
       ));
       generateDemoIdx++;

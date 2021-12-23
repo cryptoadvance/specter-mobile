@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:specter_mobile/services/cryptoService/CCryptoService.dart';
 import 'package:specter_mobile/services/CEntropyGenerationService.dart';
@@ -15,7 +16,7 @@ class GenerateSeedController extends GetxController {
 
   late StreamSubscription<SGenerateSeedEvent> _streamSubscription;
 
-  Rx<SGenerateSeedEvent>? lastGenerateSeedEvent = SGenerateSeedEvent(seedWords: []).obs;
+  Rx<SGenerateSeedEvent>? lastGenerateSeedEvent = SGenerateSeedEvent(seedWords: [], seedKey: '').obs;
 
   @override
   void onInit() {
@@ -67,7 +68,16 @@ class GenerateSeedController extends GetxController {
     update();
   }
 
-  void openNextPage() {
-    Get.offAllNamed('/onboarding');
+  void doneAction(BuildContext context) async {
+    String seedKey = lastGenerateSeedEvent!.value.seedKey;
+    if (!(await CServices.gCryptoContainer.addSeed(seedKey))) {
+      await CServices.gNotificationService.addMessage(
+        context, 'Oops!!', 'Please try again.',
+        actionTitle: 'Try Again'
+      );
+      return;
+    }
+
+    await Get.offAllNamed('/onboarding');
   }
 }
