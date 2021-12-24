@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:specter_mobile/app/routes/app_pages.dart';
 import 'package:specter_mobile/services/CServices.dart';
 import 'package:specter_mobile/services/cryptoService/CRecoverySeedService.dart';
 
-import 'enter_seed_list_controller.dart';
+import 'enter_recovery_phrase_list_controller.dart';
 
-class EnterSeedController extends GetxController {
+class EnterRecoveryPhraseController extends GetxController {
   @override
   void onInit() {
     super.onInit();
@@ -23,7 +24,7 @@ class EnterSeedController extends GetxController {
     FocusScope.of(context).unfocus();
 
     //
-    final EnterSeedListController enterSeedListController = Get.find<EnterSeedListController>();
+    final EnterRecoveryPhraseListController enterSeedListController = Get.find<EnterRecoveryPhraseListController>();
     List<String> recoveryPhrases = enterSeedListController.getSeedList();
     if (recoveryPhrases.isEmpty) {
       await CServices.gNotificationService.addMessage(
@@ -52,6 +53,6 @@ class EnterSeedController extends GetxController {
       return;
     }
 
-    await Get.offAllNamed('/onboarding');
+    await Get.offAllNamed(Routes.ONBOARDING);
   }
 }

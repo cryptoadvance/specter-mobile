@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:specter_mobile/app/routes/app_pages.dart';
 import 'package:specter_mobile/app/widgets/LightButton.dart';
 
 import '../controllers/recovery_select_controller.dart';
@@ -36,7 +37,7 @@ class RecoverySelectView extends GetView<RecoverySelectController> {
                 child: LightButton(
                   isInline: false,
                   onTap: () {
-                    Get.toNamed('/generate-seed');
+                    Get.toNamed(Routes.GENERATE_SEED);
                   },
                   child: Text(
                     'recovery_select_buttons_generate_new_seed'.tr,
@@ -52,7 +53,7 @@ class RecoverySelectView extends GetView<RecoverySelectController> {
                   isInline: false,
                   style: LightButtonStyle.SECONDARY,
                   onTap: () {
-                    Get.toNamed('/enter-seed');
+                    Get.toNamed(Routes.ENTER_RECOVERY_PHRASE);
                   },
                   child: Text('recovery_select_buttons_recovery_phrase'.tr, textAlign: TextAlign.center)
                 )

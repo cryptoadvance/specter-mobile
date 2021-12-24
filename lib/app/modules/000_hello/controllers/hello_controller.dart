@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:specter_mobile/app/routes/app_pages.dart';
 import 'package:specter_mobile/services/CServices.dart';
 
 class HelloController extends GetxController {
@@ -19,7 +20,7 @@ class HelloController extends GetxController {
       print('isNeedInitAuth: ' + isNeedInitAuth.toString());
       print('isAddedBiometricAuth: ' + isAddedBiometricAuth.toString());
 
-      String openPage = (isAddedBiometricAuth || isNeedInitAuth)?'/verification-biometric':'/verification-pincode';
+      String openPage = (isAddedBiometricAuth || isNeedInitAuth)?Routes.VERIFICATION_BIOMETRIC:Routes.VERIFICATION_PINCODE;
 
       //
       await Get.offAllNamed(openPage,

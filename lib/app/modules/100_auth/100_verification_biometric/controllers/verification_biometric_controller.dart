@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:specter_mobile/app/routes/app_pages.dart';
 
 import 'package:specter_mobile/services/cryptoContainer/CCryptoContainer.dart';
 import 'package:specter_mobile/services/CServices.dart';
@@ -49,7 +50,7 @@ class VerificationBiometricController extends GetxController {
   }
 
   void openPinCodePage() {
-    Get.toNamed('/verification-pincode', arguments: {
+    Get.toNamed(Routes.VERIFICATION_PINCODE, arguments: {
       'isNeedInitAuth': isNeedInitAuth
     });
   }

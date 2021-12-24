@@ -124,6 +124,9 @@ class VerificationPinCodeView extends GetView<VerificationPinCodeController> {
         child: PinCodeKeyboard(
           viewBiometricAuthButton: controller.viewBiometricAuthButton,
           onComplete: () {
+            if (controller.isNeedInitAuth) {
+              return;
+            }
             controller.verifyAction(context);
           },
           openBiometricAuth: () {

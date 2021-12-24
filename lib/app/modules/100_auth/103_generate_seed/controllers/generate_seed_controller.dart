@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:specter_mobile/app/routes/app_pages.dart';
 import 'package:specter_mobile/services/cryptoService/CCryptoService.dart';
 import 'package:specter_mobile/services/CEntropyGenerationService.dart';
 import 'package:specter_mobile/services/CServices.dart';
@@ -78,6 +79,6 @@ class GenerateSeedController extends GetxController {
       return;
     }
 
-    await Get.offAllNamed('/onboarding');
+    await Get.offAllNamed(Routes.ONBOARDING);
   }
 }

@@ -14,7 +14,7 @@ abstract class Routes {
   static const WALLET_INFO_ADDRESS = _Paths.WALLET_INFO_ADDRESS;
   static const WALLET_INFO_TRANSACTIONS = _Paths.WALLET_INFO_TRANSACTIONS;
   static const HELLO = _Paths.HELLO;
-  static const ENTER_SEED = _Paths.ENTER_SEED;
+  static const ENTER_RECOVERY_PHRASE = _Paths.ENTER_RECOVERY_PHRASE;
   static const AUTH_ONBOARDING = _Paths.AUTH_ONBOARDING;
   static const ONBOARDING = _Paths.ONBOARDING;
 }
@@ -30,7 +30,7 @@ abstract class _Paths {
   static const WALLET_INFO_ADDRESS = '/wallet-info-address';
   static const WALLET_INFO_TRANSACTIONS = '/wallet-info-transactions';
   static const HELLO = '/hello';
-  static const ENTER_SEED = '/enter-seed';
+  static const ENTER_RECOVERY_PHRASE = '/enter-recovery_pharse';
   static const AUTH_ONBOARDING = '/auth-onboarding';
   static const ONBOARDING = '/onboarding';
 }

@@ -2,10 +2,11 @@ import 'dart:collection';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:specter_mobile/app/modules/100_auth/102_enter_seed/controllers/enter_seed_list_controller.dart';
 import 'package:specter_mobile/utils.dart';
 
-class EnterSeedListView extends GetView<EnterSeedListController> {
+import '../controllers/enter_recovery_phrase_list_controller.dart';
+
+class EnterRecoveryPhraseListView extends GetView<EnterRecoveryPhraseListController> {
   @override
   Widget build(BuildContext context) {
     List<Widget> rows = [];

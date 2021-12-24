@@ -6,6 +6,7 @@ import 'package:crypto/crypto.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:specter_mobile/app/models/CryptoContainerModel.dart';
+import 'package:specter_mobile/app/routes/app_pages.dart';
 
 import 'CCryptoLocalSign.dart';
 import '../../utils.dart';
@@ -287,10 +288,10 @@ class CCryptoContainer {
 
   void openAfterAuthPage() {
     if (cryptoContainerModel!.isSeedInit()) {
-      Get.offAllNamed('/keys');
+      Get.offAllNamed(Routes.KEYS);
       return;
     }
 
-    Get.offAllNamed('/recovery-select');
+    Get.offAllNamed(Routes.RECOVERY_SELECT);
   }
 }

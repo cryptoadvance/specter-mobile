@@ -8,8 +8,8 @@ import 'package:specter_mobile/app/modules/100_auth/100_verification_biometric/b
 import 'package:specter_mobile/app/modules/100_auth/100_verification_biometric/views/verification_biometric_view.dart';
 import 'package:specter_mobile/app/modules/100_auth/101_recovery_select/bindings/recovery_select_binding.dart';
 import 'package:specter_mobile/app/modules/100_auth/101_recovery_select/views/recovery_select_view.dart';
-import 'package:specter_mobile/app/modules/100_auth/102_enter_seed/bindings/enter_seed_binding.dart';
-import 'package:specter_mobile/app/modules/100_auth/102_enter_seed/views/enter_seed_view.dart';
+import 'package:specter_mobile/app/modules/100_auth/102_enter_recovery_phrase/bindings/enter_recovery_phrase_binding.dart';
+import 'package:specter_mobile/app/modules/100_auth/102_enter_recovery_phrase/views/enter_recovery_phrase_screen_view.dart';
 import 'package:specter_mobile/app/modules/100_auth/103_generate_seed/bindings/generate_seed_binding.dart';
 import 'package:specter_mobile/app/modules/100_auth/103_generate_seed/views/generate_seed_view.dart';
 import 'package:specter_mobile/app/modules/100_auth/104_onboarding/bindings/onboarding_binding.dart';
@@ -72,9 +72,9 @@ class AppPages {
       binding: HelloBinding(),
     ),
     GetPage(
-      name: _Paths.ENTER_SEED,
-      page: () => EnterSeedView(),
-      binding: EnterSeedBinding(),
+      name: _Paths.ENTER_RECOVERY_PHRASE,
+      page: () => EnterRecoveryPhraseView(),
+      binding: EnterRecoveryPhraseBinding(),
     ),
     GetPage(
       name: _Paths.ONBOARDING,

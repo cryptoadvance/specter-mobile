@@ -17,8 +17,6 @@ class PinCodeKeyboard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final PinCodeInputController controller = Get.find<PinCodeInputController>();
-
     return Container(
       padding: EdgeInsets.all(15),
       child: LayoutBuilder(builder: (context, constraints) {
@@ -29,9 +27,9 @@ class PinCodeKeyboard extends StatelessWidget {
               margin: EdgeInsets.only(top: 5),
               child: getBottomButtons(context, constraints.maxWidth),
             )
-          ],
+          ]
         );
-      }),
+      })
     );
   }
 

@@ -3,7 +3,7 @@ import 'dart:collection';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class EnterSeedListController extends GetxController {
+class EnterRecoveryPhraseListController extends GetxController {
   Map<int, FocusNode> focusNodes = HashMap();
   Map<int, TextEditingController> controllers = HashMap();
 

@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:specter_mobile/app/widgets/LightButton.dart';
 
-import '../controllers/enter_seed_controller.dart';
-import 'enter_seed_list_view.dart';
+import '../controllers/enter_recovery_phrase_screen_controller.dart';
+import 'enter_recovery_phrase_list_view.dart';
 
-class EnterSeedView extends GetView<EnterSeedController> {
+class EnterRecoveryPhraseView extends GetView<EnterRecoveryPhraseController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,7 +39,7 @@ class EnterSeedView extends GetView<EnterSeedController> {
 
   Widget getListPanel(BuildContext context) {
     return SingleChildScrollView(
-      child: EnterSeedListView()
+      child: EnterRecoveryPhraseListView()
     );
   }
 
