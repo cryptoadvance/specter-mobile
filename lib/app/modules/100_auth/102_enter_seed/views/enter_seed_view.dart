@@ -2,10 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
-import 'package:specter_mobile/app/modules/100_auth/102_enter_seed/widgets/EnterSeedList.dart';
 import 'package:specter_mobile/app/widgets/LightButton.dart';
 
 import '../controllers/enter_seed_controller.dart';
+import 'enter_seed_list_view.dart';
 
 class EnterSeedView extends GetView<EnterSeedController> {
   @override
@@ -39,7 +39,7 @@ class EnterSeedView extends GetView<EnterSeedController> {
 
   Widget getListPanel(BuildContext context) {
     return SingleChildScrollView(
-      child: EnterSeedList()
+      child: EnterSeedListView()
     );
   }
 
@@ -51,6 +51,10 @@ class EnterSeedView extends GetView<EnterSeedController> {
         children: [
           Container(
               child: LightButton(
+                  style: LightButtonStyle.SECONDARY,
+                  onTap: () {
+                    Get.back();
+                  },
                   child: Row(
                       children: [
                         Icon(CupertinoIcons.back),
@@ -59,16 +63,16 @@ class EnterSeedView extends GetView<EnterSeedController> {
                             child: Text('generate_seed_buttons_prev_page'.tr)
                         )
                       ]
-                  ),
-                  style: LightButtonStyle.SECONDARY,
-                  onTap: () {
-                    Get.back();
-                  }
+                  )
               )
           ),
           Container(
               margin: EdgeInsets.only(left: 10),
               child: LightButton(
+                  style: LightButtonStyle.PRIMARY,
+                  onTap: () {
+                    controller.doneAction(context);
+                  },
                   child: Row(
                       children: [
                         Icon(CupertinoIcons.check_mark, color: Theme.of(context).accentColor),
@@ -80,9 +84,7 @@ class EnterSeedView extends GetView<EnterSeedController> {
                             )
                         )
                       ]
-                  ),
-                  style: LightButtonStyle.PRIMARY,
-                  onTap: controller.openNextPage
+                  )
               )
           )
         ]

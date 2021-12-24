@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 
 import '../CGenerateSeedService.dart';
+import '../CRecoverySeedService.dart';
 import 'CCryptoProvider.dart';
 
 class CCryptoProviderDemo extends CCryptoProvider {
@@ -64,11 +65,31 @@ class CCryptoProviderDemo extends CCryptoProvider {
   @override
   void setGenerateSeedOptions(GenerateSeedOptions generateSeedOptions) {
     currentGenerateSeedOptions = generateSeedOptions;
-    cleanDemoCounter();
+    _cleanDemoCounter();
   }
 
-  void cleanDemoCounter() {
+  void _cleanDemoCounter() {
     generateDemoIdx = 0;
     completePercent = 0;
+  }
+
+  @override
+  Future<RecoverySeedResult?> verifyRecoveryPhrase(List<String> recoveryPhrases) async {
+    String seedKey = '';
+    int phrasesCount = 0;
+    recoveryPhrases.forEach((recoveryPhrase) {
+      if (recoveryPhrase.isNotEmpty) {
+        phrasesCount++;
+      }
+      seedKey += recoveryPhrase;
+    });
+
+    if (phrasesCount < 3) {
+      return null;
+    }
+
+    return RecoverySeedResult(
+      seedKey: seedKey
+    );
   }
 }

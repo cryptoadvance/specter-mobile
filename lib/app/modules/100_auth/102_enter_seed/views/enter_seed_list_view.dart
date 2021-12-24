@@ -1,33 +1,25 @@
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:specter_mobile/app/modules/100_auth/102_enter_seed/controllers/enter_seed_list_controller.dart';
 import 'package:specter_mobile/utils.dart';
 
-class EnterSeedList extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() {
-    return EnterSeedListState();
-  }
-
-}
-
-class EnterSeedListState extends State<EnterSeedList> {
-  int seedSize = 24;
-
+class EnterSeedListView extends GetView<EnterSeedListController> {
   @override
   Widget build(BuildContext context) {
     List<Widget> rows = [];
-    for (var i = 0; i < seedSize / 2; i++) {
+    for (var i = 0; i < controller.seedSize / 2; i++) {
       rows.add(Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           Container(
             margin: EdgeInsets.all(5),
-            child: getSeedInput(i + 1, false)
+            child: getSeedInput(context, i + 1, false)
           ),
           Container(
             margin: EdgeInsets.all(5),
-            child: getSeedInput((i + 12 + 1), (i + 12 + 1) == seedSize)
+            child: getSeedInput(context, (i + 12 + 1), (i + 12 + 1) == controller.seedSize)
           )
         ]
       ));
@@ -49,28 +41,25 @@ class EnterSeedListState extends State<EnterSeedList> {
     );
   }
 
-  Map<int, FocusNode> focusNodes = HashMap();
-  Map<int, TextEditingController> controllers = HashMap();
-
-  Widget getSeedInput(int idx, bool isLast) {
-    if (!focusNodes.containsKey(idx)) {
-      focusNodes[idx] = FocusNode();
+  Widget getSeedInput(BuildContext context, int idx, bool isLast) {
+    if (!controller.focusNodes.containsKey(idx)) {
+      controller.focusNodes[idx] = FocusNode();
     }
-    if (!controllers.containsKey(idx)) {
-      controllers[idx] = TextEditingController();
+    if (!controller.controllers.containsKey(idx)) {
+      controller.controllers[idx] = TextEditingController();
     }
 
     Widget inputWidget = TextField(
       autocorrect: false,
       autofocus: true,
-      controller: controllers[idx],
-      focusNode: focusNodes[idx],
+      controller: controller.controllers[idx],
+      focusNode: controller.focusNodes[idx],
       onSubmitted: (value) {
         var nextIdx = idx + 1;
-        if (!focusNodes.containsKey(nextIdx)) {
+        if (!controller.focusNodes.containsKey(nextIdx)) {
           return;
         }
-        FocusScope.of(context).requestFocus(focusNodes[nextIdx]);
+        FocusScope.of(context).requestFocus(controller.focusNodes[nextIdx]);
       },
       textInputAction: isLast?TextInputAction.done:TextInputAction.next,
       decoration: InputDecoration(

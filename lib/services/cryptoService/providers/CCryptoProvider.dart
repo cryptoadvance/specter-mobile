@@ -3,6 +3,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import '../CGenerateSeedService.dart';
+import '../CRecoverySeedService.dart';
 
 enum CryptoProviderEventType {
   GENERATE_SEED_EVENT
@@ -67,7 +68,11 @@ abstract class CCryptoProvider {
     });
   }
 
+  //Generate seed API
   void startGenerateSeed();
   void stopGenerateSeed();
   void setGenerateSeedOptions(GenerateSeedOptions generateSeedOptions);
+
+  //Recovery seed API
+  Future<RecoverySeedResult?> verifyRecoveryPhrase(List<String> recoveryPhrases);
 }
