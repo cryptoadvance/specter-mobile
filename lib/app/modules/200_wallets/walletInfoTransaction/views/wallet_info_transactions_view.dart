@@ -12,8 +12,6 @@ import '../widgets/inputs/views/wallet_info_transaction_inputs_view.dart';
 import '../widgets/outputs/views/wallet_info_transaction_outputs_view.dart';
 
 class WalletInfoTransactionView extends GetView<WalletInfoTransactionController> {
-  final WalletInfoTransactionController controller = Get.put(WalletInfoTransactionController());
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,7 +20,14 @@ class WalletInfoTransactionView extends GetView<WalletInfoTransactionController>
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  TopSide(title: 'Transaction details', titleType: TOP_SIDE_TITLE_TYPE.TRANSACTION, menuType: TOP_SIDE_MENU_TYPE.NONE),
+                  TopSide(
+                    title: 'Transaction details',
+                    titleType: TOP_SIDE_TITLE_TYPE.TRANSACTION,
+                    menuType: TOP_SIDE_MENU_TYPE.NONE,
+                    openMenu: () {
+                      print('openMenu');
+                    }
+                  ),
                   Expanded(
                       child: getContent()
                   )

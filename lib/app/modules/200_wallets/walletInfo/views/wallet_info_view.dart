@@ -1,8 +1,12 @@
+import 'dart:ui';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 import 'package:get/get.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
+import 'package:specter_mobile/app/widgets/BottomSlideMenu.dart';
 import 'package:specter_mobile/app/widgets/TopSide.dart';
 import '../widgets/addresses/views/wallet_info_addresses_view.dart';
 import '../widgets/details/views/wallet_info_details_view.dart';
@@ -13,23 +17,62 @@ import '../../../../../utils.dart';
 import '../controllers/wallet_info_controller.dart';
 
 class WalletInfoView extends GetView<WalletInfoController> {
-  final WalletInfoController controller = Get.find<WalletInfoController>();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
+      body: SlidingUpPanel(
+        onPanelSlide: (pos) {
+          if (pos > 0) {
+            controller.slidingUpPanelIsOpen.value = true;
+          }
+        },
+        onPanelOpened: () {
+          controller.slidingUpPanelIsOpen.value = true;
+        },
+        onPanelClosed: () {
+          controller.slidingUpPanelIsOpen.value = false;
+        },
+        panel: BottomSlideMenu(),
+        minHeight: 0,
+        backdropEnabled: true,
+        color: Colors.transparent,
+        controller: controller.slidingUpPanelController,
+        body: Stack(
           children: [
-            TopSide(title: 'My wallet', titleType: TOP_SIDE_TITLE_TYPE.WALLET, menuType: TOP_SIDE_MENU_TYPE.OPTIONS),
-            Expanded(
-              child: getContent()
-            )
+            getBody(),
+            Obx(() => Container(
+                child: controller.slidingUpPanelIsOpen.value?BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: 3.0, sigmaY: 3.0),
+                    child: Container(
+                      decoration: BoxDecoration(color: Colors.white.withOpacity(0.0)),
+                    )
+                ):null
+            ))
           ]
         )
       )
+    );
+  }
+
+  Widget getBody() {
+    return SafeArea(
+        child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              TopSide(
+                  title: 'My wallet',
+                  titleType: TOP_SIDE_TITLE_TYPE.WALLET,
+                  menuType: TOP_SIDE_MENU_TYPE.OPTIONS,
+                  openMenu: () {
+                    controller.slidingUpPanelController.open();
+                  }
+              ),
+              Expanded(
+                  child: getContent()
+              )
+            ]
+        )
     );
   }
 

@@ -22,8 +22,14 @@ class TopSide extends StatelessWidget {
 
   final TOP_SIDE_TITLE_TYPE titleType;
   final TOP_SIDE_MENU_TYPE menuType;
+  final Function openMenu;
 
-  TopSide({required this.title, required this.titleType, required this.menuType});
+  TopSide({
+    required this.title,
+    required this.titleType,
+    required this.menuType,
+    required this.openMenu
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +46,7 @@ class TopSide extends StatelessWidget {
                   child: Container(
                       padding: EdgeInsets.symmetric(vertical: 15),
                       child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             getShortIcon(),
@@ -92,15 +98,23 @@ class TopSide extends StatelessWidget {
 
   Widget getBackButton() {
     return InkWell(
+        splashColor: Colors.transparent,
+        highlightColor: Colors.transparent,
         onTap: () {
           Get.back();
         },
         child: Container(
-            width: 50,
-            height: 45,
             alignment: Alignment.centerLeft,
-            padding: EdgeInsets.only(left: 5),
-            child: Icon(CupertinoIcons.left_chevron, size: 26)
+            padding: EdgeInsets.only(right: 10),
+            child: Container(
+              width: 50,
+              height: 50,
+              decoration: BoxDecoration(
+                color: Utils.hexToColor('#202A40'),
+                shape: BoxShape.circle
+              ),
+              child: Icon(CupertinoIcons.left_chevron, size: 24)
+            )
         )
     );
   }
@@ -120,17 +134,25 @@ class TopSide extends StatelessWidget {
     }
 
     return InkWell(
+        splashColor: Colors.transparent,
+        highlightColor: Colors.transparent,
         onTap: () {
-          Get.back();
+          openMenu();
         },
         child: Container(
-            width: 50,
-            height: 45,
             alignment: Alignment.centerRight,
-            padding: EdgeInsets.only(right: 5),
-            child: SvgPicture.asset(icon, color: Colors.white, height: 35)
+            padding: EdgeInsets.only(left: 10),
+            child: Container(
+                width: 50,
+                height: 50,
+                padding: EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                    color: Utils.hexToColor('#202A40'),
+                    shape: BoxShape.circle
+                ),
+                child: SvgPicture.asset(icon, color: Colors.white)
+            )
         )
     );
   }
-
 }

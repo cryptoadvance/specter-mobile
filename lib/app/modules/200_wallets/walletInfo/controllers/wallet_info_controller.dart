@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 enum WALLET_INFO_TAB {
   DETAILS,
@@ -8,6 +9,10 @@ enum WALLET_INFO_TAB {
 
 class WalletInfoController extends GetxController {
   var currentTab = WALLET_INFO_TAB.DETAILS.obs;
+
+  PanelController slidingUpPanelController = PanelController();
+
+  Rx<bool> slidingUpPanelIsOpen = false.obs;
 
   @override
   void onInit() {

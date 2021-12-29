@@ -138,6 +138,10 @@ class KeysView extends GetView<KeysController> {
 
   Widget getActionsPanel() {
     return LightButton(
+        isInline: true,
+        style: LightButtonStyle.PRIMARY,
+        onTap: () {
+        },
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -147,11 +151,7 @@ class KeysView extends GetView<KeysController> {
               child: Text('ADD WALLET', style: TextStyle(color: Colors.white))
             )
           ]
-        ),
-        isInline: true,
-        style: LightButtonStyle.PRIMARY,
-        onTap: () {
-        }
+        )
     );
   }
 }

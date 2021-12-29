@@ -13,8 +13,6 @@ import '../widgets/qrcode/views/wallet_info_address_qrcode_view.dart';
 import '../controllers/wallet_info_address_controller.dart';
 
 class WalletInfoAddressView extends GetView<WalletInfoAddressController> {
-  final WalletInfoAddressController controller = Get.put(WalletInfoAddressController());
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,7 +21,14 @@ class WalletInfoAddressView extends GetView<WalletInfoAddressController> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            TopSide(title: 'My address #1', titleType: TOP_SIDE_TITLE_TYPE.ADDRESS, menuType: TOP_SIDE_MENU_TYPE.OPTIONS),
+            TopSide(
+              title: 'My address #1',
+              titleType: TOP_SIDE_TITLE_TYPE.ADDRESS,
+              menuType: TOP_SIDE_MENU_TYPE.OPTIONS,
+              openMenu: () {
+                print('openMenu');
+              }
+            ),
             Expanded(
               child: getContent()
             )
