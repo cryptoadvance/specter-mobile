@@ -6,6 +6,12 @@ class GeneratedSeed24WordList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return LayoutBuilder(builder: (BuildContext context, BoxConstraints constraints) {
+      return getContent(constraints.maxWidth);
+    });
+  }
+
+  Widget getContent(double maxWidth) {
     int inColumnLength = 12;
     int columnsCount = (seedWords.length / inColumnLength).ceil();
 
@@ -19,9 +25,19 @@ class GeneratedSeed24WordList extends StatelessWidget {
             }
             var el = seedWords[idx];
             rows.add(Container(
+                constraints: BoxConstraints(
+                    minWidth: 150
+                ),
                 child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text((idx + 1).toString(), style: TextStyle(fontSize: 18)),
+                      Container(
+                        constraints: BoxConstraints(
+                          minWidth: 28
+                        ),
+                        child: Text((idx + 1).toString(), textAlign: TextAlign.right, style: TextStyle(fontSize: 18))
+                      ),
                       Container(
                           margin: EdgeInsets.only(left: 10),
                           child: Text(el, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold))
@@ -34,6 +50,8 @@ class GeneratedSeed24WordList extends StatelessWidget {
         columns.add(Container(
             margin: EdgeInsets.only(left: (columns.isEmpty)?0:20),
             child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: rows
             )
         ));

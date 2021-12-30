@@ -55,6 +55,10 @@ String generateMnemonic(
 
 String entropyToMnemonic(String entropyString) {
   final entropy = Uint8List.fromList(HEX.decode(entropyString));
+  return entropyHexToMnemonic(entropy).join(' ');
+}
+
+List<String> entropyHexToMnemonic(Uint8List entropy) {
   if (entropy.length < 16) {
     throw ArgumentError(_INVALID_ENTROPY);
   }
@@ -73,9 +77,7 @@ String entropyToMnemonic(String entropyString) {
       .map((match) => match.group(0)!)
       .toList(growable: false);
   List<String> wordlist = WORDLIST;
-  String words =
-      chunks.map((binary) => wordlist[_binaryToByte(binary)]).join(' ');
-  return words;
+  return chunks.map((binary) => wordlist[_binaryToByte(binary)]).toList();
 }
 
 Uint8List mnemonicToSeed(String mnemonic, {String passphrase = ""}) {

@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:math';
 import 'dart:typed_data';
 
+import 'package:hex/hex.dart';
+
 import '../../../utils/bip39/bip39.dart' as bip39;
 
 import '../CGenerateSeedService.dart';
@@ -11,9 +13,11 @@ import 'CCryptoProvider.dart';
 class CCryptoProviderDemo extends CCryptoProvider {
   Timer? timerGenerateSeed;
   int generateDemoIdx = 0;
-  int maxGenerateIterations = 50;
+  int maxGenerateIterations = 10;
   double completePercent = 0;
   GenerateSeedOptions? currentGenerateSeedOptions;
+
+  var rnd = Random.secure();
 
   @override
   void startGenerateSeed() {
@@ -25,48 +29,48 @@ class CCryptoProviderDemo extends CCryptoProvider {
     }
 
     generateDemoIdx = 0;
-
-    List<String> demoWords = ['A', 'B', 'C', 'D',  'A', 'B', 'C', 'D'];
-
-    timerGenerateSeed = Timer.periodic(Duration(milliseconds: 200), (_) async {
-      if (completePercent == 100) {
-        return;
-      }
-
-      //
-      var seed = ByteData((128 / 8).round());
-      List<String> ret = entropyToMnemonic(seed);
-
-      //
-      List<String> seedWords = [];
-      String seedKey = '';
-      int wordsCount = (currentGenerateSeedOptions!.seedComplexity == SEED_COMPLEXITY.SIMPLE)?8:24;
-      for (int i = 0; i < wordsCount; i++) {
-        String word = demoWords[Random().nextInt(demoWords.length - 1)];
-        seedKey += word;
-        seedWords.add(word);
-      }
-
-      //
-      completePercent = (generateDemoIdx / maxGenerateIterations.toDouble()) * 100;
-      if (completePercent > 100) {
-        completePercent = 100;
-      }
-
-      //
-      addEvent(CryptoProviderEventType.GENERATE_SEED_EVENT, SGenerateSeedEvent(
-          seedWords: seedWords,
-          seedKey: seedKey,
-          completePercent: completePercent
-      ));
-      generateDemoIdx++;
-    });
+    timerGenerateSeed = Timer.periodic(Duration(milliseconds: 200), demoTick);
   }
 
-  List<String> entropyToMnemonic(ByteData seed) {
-    String mnemonic = bip39.entropyToMnemonic('00000000000000000000000000000000');
-    print(mnemonic);
-    return [];
+  void demoTick(_) async {
+    if (completePercent == 100) {
+      return;
+    }
+
+    //
+    int seedBitSize = (currentGenerateSeedOptions!.seedComplexity == SEED_COMPLEXITY.SIMPLE)?128:256;
+
+    //
+    int bytes = (seedBitSize / 8).round();
+    Uint8List seedList = getRandomSeed(bytes);
+
+    //
+    List<String> seedWords = bip39.entropyHexToMnemonic(seedList);
+    String seedKey = seedWords.join(' ');
+
+    //
+    completePercent = (generateDemoIdx / maxGenerateIterations.toDouble()) * 100;
+    if (completePercent > 100) {
+      completePercent = 100;
+    }
+
+    //
+    addEvent(CryptoProviderEventType.GENERATE_SEED_EVENT, SGenerateSeedEvent(
+        seedWords: seedWords,
+        seedKey: seedKey,
+        completePercent: completePercent
+    ));
+    generateDemoIdx++;
+  }
+
+  Uint8List getRandomSeed(int bytes) {
+    Uint8List seedList = Uint8List(bytes);
+
+    //
+    for (int i = 0; i < bytes; i++) {
+      seedList[i] = rnd.nextInt(256) ^ rnd.nextInt(256) ^ rnd.nextInt(256);
+    }
+    return seedList;
   }
 
   @override

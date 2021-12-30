@@ -39,7 +39,7 @@ class GenerateSeedController extends GetxController {
   }
 
   void processGenerateSeedEvent(SGenerateSeedEvent generateSeedEvent) {
-    print('generate seed event: ' + generateSeedEvent.toString());
+    //print('generate seed event: ' + generateSeedEvent.toString());
     lastGenerateSeedEvent!.value = generateSeedEvent;
     update();
   }
