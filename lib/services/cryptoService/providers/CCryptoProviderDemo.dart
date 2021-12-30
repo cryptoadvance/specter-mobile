@@ -1,5 +1,8 @@
 import 'dart:async';
 import 'dart:math';
+import 'dart:typed_data';
+
+import '../../../utils/bip39/bip39.dart' as bip39;
 
 import '../CGenerateSeedService.dart';
 import '../CRecoverySeedService.dart';
@@ -31,6 +34,10 @@ class CCryptoProviderDemo extends CCryptoProvider {
       }
 
       //
+      var seed = ByteData((128 / 8).round());
+      List<String> ret = entropyToMnemonic(seed);
+
+      //
       List<String> seedWords = [];
       String seedKey = '';
       int wordsCount = (currentGenerateSeedOptions!.seedComplexity == SEED_COMPLEXITY.SIMPLE)?8:24;
@@ -54,6 +61,12 @@ class CCryptoProviderDemo extends CCryptoProvider {
       ));
       generateDemoIdx++;
     });
+  }
+
+  List<String> entropyToMnemonic(ByteData seed) {
+    String mnemonic = bip39.entropyToMnemonic('00000000000000000000000000000000');
+    print(mnemonic);
+    return [];
   }
 
   @override

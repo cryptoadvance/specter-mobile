@@ -25,6 +25,7 @@ dependencies:
   camera: 0.9.4+5
   permission_handler: ^8.3.0
   sliding_up_panel: ^2.0.0+1
+  hex: ^0.2.0
 
   biometric_storage:
     path: ./external/biometric_storage

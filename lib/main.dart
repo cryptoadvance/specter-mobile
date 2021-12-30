@@ -33,7 +33,7 @@ void main() {
 
   runApp(
     GetMaterialApp(
-      title: "Specter Mobile",
+      title: 'Specter Mobile',
       locale: Locale('en', 'US'),
       theme: _lightTheme,
       darkTheme: _darkTheme,
