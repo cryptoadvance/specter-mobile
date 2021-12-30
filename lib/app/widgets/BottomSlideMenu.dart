@@ -1,8 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../utils.dart';
 
+class BottomSlideMenuItem {
+  final String icon;
+  final String title;
+
+  BottomSlideMenuItem({
+    required this.icon,
+    required this.title
+  });
+}
+
 class BottomSlideMenu extends StatelessWidget {
+  final List<BottomSlideMenuItem> menuItems;
+
+  BottomSlideMenu({required this.menuItems});
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -27,16 +42,48 @@ class BottomSlideMenu extends StatelessWidget {
         borderRadius: BorderRadius.all(Radius.circular(10))
       ),
       width: 35,
-      height: 4,
+      height: 4
     ));
 
     rows.add(Container(
-      margin: EdgeInsets.only(top: 15),
+      margin: EdgeInsets.only(top: 15, bottom: 10),
       child: Text('Options', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20))
     ));
 
+    menuItems.forEach((menuItem) {
+      rows.add(Container(
+          margin: EdgeInsets.only(top: 15),
+          child: getMenuItem(menuItem)
+      ));
+    });
+
     return Column(
       children: rows
+    );
+  }
+
+  Widget getMenuItem(BottomSlideMenuItem menuItem) {
+    return InkWell(
+      onTap: () {
+        print('open menu');
+      },
+      child: Container(
+        padding: EdgeInsets.symmetric(vertical: 5),
+        child: Row(
+          children: [
+            Container(
+              width: 30,
+              child: Center(
+                child: SvgPicture.asset(menuItem.icon)
+              )
+            ),
+            Container(
+              margin: EdgeInsets.only(left: 15),
+              child: Text(menuItem.title)
+            )
+          ]
+        )
+      )
     );
   }
 }

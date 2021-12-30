@@ -32,7 +32,7 @@ class WalletInfoView extends GetView<WalletInfoController> {
         onPanelClosed: () {
           controller.slidingUpPanelIsOpen.value = false;
         },
-        panel: BottomSlideMenu(),
+        panel: getSlideMenu(),
         minHeight: 0,
         backdropEnabled: true,
         color: Colors.transparent,
@@ -51,6 +51,37 @@ class WalletInfoView extends GetView<WalletInfoController> {
           ]
         )
       )
+    );
+  }
+
+  Widget getSlideMenu() {
+    return BottomSlideMenu(
+        menuItems: [
+          BottomSlideMenuItem(
+              icon: './assets/icons/menu_pencil.svg',
+              title: 'Rename'
+          ),
+          BottomSlideMenuItem(
+              icon: './assets/icons/menu_qr_code.svg',
+              title: 'Show QR code'
+          ),
+          BottomSlideMenuItem(
+              icon: './assets/icons/menu_public_key.svg',
+              title: 'Public key'
+          ),
+          BottomSlideMenuItem(
+              icon: './assets/icons/menu_json.svg',
+              title: 'Export to JSON'
+          ),
+          BottomSlideMenuItem(
+              icon: './assets/icons/menu_pdf.svg',
+              title: 'Export to PDF'
+          ),
+          BottomSlideMenuItem(
+              icon: './assets/icons/menu_delete.svg',
+              title: 'Delete wallet'
+          )
+        ]
     );
   }
 

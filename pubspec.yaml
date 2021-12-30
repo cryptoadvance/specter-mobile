@@ -59,6 +59,12 @@ flutter:
     - assets/icons/arrow-upload.svg
     - assets/icons/arrow-download.svg
     - assets/icons/business-calendar.svg
+    - assets/icons/menu_pencil.svg
+    - assets/icons/menu_qr_code.svg
+    - assets/icons/menu_public_key.svg
+    - assets/icons/menu_json.svg
+    - assets/icons/menu_pdf.svg
+    - assets/icons/menu_delete.svg
     - assets/stickers/key-x512.png
     - assets/stickers/ghost_char-x512.png
     - assets/stickers/ghost_normal_3d-x512.png
