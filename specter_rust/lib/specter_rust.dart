@@ -15,6 +15,67 @@ class SpecterRust {
         : DynamicLibrary.process();
   }
 
+  static String mnemonic_from_entropy(String hex_entropy){
+    final ptrEntropy = hex_entropy.toNativeUtf8(allocator: malloc);
+
+    final ptrResult = _bindings.mnemonic_from_entropy(ptrEntropy.cast<Int8>());
+
+    final result = ptrResult.cast<Utf8>().toDartString();
+    _bindings.rust_cstr_free(ptrResult);
+    malloc.free(ptrEntropy);
+    return result;
+  }
+  static String mnemonic_to_root_key(String mnemonic, String password, String network){
+    final ptrMnemonic = mnemonic.toNativeUtf8(allocator: malloc);
+    final ptrPassword = password.toNativeUtf8(allocator: malloc);
+    final ptrNetwork = network.toNativeUtf8(allocator: malloc);
+
+    final ptrResult = _bindings.mnemonic_to_root_key(ptrMnemonic.cast<Int8>(), ptrPassword.cast<Int8>(), ptrNetwork.cast<Int8>());
+    final result = ptrResult.cast<Utf8>().toDartString();
+    _bindings.rust_cstr_free(ptrResult);
+
+    malloc.free(ptrMnemonic);
+    malloc.free(ptrPassword);
+    malloc.free(ptrNetwork);
+    return result;
+  }
+  static String derive_xpub(String root, String path){
+    final ptrRoot = root.toNativeUtf8(allocator: malloc);
+    final ptrPath = path.toNativeUtf8(allocator: malloc);
+
+    final ptrResult = _bindings.derive_xpub(ptrRoot.cast<Int8>(), ptrPath.cast<Int8>());
+    final result = ptrResult.cast<Utf8>().toDartString();
+    _bindings.rust_cstr_free(ptrResult);
+
+    malloc.free(ptrRoot);
+    malloc.free(ptrPath);
+    return result;
+  }
+  static String default_descriptors(String root, String network){
+    final ptrRoot = root.toNativeUtf8(allocator: malloc);
+    final ptrNetwork = network.toNativeUtf8(allocator: malloc);
+
+    final ptrResult = _bindings.default_descriptors(ptrRoot.cast<Int8>(), ptrNetwork.cast<Int8>());
+    final result = ptrResult.cast<Utf8>().toDartString();
+    _bindings.rust_cstr_free(ptrResult);
+
+    malloc.free(ptrRoot);
+    malloc.free(ptrNetwork);
+    return result;
+  }
+  static String derive_addresses(String descriptor, String network, int start, int end){
+    final ptrDescriptor = descriptor.toNativeUtf8(allocator: malloc);
+    final ptrNetwork = network.toNativeUtf8(allocator: malloc);
+
+    final ptrResult = _bindings.derive_addresses(ptrDescriptor.cast<Int8>(), ptrNetwork.cast<Int8>(), start, end);
+    final result = ptrResult.cast<Utf8>().toDartString();
+    _bindings.rust_cstr_free(ptrResult);
+
+    malloc.free(ptrDescriptor);
+    malloc.free(ptrNetwork);
+    return result;
+  }
+
   /// Computes a greeting for the given name using the native function
   static String greet(String name) {
     // Allocate a native string holding argument in UTF-8
