@@ -19,6 +19,88 @@ class SpecterRustBindings {
           lookup)
       : _lookup = lookup;
 
+  ffi.Pointer<ffi.Int8> mnemonic_from_entropy(
+    ffi.Pointer<ffi.Int8> hex_entropy,
+  ) {
+    return _mnemonic_from_entropy(
+      hex_entropy,
+    );
+  }
+
+  late final _mnemonic_from_entropy_ptr =
+      _lookup<ffi.NativeFunction<_c_mnemonic_from_entropy>>(
+          'mnemonic_from_entropy');
+  late final _dart_mnemonic_from_entropy _mnemonic_from_entropy =
+      _mnemonic_from_entropy_ptr.asFunction<_dart_mnemonic_from_entropy>();
+
+  ffi.Pointer<ffi.Int8> mnemonic_to_root_key(
+    ffi.Pointer<ffi.Int8> mnemonic,
+    ffi.Pointer<ffi.Int8> password,
+    ffi.Pointer<ffi.Int8> network,
+  ) {
+    return _mnemonic_to_root_key(
+      mnemonic,
+      password,
+      network,
+    );
+  }
+
+  late final _mnemonic_to_root_key_ptr =
+      _lookup<ffi.NativeFunction<_c_mnemonic_to_root_key>>(
+          'mnemonic_to_root_key');
+  late final _dart_mnemonic_to_root_key _mnemonic_to_root_key =
+      _mnemonic_to_root_key_ptr.asFunction<_dart_mnemonic_to_root_key>();
+
+  ffi.Pointer<ffi.Int8> derive_xpub(
+    ffi.Pointer<ffi.Int8> root,
+    ffi.Pointer<ffi.Int8> path,
+  ) {
+    return _derive_xpub(
+      root,
+      path,
+    );
+  }
+
+  late final _derive_xpub_ptr =
+      _lookup<ffi.NativeFunction<_c_derive_xpub>>('derive_xpub');
+  late final _dart_derive_xpub _derive_xpub =
+      _derive_xpub_ptr.asFunction<_dart_derive_xpub>();
+
+  ffi.Pointer<ffi.Int8> default_descriptors(
+    ffi.Pointer<ffi.Int8> root,
+    ffi.Pointer<ffi.Int8> network,
+  ) {
+    return _default_descriptors(
+      root,
+      network,
+    );
+  }
+
+  late final _default_descriptors_ptr =
+      _lookup<ffi.NativeFunction<_c_default_descriptors>>(
+          'default_descriptors');
+  late final _dart_default_descriptors _default_descriptors =
+      _default_descriptors_ptr.asFunction<_dart_default_descriptors>();
+
+  ffi.Pointer<ffi.Int8> derive_addresses(
+    ffi.Pointer<ffi.Int8> descriptor,
+    ffi.Pointer<ffi.Int8> network,
+    int start,
+    int end,
+  ) {
+    return _derive_addresses(
+      descriptor,
+      network,
+      start,
+      end,
+    );
+  }
+
+  late final _derive_addresses_ptr =
+      _lookup<ffi.NativeFunction<_c_derive_addresses>>('derive_addresses');
+  late final _dart_derive_addresses _derive_addresses =
+      _derive_addresses_ptr.asFunction<_dart_derive_addresses>();
+
   ffi.Pointer<ffi.Int8> rust_greeting(
     ffi.Pointer<ffi.Int8> to,
   ) {
@@ -54,6 +136,60 @@ class SpecterRustBindings {
   late final _dart_run_bitcoin_demo _run_bitcoin_demo =
       _run_bitcoin_demo_ptr.asFunction<_dart_run_bitcoin_demo>();
 }
+
+typedef _c_mnemonic_from_entropy = ffi.Pointer<ffi.Int8> Function(
+  ffi.Pointer<ffi.Int8> hex_entropy,
+);
+
+typedef _dart_mnemonic_from_entropy = ffi.Pointer<ffi.Int8> Function(
+  ffi.Pointer<ffi.Int8> hex_entropy,
+);
+
+typedef _c_mnemonic_to_root_key = ffi.Pointer<ffi.Int8> Function(
+  ffi.Pointer<ffi.Int8> mnemonic,
+  ffi.Pointer<ffi.Int8> password,
+  ffi.Pointer<ffi.Int8> network,
+);
+
+typedef _dart_mnemonic_to_root_key = ffi.Pointer<ffi.Int8> Function(
+  ffi.Pointer<ffi.Int8> mnemonic,
+  ffi.Pointer<ffi.Int8> password,
+  ffi.Pointer<ffi.Int8> network,
+);
+
+typedef _c_derive_xpub = ffi.Pointer<ffi.Int8> Function(
+  ffi.Pointer<ffi.Int8> root,
+  ffi.Pointer<ffi.Int8> path,
+);
+
+typedef _dart_derive_xpub = ffi.Pointer<ffi.Int8> Function(
+  ffi.Pointer<ffi.Int8> root,
+  ffi.Pointer<ffi.Int8> path,
+);
+
+typedef _c_default_descriptors = ffi.Pointer<ffi.Int8> Function(
+  ffi.Pointer<ffi.Int8> root,
+  ffi.Pointer<ffi.Int8> network,
+);
+
+typedef _dart_default_descriptors = ffi.Pointer<ffi.Int8> Function(
+  ffi.Pointer<ffi.Int8> root,
+  ffi.Pointer<ffi.Int8> network,
+);
+
+typedef _c_derive_addresses = ffi.Pointer<ffi.Int8> Function(
+  ffi.Pointer<ffi.Int8> descriptor,
+  ffi.Pointer<ffi.Int8> network,
+  ffi.Int32 start,
+  ffi.Int32 end,
+);
+
+typedef _dart_derive_addresses = ffi.Pointer<ffi.Int8> Function(
+  ffi.Pointer<ffi.Int8> descriptor,
+  ffi.Pointer<ffi.Int8> network,
+  int start,
+  int end,
+);
 
 typedef _c_rust_greeting = ffi.Pointer<ffi.Int8> Function(
   ffi.Pointer<ffi.Int8> to,
