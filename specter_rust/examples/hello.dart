@@ -6,11 +6,15 @@ import '../lib/specter_rust.dart';
 void main() {
   print(SpecterRust.greet("Rust"));
 
-  // 16 bytes in hex makes 12 word recovery phrase
+  // First we need to generate entropy and convert it to hex.
+  // 16 random bytes make 12-word mnemonic, 32 bytes makes 24-byte mnemonic.
+  // Entropy should be generated from a secure random source.
+  // Here 16 bytes are converted to hex and sent to rust to get back mnemonic:
   var entropy = "31313131313131313131313131313131";
   var mnemonic = SpecterRust.mnemonic_from_entropy(entropy);
   print(mnemonic);
 
+  // If we pass invalid number of bytes or invalid hex string it will throw an exception
   try{
     // invalid number of bytes should throw
     print(SpecterRust.mnemonic_from_entropy("313131313131313131313131313131"));    
@@ -18,20 +22,27 @@ void main() {
     print("Error: $e");
   }
 
-  // root key and fingerprint
+  // To derive root key from mnemonic we need to also pass bip39-password (empty string by default) and network:
+  // Network can be "bitcoin", "testnet", "regtest" and "signet". We assume main bitcoin network here.
+  // The function returns a dict {"fingerprint": "4-bytes-in-hex", "xprv": "root private key string"}
   var root = SpecterRust.mnemonic_to_root_key(mnemonic, "", "bitcoin");
-  var xprv = root["xprv"];
+  var xprv = root["xprv"]; // this is our key
   print(root);
 
-  // xpub at some path
+  // Derive master public key at some path
   var xpub = SpecterRust.derive_xpub(xprv, "m/84h/0h/0h");
   print(xpub);
 
-  // default single-sig descriptor for bitcoin network
+  // Construct default wallet descriptor.
+  // By default it constructs a single-sig segwit descriptor with path depending on the network.
+  // Returns a dict {"recv_descriptor": string, "change_descriptor": string}
+  // Recv descriptor is used to derive receiving addresses of the wallet, change descriptor is used for internal change addresses.
+  // Address view in the app should display receiving addresses by default
+  // (not sure if we need change addresses anywhere except verification of the transactions)
   var desc = SpecterRust.default_descriptors(xprv, "bitcoin");
   print(desc);
 
-  // first 10 addresses
+  // Derive first 10 addresses of the wallet for bitcoin network
   var recv_desc = desc["recv_descriptor"];
   var addresses = SpecterRust.derive_addresses(recv_desc, "bitcoin", 0, 10);
   print(addresses);
