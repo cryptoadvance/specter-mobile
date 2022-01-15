@@ -16,6 +16,16 @@
   		"recovery_phrase": "USE RECOVERY PHRASE"
   	}
   },
+  "add_wallet": {
+    "labels": {
+      "top_title": "Add a wallet",
+      "middle_help": "To use the application, you need to create a new wallet or import an existing one. Please choose what you will do next:"
+    },
+    "buttons": {
+      "create_wallet": "Create new wallet",
+      "import_wallet": "Import existing wallet"
+    }
+  },
   "generate_seed": {
     "labels": {
       "top_title": "Your recovery phrase",
@@ -33,7 +43,8 @@
   "onboarding": {
   	"labels": {
   		"top_title": "Yayy!!!",
-  		"top_label": "Your wallet is ready to use."
+  		"recovery_set_up_success": "Recovery phrase set up successfully.",
+      "wallet_ready": "Your wallet is ready to use."
   	},
   	"buttons": {
   		"next_page": "OK"

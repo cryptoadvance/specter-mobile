@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:specter_mobile/app/modules/100_auth/104_onboarding/controllers/onboarding_controller.dart';
 import 'package:specter_mobile/app/routes/app_pages.dart';
 import 'package:specter_mobile/services/CServices.dart';
 import 'package:specter_mobile/services/cryptoService/CRecoverySeedService.dart';
@@ -53,6 +54,8 @@ class EnterRecoveryPhraseController extends GetxController {
       return;
     }
 
-    await Get.offAllNamed(Routes.ONBOARDING);
+    await Get.offAllNamed(Routes.ONBOARDING, arguments: {
+      'onboardingMessageType': ONBOARDING_MESSAGE_TYPE.RECOVERY_SET_UP_SUCCESS
+    });
   }
 }

@@ -26,7 +26,7 @@ class EnterRecoveryPhraseListController extends GetxController {
     List<String> list = [];
     bool haveData = false;
     controllers.forEach((key, ctx) {
-      String val = ctx.text;
+      String val = ctx.text.trim();
       if (val.isNotEmpty) {
         haveData = true;
       }

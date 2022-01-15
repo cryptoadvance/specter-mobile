@@ -286,12 +286,29 @@ class CCryptoContainer {
     return true;
   }
 
+  Future<bool> addNewWallet({required String walletName}) async {
+    if (!(await cryptoContainerModel!.addNewWallet(walletName: walletName))) {
+      return false;
+    }
+
+    if (!(await _saveCryptoContainer())) {
+      return false;
+    }
+
+    return true;
+  }
+
   void openAfterAuthPage() {
-    if (cryptoContainerModel!.isSeedInit()) {
-      Get.offAllNamed(Routes.KEYS);
+    if (!cryptoContainerModel!.isSeedInit()) {
+      Get.offAllNamed(Routes.RECOVERY_SELECT);
       return;
     }
 
-    Get.offAllNamed(Routes.RECOVERY_SELECT);
+    if (!cryptoContainerModel!.isWalletsInit()) {
+      Get.offAllNamed(Routes.ADD_WALLET);
+      return;
+    }
+
+    Get.offAllNamed(Routes.KEYS);
   }
 }

@@ -17,6 +17,8 @@ abstract class Routes {
   static const ENTER_RECOVERY_PHRASE = _Paths.ENTER_RECOVERY_PHRASE;
   static const AUTH_ONBOARDING = _Paths.AUTH_ONBOARDING;
   static const ONBOARDING = _Paths.ONBOARDING;
+  static const ADD_WALLET = _Paths.ADD_WALLET_SELECT;
+  static const CREATE_NEW_WALLET = _Paths.CREATE_NEW_WALLET;
 }
 
 abstract class _Paths {
@@ -33,4 +35,6 @@ abstract class _Paths {
   static const ENTER_RECOVERY_PHRASE = '/enter-recovery_pharse';
   static const AUTH_ONBOARDING = '/auth-onboarding';
   static const ONBOARDING = '/onboarding';
+  static const ADD_WALLET_SELECT = '/add-wallet-select';
+  static const CREATE_NEW_WALLET = '/create-new-wallet';
 }
