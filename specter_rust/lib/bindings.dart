@@ -36,12 +36,10 @@ class SpecterRustBindings {
   ffi.Pointer<ffi.Int8> mnemonic_to_root_key(
     ffi.Pointer<ffi.Int8> mnemonic,
     ffi.Pointer<ffi.Int8> password,
-    ffi.Pointer<ffi.Int8> network,
   ) {
     return _mnemonic_to_root_key(
       mnemonic,
       password,
-      network,
     );
   }
 
@@ -54,10 +52,12 @@ class SpecterRustBindings {
   ffi.Pointer<ffi.Int8> derive_xpub(
     ffi.Pointer<ffi.Int8> root,
     ffi.Pointer<ffi.Int8> path,
+    ffi.Pointer<ffi.Int8> network,
   ) {
     return _derive_xpub(
       root,
       path,
+      network,
     );
   }
 
@@ -66,21 +66,24 @@ class SpecterRustBindings {
   late final _dart_derive_xpub _derive_xpub =
       _derive_xpub_ptr.asFunction<_dart_derive_xpub>();
 
-  ffi.Pointer<ffi.Int8> default_descriptors(
+  ffi.Pointer<ffi.Int8> get_descriptors(
     ffi.Pointer<ffi.Int8> root,
+    ffi.Pointer<ffi.Int8> path,
+    ffi.Pointer<ffi.Int8> scripttype,
     ffi.Pointer<ffi.Int8> network,
   ) {
-    return _default_descriptors(
+    return _get_descriptors(
       root,
+      path,
+      scripttype,
       network,
     );
   }
 
-  late final _default_descriptors_ptr =
-      _lookup<ffi.NativeFunction<_c_default_descriptors>>(
-          'default_descriptors');
-  late final _dart_default_descriptors _default_descriptors =
-      _default_descriptors_ptr.asFunction<_dart_default_descriptors>();
+  late final _get_descriptors_ptr =
+      _lookup<ffi.NativeFunction<_c_get_descriptors>>('get_descriptors');
+  late final _dart_get_descriptors _get_descriptors =
+      _get_descriptors_ptr.asFunction<_dart_get_descriptors>();
 
   ffi.Pointer<ffi.Int8> derive_addresses(
     ffi.Pointer<ffi.Int8> descriptor,
@@ -148,32 +151,36 @@ typedef _dart_mnemonic_from_entropy = ffi.Pointer<ffi.Int8> Function(
 typedef _c_mnemonic_to_root_key = ffi.Pointer<ffi.Int8> Function(
   ffi.Pointer<ffi.Int8> mnemonic,
   ffi.Pointer<ffi.Int8> password,
-  ffi.Pointer<ffi.Int8> network,
 );
 
 typedef _dart_mnemonic_to_root_key = ffi.Pointer<ffi.Int8> Function(
   ffi.Pointer<ffi.Int8> mnemonic,
   ffi.Pointer<ffi.Int8> password,
-  ffi.Pointer<ffi.Int8> network,
 );
 
 typedef _c_derive_xpub = ffi.Pointer<ffi.Int8> Function(
   ffi.Pointer<ffi.Int8> root,
   ffi.Pointer<ffi.Int8> path,
+  ffi.Pointer<ffi.Int8> network,
 );
 
 typedef _dart_derive_xpub = ffi.Pointer<ffi.Int8> Function(
   ffi.Pointer<ffi.Int8> root,
   ffi.Pointer<ffi.Int8> path,
-);
-
-typedef _c_default_descriptors = ffi.Pointer<ffi.Int8> Function(
-  ffi.Pointer<ffi.Int8> root,
   ffi.Pointer<ffi.Int8> network,
 );
 
-typedef _dart_default_descriptors = ffi.Pointer<ffi.Int8> Function(
+typedef _c_get_descriptors = ffi.Pointer<ffi.Int8> Function(
   ffi.Pointer<ffi.Int8> root,
+  ffi.Pointer<ffi.Int8> path,
+  ffi.Pointer<ffi.Int8> scripttype,
+  ffi.Pointer<ffi.Int8> network,
+);
+
+typedef _dart_get_descriptors = ffi.Pointer<ffi.Int8> Function(
+  ffi.Pointer<ffi.Int8> root,
+  ffi.Pointer<ffi.Int8> path,
+  ffi.Pointer<ffi.Int8> scripttype,
   ffi.Pointer<ffi.Int8> network,
 );
 

@@ -80,17 +80,15 @@ pub extern fn mnemonic_from_entropy(hex_entropy: *const c_char) -> *mut c_char {
 }
 
 #[no_mangle]
-pub extern fn mnemonic_to_root_key(mnemonic: *const c_char, password: *const c_char, network: *const c_char) -> *mut c_char {
-    let network = cstr!(network);
+pub extern fn mnemonic_to_root_key(mnemonic: *const c_char, password: *const c_char) -> *mut c_char {
     let mnemonic = cstr!(mnemonic);
     let password = cstr!(password);
 
-    let network = err!(network.parse::<Network>());
     let mnemonic = err!(Mnemonic::parse(mnemonic));
     let seed = mnemonic.to_seed(password);
 
     // generate root bip-32 key from seed
-    let root = err!(ExtendedPrivKey::new_master(network, &seed));
+    let root = err!(ExtendedPrivKey::new_master(Network::Bitcoin, &seed));
 
     let secp_ctx = Secp256k1::new();
     let fingerprint = root.fingerprint(&secp_ctx);
@@ -101,11 +99,14 @@ pub extern fn mnemonic_to_root_key(mnemonic: *const c_char, password: *const c_c
 }
 
 #[no_mangle]
-pub extern fn derive_xpub(root: *const c_char, path: *const c_char) -> *mut c_char {
+pub extern fn derive_xpub(root: *const c_char, path: *const c_char, network: *const c_char) -> *mut c_char {
     let path = cstr!(path);
     let root = cstr!(root);
+    let network = cstr!(network);
 
-    let root = err!(ExtendedPrivKey::from_str(root));
+    let network = err!(network.parse::<Network>());
+    let mut root = err!(ExtendedPrivKey::from_str(root));
+    root.network = network;
     let derivation = err!(DerivationPath::from_str(path));
 
     // child private key
@@ -118,21 +119,21 @@ pub extern fn derive_xpub(root: *const c_char, path: *const c_char) -> *mut c_ch
 }
 
 #[no_mangle]
-pub extern fn default_descriptors(root: *const c_char, network: *const c_char) -> *mut c_char {
-    let network = cstr!(network);
+pub extern fn get_descriptors(
+    root: *const c_char, // xprv
+    path: *const c_char, // derivation path like m/12h/34
+    scripttype: *const c_char, // "segwit", "nested" or "legacy"
+    network: *const c_char
+) -> *mut c_char {
+
     let root = cstr!(root);
+    let path = cstr!(path);
+    let scripttype = cstr!(scripttype);
+    let network = cstr!(network);
 
     let network = err!(network.parse::<Network>());
-    let root = err!(ExtendedPrivKey::from_str(root));
-
-    let path = match network {
-        Network::Bitcoin => {
-            "m/84h/0h/0h"
-        }
-        _ => {
-            "m/84h/1h/0h"
-        }
-    };
+    let mut root = err!(ExtendedPrivKey::from_str(root));
+    root.network = network;
     let derivation = err!(DerivationPath::from_str(path));
 
     let secp_ctx = Secp256k1::new();
@@ -144,12 +145,15 @@ pub extern fn default_descriptors(root: *const c_char, network: *const c_char) -
 
     let key = format!("[{}{}]{}", fingerprint, &path[1..], xpub);
 
-    let recv_desc = err!(miniscript::Descriptor::<DescriptorPublicKey>::from_str(
-        &format!("wpkh({}/0/*)", key)
-    ));
-    let change_desc = err!(miniscript::Descriptor::<DescriptorPublicKey>::from_str(
-        &format!("wpkh({}/0/*)", key)
-    ));
+    let desc = match scripttype {
+        "segwit" => format!("wpkh({}/0/*)", key),
+        "nested" => format!("sh(wpkh({}/0/*))", key),
+        "legacy" => format!("pkh({}/0/*)", key),
+        "taproot" => format!("tr({}/0/*)", key),
+        _ => err!(Err("Invalid script type"))
+    };
+    let recv_desc = err!(miniscript::Descriptor::<DescriptorPublicKey>::from_str(&desc));
+    let change_desc = err!(miniscript::Descriptor::<DescriptorPublicKey>::from_str(&desc.replace("/0/*", "/1/*")));
     ok!(json!({
         "recv_descriptor": recv_desc.to_string(),
         "change_descriptor": change_desc.to_string(),

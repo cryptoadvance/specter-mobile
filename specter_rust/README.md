@@ -26,3 +26,12 @@ sudo cp target/debug/libspecter_rust.so /usr/lib
 ```
 dart examples/hello.dart
 ```
+
+## Creating bindings
+
+```
+dart pub get
+dart ffigen
+```
+
+Problems with llvm? For me this fixed the problem: `sudo ln /usr/lib/llvm-10/lib/libclang.so.1 /usr/lib/llvm-10/lib/libclang.so`

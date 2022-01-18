@@ -22,12 +22,14 @@ void main() {
   // To derive root key from mnemonic we need to also pass bip39-password (empty string by default) and network:
   // Network can be 'bitcoin', 'testnet', 'regtest' and 'signet'. We assume main bitcoin network here.
   // The function returns a dict {'fingerprint': '4-bytes-in-hex', 'xprv': 'root private key string'}
-  var root = SpecterRust.mnemonic_to_root_key(mnemonic, '', 'bitcoin');
-  var xprv = root['xprv']; // this is our key
+  var root = SpecterRust.mnemonic_to_root_key(mnemonic, '');
+  String xprv = root['xprv']; // this is our key
+  String fgp = root['fingerprint'];
   print(root);
+  print('Fingerprint: $fgp');
 
   // Derive master public key at some path
-  var xpub = SpecterRust.derive_xpub(xprv, 'm/84h/0h/0h');
+  var xpub = SpecterRust.derive_xpub(xprv, "m/84'/0'/0'", 'bitcoin');
   print(xpub);
 
   // Construct default wallet descriptor.
@@ -43,4 +45,9 @@ void main() {
   var recv_desc = desc['recv_descriptor'];
   var addresses = SpecterRust.derive_addresses(recv_desc, 'bitcoin', 0, 10);
   print(addresses);
+
+  // get descriptor for account 3, type - nested segwit.
+  var nested_desc_acc_2 = SpecterRust.get_account_descriptors(xprv, 3, 'nested', 'bitcoin');
+  print(nested_desc_acc_2);
+
 }
