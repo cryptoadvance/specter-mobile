@@ -1,15 +1,28 @@
 # specter_rust
 
-A new flutter plugin project.
+Specter Rust bindings for wallet functionality.
 
-## Getting Started
+## Building
 
-This project is a starting point for a Flutter
-[plug-in package](https://flutter.dev/developing-packages/),
-a specialized package that includes platform-specific implementation code for
-Android and/or iOS.
+First run:
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+```
+flutter pub get
+cd rust
+make init
+make bindings
+```
 
+Then for Android and iOS run `make all` or separately `make ios` and `make android`
+
+On Linux run `cargo build` and install the resulting library or make it somehow available for the system:
+
+```
+sudo cp target/debug/libspecter_rust.so /usr/lib
+```
+
+## Running dart example
+
+```
+dart examples/hello.dart
+```
