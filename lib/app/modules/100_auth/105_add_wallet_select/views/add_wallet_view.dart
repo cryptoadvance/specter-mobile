@@ -53,7 +53,7 @@ class AddWalletSelectView extends GetView<AddWalletSelectController> {
                   isInline: false,
                   style: LightButtonStyle.SECONDARY,
                   onTap: () {
-                    //Get.toNamed(Routes.ENTER_RECOVERY_PHRASE);
+                    Get.toNamed(Routes.IMPORT_EXISTING_WALLET);
                   },
                   child: Text('add_wallet_buttons_import_wallet'.tr, textAlign: TextAlign.center)
                 )

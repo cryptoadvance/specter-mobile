@@ -49,6 +49,7 @@ flutter:
     - assets/icons/vpn_key.svg
     - assets/icons/account_balance_wallet.svg
     - assets/icons/qr_code_scanner.svg
+    - assets/icons/qr_code_scanner_2.svg
     - assets/icons/coolicon.svg
     - assets/icons/bitcoin.svg
     - assets/icons/account_tree.svg
@@ -66,6 +67,7 @@ flutter:
     - assets/icons/menu_json.svg
     - assets/icons/menu_pdf.svg
     - assets/icons/menu_delete.svg
+    - assets/icons/folder_open.svg
     - assets/stickers/key-x512.png
     - assets/stickers/ghost_char-x512.png
     - assets/stickers/ghost_normal_3d-x512.png

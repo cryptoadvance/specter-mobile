@@ -14,8 +14,12 @@ import '../modules/100_auth/103_generate_seed/bindings/generate_seed_binding.dar
 import '../modules/100_auth/103_generate_seed/views/generate_seed_view.dart';
 import '../modules/100_auth/104_onboarding/bindings/onboarding_binding.dart';
 import '../modules/100_auth/104_onboarding/views/onboarding_view.dart';
+import '../modules/100_auth/1051_create_new_wallet/bindings/create_new_wallet_binding.dart';
+import '../modules/100_auth/1051_create_new_wallet/views/create_new_wallet_view.dart';
 import '../modules/100_auth/105_add_wallet_select/bindings/add_wallet_binding.dart';
 import '../modules/100_auth/105_add_wallet_select/views/add_wallet_view.dart';
+import '../modules/100_auth/1052_import_existing_wallet/bindings/import_existing_wallet_binding.dart';
+import '../modules/100_auth/1052_import_existing_wallet/views/import_existing_wallet_view.dart';
 import '../modules/200_wallets/keys/bindings/keys_binding.dart';
 import '../modules/200_wallets/keys/views/keys_view.dart';
 import '../modules/200_wallets/walletInfo/bindings/wallet_info_binding.dart';
@@ -24,8 +28,6 @@ import '../modules/200_wallets/walletInfoAddress/bindings/wallet_info_address_bi
 import '../modules/200_wallets/walletInfoAddress/views/wallet_info_address_view.dart';
 import '../modules/200_wallets/walletInfoTransaction/bindings/wallet_info_transactions_binding.dart';
 import '../modules/200_wallets/walletInfoTransaction/views/wallet_info_transactions_view.dart';
-import '../modules/100_auth/1051_create_new_wallet/bindings/create_new_wallet_binding.dart';
-import '../modules/100_auth/1051_create_new_wallet/views/create_new_wallet_view.dart';
 
 part 'app_routes.dart';
 
@@ -99,6 +101,11 @@ class AppPages {
       name: _Paths.CREATE_NEW_WALLET,
       page: () => CreateNewWalletView(),
       binding: CreateNewWalletBinding(),
+    ),
+    GetPage(
+      name: _Paths.IMPORT_EXISTING_WALLET,
+      page: () => ImportExistingWalletView(),
+      binding: ImportExistingWalletBinding(),
     ),
   ];
 }

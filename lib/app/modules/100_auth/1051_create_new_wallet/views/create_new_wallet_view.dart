@@ -12,31 +12,33 @@ class CreateNewWalletView extends GetView<CreateNewWalletController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: GestureDetector(
-          onTap: () {
-            controller.viewTap(context);
-          },
-          child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 15),
-            child: Column(
-              children: [
-                Container(
-                  margin: EdgeInsets.only(top: 15),
-                  child: getTopSide()
-                ),
-                Container(
-                  margin: EdgeInsets.only(top: 50),
-                  child: getNameInputSide()
-                ),
-                Container(
-                  margin: EdgeInsets.only(top: 50),
-                  child: getTypesSide(context)
-                )
-              ]
-            )
-          ),
-        )
+      body: SingleChildScrollView(
+        child: SafeArea(
+          child: GestureDetector(
+            onTap: () {
+              controller.viewTap(context);
+            },
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 15),
+              child: Column(
+                children: [
+                  Container(
+                    margin: EdgeInsets.only(top: 15),
+                    child: getTopSide()
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(top: 50),
+                    child: getNameInputSide()
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(top: 50),
+                    child: getTypesSide(context)
+                  )
+                ]
+              )
+            ),
+          )
+        ),
       )
     );
   }
@@ -52,12 +54,13 @@ class CreateNewWalletView extends GetView<CreateNewWalletController> {
               ),
               Expanded(
                   child: Container(
+                      padding: EdgeInsets.only(right: 20),
                       child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Container(
-                                child: Text('Name your\n wallet', style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold))
+                                child: Text('Name your\nwallet', textAlign: TextAlign.center, style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold))
                             )
                           ]
                       )
