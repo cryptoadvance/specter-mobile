@@ -19,8 +19,7 @@ void main() {
     print('Error: $e');
   }
 
-  // To derive root key from mnemonic we need to also pass bip39-password (empty string by default) and network:
-  // Network can be 'bitcoin', 'testnet', 'regtest' and 'signet'. We assume main bitcoin network here.
+  // To derive root key from mnemonic we need to also pass bip39-password (empty string by default).
   // The function returns a dict {'fingerprint': '4-bytes-in-hex', 'xprv': 'root private key string'}
   var root = SpecterRust.mnemonic_to_root_key(mnemonic, '');
   String xprv = root['xprv']; // this is our key
@@ -28,7 +27,8 @@ void main() {
   print(root);
   print('Fingerprint: $fgp');
 
-  // Derive master public key at some path
+  // Derive master public key at some path for current network:
+  // Network can be 'bitcoin', 'testnet', 'regtest' and 'signet'. We assume main bitcoin network here
   var xpub = SpecterRust.derive_xpub(xprv, "m/84'/0'/0'", 'bitcoin');
   print(xpub);
 
