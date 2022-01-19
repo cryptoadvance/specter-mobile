@@ -112,6 +112,10 @@ target/bindings.h: src/lib.rs
 	cp -f $@ ../ios/Classes/$(LIBNAME)_bindings.h
 	@echo "[DONE] $@"
 
+# Generate debug version of the library for the host OS
+test_lib: $(SOURCES)
+	cargo build
+
 ## :
 
 # ##############################################################################

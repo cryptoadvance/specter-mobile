@@ -10,6 +10,21 @@ class SpecterRust {
       SpecterRustBindings(SpecterRust._loadLibrary());
 
   static DynamicLibrary _loadLibrary() {
+    // If we are in test environment, handle library loading differently
+    if (Platform.environment.containsKey('FLUTTER_TEST')) {
+      var hostLib = './rust/target/debug/libspecter_rust';
+      if (Platform.isLinux) {
+        hostLib += '.so';
+      } else if (Platform.isMacOS) {
+        hostLib += '.dylib';
+      } else if (Platform.isWindows) {
+        hostLib += '.dll';
+      } else {
+        throw UnimplementedError('Host OS not supported.');
+      }
+      return DynamicLibrary.open(hostLib);
+    }
+
     return Platform.isAndroid
         ? DynamicLibrary.open(DYNAMIC_LIBRARY_FILE_NAME)
         : DynamicLibrary.process();

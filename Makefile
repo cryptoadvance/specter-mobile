@@ -50,6 +50,7 @@ test_rust:
 ## test: Run tests
 test: test_rust
 	@echo "Running tests for the Rust package"
+	@$(MAKE) -C $(RUST_DIR) test_lib
 	@cd $(RUST_PACKAGE_DIR); flutter test
 	@echo "Running tests for the Flutter application"
 	@flutter test
