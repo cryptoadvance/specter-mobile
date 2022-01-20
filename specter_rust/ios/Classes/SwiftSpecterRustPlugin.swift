@@ -14,6 +14,13 @@ public class SwiftSpecterRustPlugin: NSObject, FlutterPlugin {
 
   public func intertMethodToEnforceBundling() {
     // This will never be executed
-    //rust_greeting("");
+    mnemonic_from_entropy("")
+    mnemonic_to_root_key("", "")
+    derive_xpub("", "", "")
+    get_descriptors("", "", "", "")
+    derive_addresses("", "", 0, 0)
+    rust_greeting("")
+    rust_cstr_free(nil)
+    run_bitcoin_demo()
   }
 }
