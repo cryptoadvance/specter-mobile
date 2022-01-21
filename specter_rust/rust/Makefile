@@ -104,13 +104,17 @@ ndk-home:
 	fi
 
 ## bindings: Generate the .h file for iOS
-bindings: target/bindings.h
+bindings: target/bindings.h cbindgen.toml
 
-target/bindings.h: src/lib.rs
+target/bindings.h: src/lib.rs cbindgen.toml
 	cd ..; flutter pub get
-	cbindgen $^ -c cbindgen.toml | grep -v \#include | uniq > $@
+	cbindgen $< -c cbindgen.toml | uniq > $@
 	cp -f $@ ../ios/Classes/$(LIBNAME)_bindings.h
 	@echo "[DONE] $@"
+
+# Generate debug version of the library for the host OS
+test_lib: $(SOURCES)
+	cargo build
 
 ## :
 
