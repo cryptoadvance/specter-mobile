@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 class GeneratedSeed24WordList extends StatelessWidget {
-  final List<String> seedWords;
-  GeneratedSeed24WordList({required this.seedWords});
+  final List<String> mnemonicWords;
+  GeneratedSeed24WordList({required this.mnemonicWords});
 
   @override
   Widget build(BuildContext context) {
@@ -13,17 +13,17 @@ class GeneratedSeed24WordList extends StatelessWidget {
 
   Widget getContent(double maxWidth) {
     int inColumnLength = 12;
-    int columnsCount = (seedWords.length / inColumnLength).ceil();
+    int columnsCount = (mnemonicWords.length / inColumnLength).ceil();
 
     var idx = 0;
     List<Widget> columns = [];
     for (int columnIdx = 0; columnIdx < columnsCount; columnIdx++) {
         List<Widget> rows = [];
         for (var i = 0; i < inColumnLength; i++) {
-            if (idx >= seedWords.length) {
+            if (idx >= mnemonicWords.length) {
               break;
             }
-            var el = seedWords[idx];
+            var el = mnemonicWords[idx];
             rows.add(Container(
                 constraints: BoxConstraints(
                     minWidth: 150

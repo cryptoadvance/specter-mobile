@@ -68,6 +68,7 @@ flutter:
     - assets/icons/menu_pdf.svg
     - assets/icons/menu_delete.svg
     - assets/icons/folder_open.svg
+    - assets/icons/take_photo.svg
     - assets/stickers/key-x512.png
     - assets/stickers/ghost_char-x512.png
     - assets/stickers/ghost_normal_3d-x512.png

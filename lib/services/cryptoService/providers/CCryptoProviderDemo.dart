@@ -3,37 +3,41 @@ import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:hex/hex.dart';
+import 'package:specter_rust/specter_rust.dart';
 
 import '../../../utils/bip39/bip39.dart' as bip39;
 
+import '../../CEntropyExternalGenerationService.dart';
 import '../CGenerateSeedService.dart';
 import '../CRecoverySeedService.dart';
 import 'CCryptoProvider.dart';
 
 class CCryptoProviderDemo extends CCryptoProvider {
-  Timer? timerGenerateSeed;
-  int generateDemoIdx = 0;
   int maxGenerateIterations = 10;
-  double completePercent = 0;
   GenerateSeedOptions? currentGenerateSeedOptions;
+  String _mnemonic = '';
+
+  SGenerateEntropyExternalEvent? _entropyExternalEvent;
 
   var rnd = Random.secure();
 
   @override
   void startGenerateSeed() {
-    if (timerGenerateSeed != null) {
-      throw 'generate seed already started';
-    }
+    print('startGenerateSeed');
     if (currentGenerateSeedOptions == null) {
       throw 'generateSeedOptions is not set';
     }
 
-    generateDemoIdx = 0;
-    timerGenerateSeed = Timer.periodic(Duration(milliseconds: 200), demoTick);
+    //
+    Future.delayed(Duration(milliseconds: 1), () {
+      _generateSeed();
+    });
   }
 
-  void demoTick(_) async {
-    if (completePercent == 100) {
+  void _generateSeed() async {
+    if (currentGenerateSeedOptions!.entropySource == ENTROPY_SOURCE.CAMERA && _entropyExternalEvent == null) {
+      _mnemonic = '';
+      _addEvent();
       return;
     }
 
@@ -46,48 +50,92 @@ class CCryptoProviderDemo extends CCryptoProvider {
 
     //
     List<String> seedWords = bip39.entropyHexToMnemonic(seedList);
-    String seedKey = seedWords.join(' ');
-
+    
     //
-    completePercent = (generateDemoIdx / maxGenerateIterations.toDouble()) * 100;
-    if (completePercent > 100) {
-      completePercent = 100;
+    String mnemonicFromLocal = seedWords.join(' ');
+    String mnemonicFromRust = SpecterRust.mnemonic_from_entropy(HEX.encode(seedList));
+    if (mnemonicFromLocal != mnemonicFromRust) {
+      throw 'mnemonic different';
     }
 
     //
-    addEvent(CryptoProviderEventType.GENERATE_SEED_EVENT, SGenerateSeedEvent(
-        seedWords: seedWords,
-        seedKey: seedKey,
-        completePercent: completePercent
-    ));
-    generateDemoIdx++;
+    _mnemonic = mnemonicFromRust;
+
+    //
+    _addEvent();
   }
 
-  Uint8List getRandomSeed(int bytes) {
-    Uint8List seedList = Uint8List(bytes);
+  void _addEvent() {
+    addEvent(CryptoProviderEventType.GENERATE_SEED_EVENT, SGenerateSeedEvent(
+        mnemonicKey: _mnemonic,
+        completePercent: 100
+    ));
+  }
 
-    //
-    for (int i = 0; i < bytes; i++) {
-      seedList[i] = rnd.nextInt(256) ^ rnd.nextInt(256) ^ rnd.nextInt(256);
+  static int entropyGenIterations = 100;
+
+  Uint8List getRandomSeed(int bytes) {
+    if (bytes < 16) {
+      throw 'to small bytes';
     }
+    if (entropyGenIterations < 10) {
+      throw 'to low entropyGenIterations';
+    }
+
+    Uint8List seedList = Uint8List(bytes);
+    for (int seedIdx = 0; seedIdx < bytes; seedIdx++) {
+      seedList[seedIdx] = 0;
+    }
+
+    for (int genIdx = 0; genIdx < entropyGenIterations; genIdx++) {
+      for (int seedIdx = 0; seedIdx < bytes; seedIdx++) {
+        int a = seedList[seedIdx];
+        a = a ^ rnd.nextInt(256) ^ rnd.nextInt(256) ^ rnd.nextInt(256);
+        seedList[seedIdx] = a;
+      }
+    }
+
+    if (_entropyExternalEvent != null) {
+      List<int> digest = _entropyExternalEvent!.digest!;
+
+      for (int seedIdx = 0; seedIdx < bytes; seedIdx++) {
+        int useIndex = seedIdx % digest.length;
+        int externalEntropy = digest[useIndex];
+        int a = seedList[seedIdx];
+        a = a ^ externalEntropy;
+        seedList[seedIdx] = a;
+      }
+    }
+
     return seedList;
   }
 
   @override
   void stopGenerateSeed() {
-    timerGenerateSeed!.cancel();
-    timerGenerateSeed = null;
+    _mnemonic = '';
+    _entropyExternalEvent = null;
   }
 
   @override
   void setGenerateSeedOptions(GenerateSeedOptions generateSeedOptions) {
+    if (generateSeedOptions.entropySource == ENTROPY_SOURCE.NONE) {
+      _entropyExternalEvent = null;
+    }
     currentGenerateSeedOptions = generateSeedOptions;
-    _cleanDemoCounter();
+    _generateSeed();
   }
 
-  void _cleanDemoCounter() {
-    generateDemoIdx = 0;
-    completePercent = 0;
+  @override
+  void addExternalEntropy(SGenerateEntropyExternalEvent entropyExternalEvent) {
+    print('add external entropy');
+    _entropyExternalEvent = entropyExternalEvent;
+    _generateSeed();
+  }
+
+  @override
+  void cleanGeneratedSeed() {
+   _mnemonic = '';
+   _addEvent();
   }
 
   @override

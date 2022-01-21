@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import '../CEntropyExternalGenerationService.dart';
 import 'providers/CCryptoProvider.dart';
 
 enum SEED_COMPLEXITY {
@@ -14,6 +15,7 @@ enum ENTROPY_SOURCE {
 
 class GenerateSeedOptions {
   SEED_COMPLEXITY seedComplexity = SEED_COMPLEXITY.SIMPLE;
+  ENTROPY_SOURCE entropySource = ENTROPY_SOURCE.NONE;
 }
 
 class CGenerateSeedService {
@@ -53,7 +55,20 @@ class CGenerateSeedService {
     updateGenerateSeedOptions();
   }
 
+  void setEntropySource(ENTROPY_SOURCE entropySource) {
+    currentGenerateSeedOptions.entropySource = entropySource;
+    updateGenerateSeedOptions();
+  }
+
+  void cleanGeneratedSeed() {
+    _cryptoProvider.cleanGeneratedSeed();
+  }
+
   void updateGenerateSeedOptions() {
     _cryptoProvider.setGenerateSeedOptions(currentGenerateSeedOptions);
+  }
+
+  void addExternalEntropy(SGenerateEntropyExternalEvent entropyExternalEvent) {
+    _cryptoProvider.addExternalEntropy(entropyExternalEvent);
   }
 }

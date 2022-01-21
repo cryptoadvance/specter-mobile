@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'dart:convert';
 
+import '../../CEntropyExternalGenerationService.dart';
 import '../CGenerateSeedService.dart';
 import '../CRecoverySeedService.dart';
 
@@ -30,17 +31,15 @@ abstract class SCryptoProviderSubEvent {
 }
 
 class SGenerateSeedEvent extends SCryptoProviderSubEvent {
-  List<String> seedWords;
-  String seedKey;
+  String mnemonicKey;
   double completePercent;
 
-  SGenerateSeedEvent({required this.seedWords, this.completePercent = 0, required this.seedKey});
+  SGenerateSeedEvent({this.completePercent = 0, required this.mnemonicKey});
 
   @override
   String toString() {
     return jsonEncode({
-      'seedWords': seedWords,
-      'seedKey': seedKey,
+      'seedKey': mnemonicKey,
       'completePercent': completePercent.toString()
     });
   }
@@ -72,6 +71,8 @@ abstract class CCryptoProvider {
   void startGenerateSeed();
   void stopGenerateSeed();
   void setGenerateSeedOptions(GenerateSeedOptions generateSeedOptions);
+  void cleanGeneratedSeed();
+  void addExternalEntropy(SGenerateEntropyExternalEvent entropyExternalEvent);
 
   //Recovery seed API
   Future<RecoverySeedResult?> verifyRecoveryPhrase(List<String> recoveryPhrases);
