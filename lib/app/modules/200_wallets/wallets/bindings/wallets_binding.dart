@@ -1,12 +1,12 @@
 import 'package:get/get.dart';
 
-import '../controllers/keys_controller.dart';
+import '../controllers/wallets_controller.dart';
 
 class KeysBinding extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut<KeysController>(
-      () => KeysController(),
+    Get.lazyPut<WalletsController>(
+      () => WalletsController(),
     );
   }
 }

@@ -20,8 +20,8 @@ import '../modules/100_auth/105_add_wallet_select/bindings/add_wallet_binding.da
 import '../modules/100_auth/105_add_wallet_select/views/add_wallet_view.dart';
 import '../modules/100_auth/1052_import_existing_wallet/bindings/import_existing_wallet_binding.dart';
 import '../modules/100_auth/1052_import_existing_wallet/views/import_existing_wallet_view.dart';
-import '../modules/200_wallets/keys/bindings/keys_binding.dart';
-import '../modules/200_wallets/keys/views/keys_view.dart';
+import '../modules/200_wallets/wallets/bindings/wallets_binding.dart';
+import '../modules/200_wallets/wallets/views/wallets_view.dart';
 import '../modules/200_wallets/walletInfo/bindings/wallet_info_binding.dart';
 import '../modules/200_wallets/walletInfo/views/wallet_info_view.dart';
 import '../modules/200_wallets/walletInfoAddress/bindings/wallet_info_address_binding.dart';
@@ -54,7 +54,7 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.KEYS,
-      page: () => KeysView(),
+      page: () => WalletsView(),
       binding: KeysBinding(),
     ),
     GetPage(

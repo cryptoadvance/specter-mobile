@@ -2,13 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
-import 'package:specter_mobile/app/modules/200_wallets/keys/widgets/WalletsList.dart';
 import 'package:specter_mobile/app/widgets/BottomMenu.dart';
 import 'package:specter_mobile/app/widgets/LightButton.dart';
+import '../controllers/wallets_controller.dart';
 
-import '../controllers/keys_controller.dart';
+import '../widgets/WalletsList.dart';
 
-class KeysView extends GetView<KeysController> {
+class WalletsView extends GetView<WalletsController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

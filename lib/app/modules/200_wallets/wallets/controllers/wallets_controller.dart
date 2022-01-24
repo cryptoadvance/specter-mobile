@@ -1,9 +1,6 @@
 import 'package:get/get.dart';
 
-class KeysController extends GetxController {
-  //TODO: Implement KeysController
-
-  final count = 0.obs;
+class WalletsController extends GetxController {
   @override
   void onInit() {
     super.onInit();
@@ -16,5 +13,4 @@ class KeysController extends GetxController {
 
   @override
   void onClose() {}
-  void increment() => count.value++;
 }
