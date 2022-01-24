@@ -1,66 +1,109 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
+import 'package:specter_mobile/app/modules/200_wallets/walletInfo/views/wallet_info_view.dart';
+import 'package:specter_mobile/app/routes/app_pages.dart';
 
 import '../../../../../utils.dart';
-import 'AccountWalletItem.dart';
 
 class AccountItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container(
-        decoration: BoxDecoration(
-            color: Utils.hexToColor('#202A40'),
-            borderRadius: BorderRadius.all(Radius.circular(5))
-        ),
-        padding: EdgeInsets.symmetric(vertical: 10),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
+    return InkWell(
+      onTap: tapItem,
+      child: Container(
+        padding: EdgeInsets.only(top: 15, bottom: 5),
+        child: Stack(
           children: [
             Container(
-              padding: EdgeInsets.only(left: 15, right: 15),
-              child: getTopPanel(context)
+              padding: EdgeInsets.symmetric(horizontal: 15),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    child: getTopPanel(context),
+                  ),
+                  Container(
+                    width: double.infinity,
+                    child: getOperationsList(context),
+                  )
+                ]
+              ),
             ),
-            Container(
-              width: double.infinity,
-              child: getBottomPanel()
+            Positioned(
+              top: 3,
+              right: 10,
+              child: Icon(CupertinoIcons.right_chevron, size: 20, color: Theme.of(context).accentColor)
             )
-          ],
-        )
+          ]
+        ),
+      )
     );
   }
 
   Widget getTopPanel(BuildContext context) {
-    return Column(
+    return Row(
+      mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
-          child: Text('ACCOUNT #1', style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Theme.of(context).accentColor)),
+          margin: EdgeInsets.only(top: 10),
+          child: SvgPicture.asset('assets/icons/bitcoin.svg', color: Utils.hexToColor('#F3B352')),
         ),
-        Container(
-          child: Text('Primary', style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Theme.of(context).accentColor)),
+        Expanded(
+          child: Container(
+            margin: EdgeInsets.only(left: 15),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('Account #0', style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Theme.of(context).accentColor)),
+                Container(
+                  width: double.infinity,
+                  padding: EdgeInsets.only(right: 20),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Exchange', style: TextStyle(fontSize: 14, color: Theme.of(context).accentColor))
+                    ]
+                  )
+                )
+              ]
+            )
+          )
         )
       ]
     );
   }
 
-  Widget getBottomPanel() {
+  Widget getOperationsList(BuildContext context) {
     List<Widget> rows = [];
-    for (int i = 0; i < 2; i++) {
+    for (int i = 0; i < 3; i++) {
       rows.add(Container(
-          width: double.infinity,
-          decoration: BoxDecoration(
-              border: Border(
-                  top: BorderSide(color: Colors.grey[400]!)
-              )
-          ),
-          margin: EdgeInsets.only(top: 15),
-          child: AccountWalletItem()
+        width: double.infinity,
+        margin: EdgeInsets.only(top: rows.isEmpty?5:1),
+        child: Row(
+          mainAxisSize: MainAxisSize.max,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text('Dec, 12, 2020', style: TextStyle(fontSize: 14, color: Theme.of(context).accentColor)),
+            Text('send 0.01, change 0.100', style: TextStyle(fontSize: 14, color: Theme.of(context).accentColor)),
+          ]
+        )
       ));
     }
     return Column(
-        children: rows
+      children: rows
     );
   }
-}
 
+  void tapItem() {
+    Get.toNamed(Routes.WALLET_INFO);
+  }
+}

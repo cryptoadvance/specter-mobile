@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
-import 'package:specter_mobile/app/modules/200_wallets/keys/widgets/AccountItem.dart';
+import 'package:specter_mobile/app/modules/200_wallets/keys/widgets/WalletsList.dart';
 import 'package:specter_mobile/app/widgets/BottomMenu.dart';
 import 'package:specter_mobile/app/widgets/LightButton.dart';
 
@@ -61,14 +61,7 @@ class KeysView extends GetView<KeysController> {
             title: getTopStatePanel()
           )
         ),
-        SliverList(
-          delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
-            return Container(
-              margin: EdgeInsets.only(top: (index == 0)?15:0, left: 15, right: 15, bottom: 15),
-              child: AccountItem()
-            );
-          }, childCount: 2
-        ))
+        WalletsList()
       ]
     );
   }
