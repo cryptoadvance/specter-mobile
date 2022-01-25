@@ -2,11 +2,8 @@ import 'dart:collection';
 import 'dart:convert';
 
 import 'package:biometric_storage/biometric_storage.dart';
-import 'package:crypto/crypto.dart';
-import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:specter_mobile/app/models/CryptoContainerModel.dart';
-import 'package:specter_mobile/app/routes/app_pages.dart';
 
 import 'CCryptoLocalSign.dart';
 import '../../utils.dart';
@@ -22,14 +19,6 @@ extension ParseToString on CryptoContainerType {
   }
 }
 
-class CCryptoContainerAuth {
-  int _currentSeedIdx = -1;
-
-  void selectCurrentSeedByIdx(int idx) {
-    _currentSeedIdx = idx;
-  }
-}
-
 /*
  * Manages data storage in the secure storage
  */
@@ -41,8 +30,6 @@ class CCryptoContainer {
   Map<CryptoContainerType, BiometricStorageFile> stores = HashMap();
 
   final CCryptoLocalSign _cryptoLocalSign = CCryptoLocalSign();
-
-  CCryptoContainerAuth cryptoContainerAuth = CCryptoContainerAuth();
 
   Future<void> init() async {
     prefs = await SharedPreferences.getInstance();
@@ -308,19 +295,11 @@ class CCryptoContainer {
     return true;
   }
 
-  void openAfterAuthPage() {
-    if (!cryptoContainerModel!.isSeedsInit()) {
-      Get.offAllNamed(Routes.RECOVERY_SELECT);
-      return;
-    }
-    cryptoContainerAuth.selectCurrentSeedByIdx(0);
+  bool isSeedsInit() {
+    return cryptoContainerModel!.isSeedsInit();
+  }
 
-    //
-    if (!cryptoContainerModel!.isWalletsInit()) {
-      Get.offAllNamed(Routes.ADD_WALLET);
-      return;
-    }
-
-    Get.offAllNamed(Routes.WALLETS);
+  bool isWalletsInit() {
+    return cryptoContainerModel!.isWalletsInit();
   }
 }

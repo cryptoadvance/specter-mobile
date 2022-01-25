@@ -84,7 +84,7 @@ class VerificationPinCodeController extends GetxController {
   }
 
   void openNextPage() {
-    CServices.crypto.cryptoContainer.openAfterAuthPage();
+    CServices.crypto.openAfterAuthPage();
   }
 
   void openPrevPage() {
