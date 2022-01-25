@@ -96,7 +96,7 @@ class WalletItem extends StatelessWidget {
   }
 
   void tapItem() {
-    Get.toNamed(Routes.WALLET_INFO);
+    Get.toNamed(Routes.WALLET_ACCOUNT);
   }
 }
 

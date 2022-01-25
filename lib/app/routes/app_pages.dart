@@ -16,18 +16,20 @@ import '../modules/100_auth/104_onboarding/bindings/onboarding_binding.dart';
 import '../modules/100_auth/104_onboarding/views/onboarding_view.dart';
 import '../modules/100_auth/1051_create_new_wallet/bindings/create_new_wallet_binding.dart';
 import '../modules/100_auth/1051_create_new_wallet/views/create_new_wallet_view.dart';
-import '../modules/100_auth/105_add_wallet_select/bindings/add_wallet_binding.dart';
-import '../modules/100_auth/105_add_wallet_select/views/add_wallet_view.dart';
 import '../modules/100_auth/1052_import_existing_wallet/bindings/import_existing_wallet_binding.dart';
 import '../modules/100_auth/1052_import_existing_wallet/views/import_existing_wallet_view.dart';
-import '../modules/200_wallets/wallets/bindings/wallets_binding.dart';
-import '../modules/200_wallets/wallets/views/wallets_view.dart';
+import '../modules/100_auth/105_add_wallet_select/bindings/add_wallet_binding.dart';
+import '../modules/100_auth/105_add_wallet_select/views/add_wallet_view.dart';
 import '../modules/200_wallets/walletInfo/bindings/wallet_info_binding.dart';
 import '../modules/200_wallets/walletInfo/views/wallet_info_view.dart';
 import '../modules/200_wallets/walletInfoAddress/bindings/wallet_info_address_binding.dart';
 import '../modules/200_wallets/walletInfoAddress/views/wallet_info_address_view.dart';
 import '../modules/200_wallets/walletInfoTransaction/bindings/wallet_info_transactions_binding.dart';
 import '../modules/200_wallets/walletInfoTransaction/views/wallet_info_transactions_view.dart';
+import '../modules/200_wallets/wallets/bindings/wallets_binding.dart';
+import '../modules/200_wallets/wallets/views/wallets_view.dart';
+import '../modules/200_wallets/walletAccount/bindings/wallet_account_binding.dart';
+import '../modules/200_wallets/walletAccount/views/wallet_account_view.dart';
 
 part 'app_routes.dart';
 
@@ -53,7 +55,7 @@ class AppPages {
       binding: GenerateSeedBinding(),
     ),
     GetPage(
-      name: _Paths.KEYS,
+      name: _Paths.WALLETS,
       page: () => WalletsView(),
       binding: KeysBinding(),
     ),
@@ -106,6 +108,11 @@ class AppPages {
       name: _Paths.IMPORT_EXISTING_WALLET,
       page: () => ImportExistingWalletView(),
       binding: ImportExistingWalletBinding(),
+    ),
+    GetPage(
+      name: _Paths.WALLET_ACCOUNT,
+      page: () => WalletAccountView(),
+      binding: WalletAccountBinding(),
     ),
   ];
 }

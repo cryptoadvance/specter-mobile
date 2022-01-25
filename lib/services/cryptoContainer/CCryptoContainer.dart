@@ -309,6 +309,6 @@ class CCryptoContainer {
       return;
     }
 
-    Get.offAllNamed(Routes.KEYS);
+    Get.offAllNamed(Routes.WALLETS);
   }
 }

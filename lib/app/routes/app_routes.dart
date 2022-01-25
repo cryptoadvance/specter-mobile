@@ -9,7 +9,7 @@ abstract class Routes {
   static const VERIFICATION_BIOMETRIC = _Paths.VERIFICATION_BIOMETRIC;
   static const RECOVERY_SELECT = _Paths.RECOVERY_SELECT;
   static const GENERATE_SEED = _Paths.GENERATE_SEED;
-  static const KEYS = _Paths.KEYS;
+  static const WALLETS = _Paths.WALLETS;
   static const WALLET_INFO = _Paths.WALLET_INFO;
   static const WALLET_INFO_ADDRESS = _Paths.WALLET_INFO_ADDRESS;
   static const WALLET_INFO_TRANSACTIONS = _Paths.WALLET_INFO_TRANSACTIONS;
@@ -20,6 +20,7 @@ abstract class Routes {
   static const ADD_WALLET = _Paths.ADD_WALLET_SELECT;
   static const CREATE_NEW_WALLET = _Paths.CREATE_NEW_WALLET;
   static const IMPORT_EXISTING_WALLET = _Paths.IMPORT_EXISTING_WALLET;
+  static const WALLET_ACCOUNT = _Paths.WALLET_ACCOUNT;
 }
 
 abstract class _Paths {
@@ -28,8 +29,9 @@ abstract class _Paths {
   static const VERIFICATION_BIOMETRIC = '/verification-biometric';
   static const RECOVERY_SELECT = '/recovery-select';
   static const GENERATE_SEED = '/generate-seed';
-  static const KEYS = '/keys';
+  static const WALLETS = '/wallets';
   static const WALLET_INFO = '/wallet-info';
+  static const WALLET_ACCOUNT = '/wallet-account';
   static const WALLET_INFO_ADDRESS = '/wallet-info-address';
   static const WALLET_INFO_TRANSACTIONS = '/wallet-info-transactions';
   static const HELLO = '/hello';
