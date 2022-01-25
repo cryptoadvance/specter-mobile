@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:biometric_storage/biometric_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:specter_mobile/app/models/CryptoContainerModel.dart';
+import 'package:specter_mobile/services/cryptoService/providers/CCryptoProvider.dart';
 
 import 'CCryptoLocalSign.dart';
 import '../../utils.dart';
@@ -283,8 +284,12 @@ class CCryptoContainer {
     return true;
   }
 
-  Future<bool> addNewWallet({required String walletName}) async {
-    if (!(await cryptoContainerModel!.addNewWallet(walletName: walletName))) {
+  Future<bool> addNewWallet({
+    required String walletName,
+    required SWalletDescriptor walletDescriptor
+  }) async {
+    SWalletModel wallet = SWalletModel(name: walletName, descriptor: walletDescriptor);
+    if (!(await cryptoContainerModel!.addNewWallet(wallet))) {
       return false;
     }
 
@@ -301,5 +306,9 @@ class CCryptoContainer {
 
   bool isWalletsInit() {
     return cryptoContainerModel!.isWalletsInit();
+  }
+
+  String getMnemonicByIdx(int idx) {
+    return cryptoContainerModel!.getMnemonicByIdx(idx);
   }
 }

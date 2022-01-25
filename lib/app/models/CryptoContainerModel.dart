@@ -1,6 +1,34 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:specter_mobile/services/cryptoContainer/CCryptoContainer.dart';
+import 'package:specter_mobile/services/cryptoService/providers/CCryptoProvider.dart';
+
+class SWalletModel {
+  String name;
+  SWalletDescriptor descriptor;
+
+  SWalletModel({required this.name, required this.descriptor});
+
+  @override
+  String toString() {
+    return jsonEncode(toJSON());
+  }
+
+  static SWalletModel fromJSON(obj) {
+    return SWalletModel(
+      name: obj['name'],
+      descriptor: SWalletDescriptor.fromJSON(obj['descriptor'])
+    );
+  }
+
+  Map<String, dynamic> toJSON() {
+    return {
+      'name': name,
+      'descriptor': descriptor.toJSON()
+    };
+  }
+}
 
 class CryptoContainerModel {
   final version = 1;
@@ -8,7 +36,7 @@ class CryptoContainerModel {
   String? _pinCodeSign;
 
   List<dynamic> _seedKeys = [];
-  List<dynamic> _wallets = [];
+  List<SWalletModel> _wallets = [];
 
   CryptoContainerModel({
     required authTypes
@@ -17,17 +45,33 @@ class CryptoContainerModel {
   void loadStore(Map<String, dynamic> data) {
     _pinCodeSign = data['pinCodeSign'];
     _seedKeys = data['seedKeys'] ?? [];
-    _wallets = data['wallets'] ?? [];
+
+    _wallets = [];
+    try {
+      List<dynamic> _walletsList = data['wallets'] ?? [];
+      _walletsList.forEach((wallet) {
+        _wallets.add(SWalletModel.fromJSON(wallet));
+      });
+    } catch(e) {
+      if (!kDebugMode) {
+        rethrow;
+      }
+      print(e);
+    }
   }
 
   @override
   String toString() {
+    List<dynamic> _walletsList = [];
+    _wallets.forEach((wallet) {
+      _walletsList.add(wallet.toJSON());
+    });
     return jsonEncode({
       'version': 1,
       'authTypes': getAuthTypes(),
       'pinCodeSign': _pinCodeSign,
       'seedKeys': _seedKeys,
-      'wallets': _wallets
+      'wallets': _walletsList
     });
   }
 
@@ -65,10 +109,8 @@ class CryptoContainerModel {
       return true;
   }
 
-  Future<bool> addNewWallet({required String walletName}) async {
-    _wallets.add({
-      'name': walletName
-    });
+  Future<bool> addNewWallet(SWalletModel wallet) async {
+    _wallets.add(wallet);
     return true;
   }
 
@@ -78,5 +120,9 @@ class CryptoContainerModel {
 
   bool isWalletsInit() {
     return _wallets.isNotEmpty;
+  }
+
+  String getMnemonicByIdx(int idx) {
+    return _seedKeys[idx]['mnemonic'];
   }
 }

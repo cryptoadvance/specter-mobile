@@ -45,6 +45,47 @@ class SGenerateSeedEvent extends SCryptoProviderSubEvent {
   }
 }
 
+class SMnemonicRootKey {
+  String rootPrivateKey;
+  String sign;
+
+  SMnemonicRootKey({required this.rootPrivateKey, required this.sign});
+
+  @override
+  String toString() {
+    return jsonEncode({
+      'rootPrivateKey': rootPrivateKey,
+      'sign': sign
+    });
+  }
+}
+
+class SWalletDescriptor {
+  String recv;
+  String change;
+
+  SWalletDescriptor({required this.recv, required this.change});
+
+  static SWalletDescriptor fromJSON(obj) {
+    return SWalletDescriptor(
+      recv: obj['recv'],
+      change: obj['change']
+    );
+  }
+
+  Map<String, dynamic> toJSON() {
+    return {
+      'recv': recv,
+      'change': change
+    };
+  }
+
+  @override
+  String toString() {
+    return jsonEncode(toJSON());
+  }
+}
+
 abstract class CCryptoProvider {
   late StreamController<SCryptoProviderEvent> streamController;
   late Stream<SCryptoProviderEvent> stream;
@@ -76,4 +117,8 @@ abstract class CCryptoProvider {
 
   //Recovery seed API
   Future<RecoverySeedResult?> verifyRecoveryPhrase(List<String> recoveryPhrases);
+
+  //Wallets API
+  SMnemonicRootKey mnemonicToRootKey(String mnemonic, String pass);
+  SWalletDescriptor getDefaultDescriptors(SMnemonicRootKey mnemonicRootKey);
 }

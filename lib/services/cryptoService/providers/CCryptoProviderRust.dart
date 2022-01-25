@@ -12,7 +12,7 @@ import '../CGenerateSeedService.dart';
 import '../CRecoverySeedService.dart';
 import 'CCryptoProvider.dart';
 
-class CCryptoProviderDemo extends CCryptoProvider {
+class CCryptoProviderRust extends CCryptoProvider {
   int maxGenerateIterations = 10;
   GenerateSeedOptions? currentGenerateSeedOptions;
   String _mnemonic = '';
@@ -155,6 +155,24 @@ class CCryptoProviderDemo extends CCryptoProvider {
 
     return RecoverySeedResult(
       seedKey: seedKey
+    );
+  }
+
+  @override
+  SMnemonicRootKey mnemonicToRootKey(String mnemonic, String pass) {
+    var obj = SpecterRust.mnemonic_to_root_key(mnemonic, pass);
+    return SMnemonicRootKey(
+      rootPrivateKey: obj['xprv'],
+      sign: obj['fingerprint']
+    );
+  }
+
+  @override
+  SWalletDescriptor getDefaultDescriptors(SMnemonicRootKey mnemonicRootKey) {
+    var obj = SpecterRust.get_default_descriptors(mnemonicRootKey.rootPrivateKey, 'bitcoin');
+    return SWalletDescriptor(
+      recv: obj['recv_descriptor'],
+      change: obj['change_descriptor']
     );
   }
 }
