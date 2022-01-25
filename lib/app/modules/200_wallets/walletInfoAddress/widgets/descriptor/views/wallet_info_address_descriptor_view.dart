@@ -117,6 +117,6 @@ class WalletInfoAddressDescriptorView extends GetView<WalletInfoAddressDescripto
 
   void copyAddress(BuildContext context) {
     Clipboard.setData(ClipboardData(text: controller.descriptor));
-    CServices.gNotificationService.addNotify(context, 'Descriptor copied');
+    CServices.notify.addNotify(context, 'Descriptor copied');
   }
 }

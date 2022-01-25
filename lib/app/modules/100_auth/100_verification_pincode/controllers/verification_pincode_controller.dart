@@ -31,7 +31,7 @@ class VerificationPinCodeController extends GetxController {
   void verifyAction(BuildContext context) async {
     PinCodeInputController pinCodeInputController = Get.find<PinCodeInputController>();
     if (!pinCodeInputController.isFilled()) {
-      await CServices.gNotificationService.addMessage(
+      await CServices.notify.addMessage(
           context, 'Oops!!', 'The PIN-code is not entered.',
           actionTitle: 'Try Again'
       );
@@ -40,7 +40,7 @@ class VerificationPinCodeController extends GetxController {
 
     String pinCode = pinCodeInputController.getValue();
     if (pinCode == '0000') {
-      await CServices.gNotificationService.addMessage(
+      await CServices.notify.addMessage(
           context, 'Oops!!', 'The PIN-code is wrong.',
           actionTitle: 'Try Again'
       );
@@ -49,11 +49,11 @@ class VerificationPinCodeController extends GetxController {
 
     //
     if (isNeedInitAuth) {
-      if (!await CServices.gCryptoContainer.addCryptoContainerAuth(CryptoContainerType.PIN_CODE)) {
+      if (!await CServices.crypto.cryptoContainer.addCryptoContainerAuth(CryptoContainerType.PIN_CODE)) {
         return;
       }
 
-      if (!await CServices.gCryptoContainer.setCryptoContainerPinCode(pinCode)) {
+      if (!await CServices.crypto.cryptoContainer.setCryptoContainerPinCode(pinCode)) {
         return;
       }
 
@@ -62,16 +62,16 @@ class VerificationPinCodeController extends GetxController {
     }
 
     //
-    if (!(await CServices.gCryptoContainer.authCryptoContainer())) {
-      await CServices.gNotificationService.addMessage(
+    if (!(await CServices.crypto.cryptoContainer.authCryptoContainer())) {
+      await CServices.notify.addMessage(
           context, 'Oops!!', 'Can not load crypto container.',
           actionTitle: 'Try Again'
       );
       return;
     }
 
-    if (!await CServices.gCryptoContainer.verifyCryptoContainerPinCode(pinCode)) {
-      await CServices.gNotificationService.addMessage(
+    if (!await CServices.crypto.cryptoContainer.verifyCryptoContainerPinCode(pinCode)) {
+      await CServices.notify.addMessage(
           context, 'Oops!!', 'The PIN-code is not correct. \nPlease try again.',
           actionTitle: 'Try Again'
       );
@@ -84,7 +84,7 @@ class VerificationPinCodeController extends GetxController {
   }
 
   void openNextPage() {
-    CServices.gCryptoContainer.openAfterAuthPage();
+    CServices.crypto.cryptoContainer.openAfterAuthPage();
   }
 
   void openPrevPage() {

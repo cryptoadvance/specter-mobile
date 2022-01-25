@@ -6,10 +6,9 @@ class CryptoContainerModel {
   final version = 1;
   final List<CryptoContainerType> _authTypes;
   String? _pinCodeSign;
-  String? _seedKey;
 
+  List<dynamic> _seedKeys = [];
   List<dynamic> _wallets = [];
-
 
   CryptoContainerModel({
     required authTypes
@@ -17,8 +16,8 @@ class CryptoContainerModel {
 
   void loadStore(Map<String, dynamic> data) {
     _pinCodeSign = data['pinCodeSign'];
-    _seedKey = data['seedKey'];
-    _wallets = data['wallets'];
+    _seedKeys = data['seedKeys'] ?? [];
+    _wallets = data['wallets'] ?? [];
   }
 
   @override
@@ -27,7 +26,7 @@ class CryptoContainerModel {
       'version': 1,
       'authTypes': getAuthTypes(),
       'pinCodeSign': _pinCodeSign,
-      'seedKey': _seedKey,
+      'seedKeys': _seedKeys,
       'wallets': _wallets
     });
   }
@@ -60,8 +59,10 @@ class CryptoContainerModel {
   }
 
   Future<bool> addSeed(String seedKey) async {
-    _seedKey = seedKey;
-    return true;
+      _seedKeys.add({
+        'mnemonic': seedKey
+      });
+      return true;
   }
 
   Future<bool> addNewWallet({required String walletName}) async {
@@ -71,8 +72,8 @@ class CryptoContainerModel {
     return true;
   }
 
-  bool isSeedInit() {
-    return _seedKey != null;
+  bool isSeedsInit() {
+    return _seedKeys.isNotEmpty;
   }
 
   bool isWalletsInit() {

@@ -29,7 +29,7 @@ class GenerateSeedController extends GetxController {
   void onInit() {
     super.onInit();
 
-    _streamSubscription = CServices.gCryptoService.generateSeedService.startGenerateSeed(processGenerateSeedEvent);
+    _streamSubscription = CServices.crypto.generateSeedService.startGenerateSeed(processGenerateSeedEvent);
     _streamSubscription2 = entropyExternalGenerationService.init(processEntropyEvent);
   }
 
@@ -40,7 +40,7 @@ class GenerateSeedController extends GetxController {
 
   @override
   void onClose() {
-    CServices.gCryptoService.generateSeedService.stopGenerateSeed();
+    CServices.crypto.generateSeedService.stopGenerateSeed();
     _streamSubscription.cancel();
     _streamSubscription2.cancel();
     entropyExternalGenerationService.close();
@@ -54,7 +54,7 @@ class GenerateSeedController extends GetxController {
 
   void setComplexityState(SEED_COMPLEXITY seed_complexity_) {
     seed_complexity.value = seed_complexity_;
-    CServices.gCryptoService.generateSeedService.setGenerateSeedComplexity(seed_complexity_);
+    CServices.crypto.generateSeedService.setGenerateSeedComplexity(seed_complexity_);
     update();
   }
 
@@ -75,7 +75,7 @@ class GenerateSeedController extends GetxController {
         break;
     }
 
-    CServices.gCryptoService.generateSeedService.setEntropySource(entropySource);
+    CServices.crypto.generateSeedService.setEntropySource(entropySource);
 
     entropy_source.value = entropySource;
     update();
@@ -88,7 +88,7 @@ class GenerateSeedController extends GetxController {
         update();
 
         //
-        CServices.gNotificationService.addNotify(context, 'Can not connect to the camera');
+        CServices.notify.addNotify(context, 'Can not connect to the camera');
         return;
       }
 
@@ -107,14 +107,14 @@ class GenerateSeedController extends GetxController {
       update();
 
       //
-      CServices.gNotificationService.addNotify(context, 'Can not use entropy from the camera');
+      CServices.notify.addNotify(context, 'Can not use entropy from the camera');
       return;
     }
 
     //
     Future.delayed(Duration(milliseconds: 150), () {
       needTakePhoto.value = false;
-      CServices.gCryptoService.generateSeedService.addExternalEntropy(lastGenerateEntropyExternalEvent.value);
+      CServices.crypto.generateSeedService.addExternalEntropy(lastGenerateEntropyExternalEvent.value);
     });
   }
 
@@ -125,8 +125,8 @@ class GenerateSeedController extends GetxController {
 
   void doneAction(BuildContext context) async {
     String seedKey = lastGenerateSeedEvent!.value.mnemonicKey;
-    if (!(await CServices.gCryptoContainer.addSeed(seedKey))) {
-      await CServices.gNotificationService.addMessage(
+    if (!(await CServices.crypto.cryptoContainer.addSeed(seedKey))) {
+      await CServices.notify.addMessage(
         context, 'Oops!!', 'Please try again.',
         actionTitle: 'Try Again'
       );

@@ -22,6 +22,14 @@ extension ParseToString on CryptoContainerType {
   }
 }
 
+class CCryptoContainerAuth {
+  int _currentSeedIdx = -1;
+
+  void selectCurrentSeedByIdx(int idx) {
+    _currentSeedIdx = idx;
+  }
+}
+
 /*
  * Manages data storage in the secure storage
  */
@@ -33,6 +41,8 @@ class CCryptoContainer {
   Map<CryptoContainerType, BiometricStorageFile> stores = HashMap();
 
   final CCryptoLocalSign _cryptoLocalSign = CCryptoLocalSign();
+
+  CCryptoContainerAuth cryptoContainerAuth = CCryptoContainerAuth();
 
   Future<void> init() async {
     prefs = await SharedPreferences.getInstance();
@@ -299,11 +309,13 @@ class CCryptoContainer {
   }
 
   void openAfterAuthPage() {
-    if (!cryptoContainerModel!.isSeedInit()) {
+    if (!cryptoContainerModel!.isSeedsInit()) {
       Get.offAllNamed(Routes.RECOVERY_SELECT);
       return;
     }
+    cryptoContainerAuth.selectCurrentSeedByIdx(0);
 
+    //
     if (!cryptoContainerModel!.isWalletsInit()) {
       Get.offAllNamed(Routes.ADD_WALLET);
       return;

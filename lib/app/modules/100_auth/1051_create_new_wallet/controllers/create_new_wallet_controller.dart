@@ -29,7 +29,7 @@ class CreateNewWalletController extends GetxController {
 
     String walletName = nameInputController.text.trim();
     if (walletName.isEmpty) {
-      await CServices.gNotificationService.addMessage(
+      await CServices.notify.addMessage(
           context, 'Oops!!', 'Please enter wallet name.',
           actionTitle: 'Try Again'
       );
@@ -37,15 +37,15 @@ class CreateNewWalletController extends GetxController {
     }
 
     if (walletName.length > 200) {
-      await CServices.gNotificationService.addMessage(
+      await CServices.notify.addMessage(
           context, 'Oops!!', 'Wallet name is too long.',
           actionTitle: 'Try Again'
       );
       return;
     }
 
-    if (!(await CServices.gCryptoContainer.addNewWallet(walletName: walletName))) {
-      await CServices.gNotificationService.addMessage(
+    if (!(await CServices.crypto.controlWalletsService.addNewWallet(walletName: walletName))) {
+      await CServices.notify.addMessage(
           context, 'Oops!!', 'Please try again.',
           actionTitle: 'Try Again'
       );

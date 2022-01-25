@@ -51,7 +51,7 @@ class BottomMenu extends StatelessWidget {
               isActive: (item == BOTTOM_MENU_ITEM.QR_SCAN),
               icon: 'assets/icons/qr_code_scanner.svg',
               onSelect: () {
-                CServices.gNotificationService.addDialog(context, child: QRCodeScanner());
+                CServices.notify.addDialog(context, child: QRCodeScanner());
               }
             )
           ),

@@ -23,6 +23,6 @@ class OnboardingController extends GetxController {
   void onClose() {}
 
   void openNextPage() {
-    CServices.gCryptoContainer.openAfterAuthPage();
+    CServices.crypto.cryptoContainer.openAfterAuthPage();
   }
 }

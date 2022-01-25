@@ -28,7 +28,7 @@ class EnterRecoveryPhraseController extends GetxController {
     final EnterRecoveryPhraseListController enterSeedListController = Get.find<EnterRecoveryPhraseListController>();
     List<String> recoveryPhrases = enterSeedListController.getSeedList();
     if (recoveryPhrases.isEmpty) {
-      await CServices.gNotificationService.addMessage(
+      await CServices.notify.addMessage(
           context, 'Oops!!', 'Please enter recovery phrase.',
           actionTitle: 'Try Again'
       );
@@ -36,9 +36,9 @@ class EnterRecoveryPhraseController extends GetxController {
     }
 
     //
-    RecoverySeedResult? recoverySeedResult = await CServices.gCryptoService.recoverySeedService.verifyRecoveryPhrase(recoveryPhrases);
+    RecoverySeedResult? recoverySeedResult = await CServices.crypto.recoverySeedService.verifyRecoveryPhrase(recoveryPhrases);
     if (recoverySeedResult == null) {
-      await CServices.gNotificationService.addMessage(
+      await CServices.notify.addMessage(
           context, 'Oops!!', 'Please enter correct recovery phrase.',
           actionTitle: 'Try Again'
       );
@@ -46,8 +46,8 @@ class EnterRecoveryPhraseController extends GetxController {
     }
 
     String seedKey = recoverySeedResult.seedKey;
-    if (!(await CServices.gCryptoContainer.addSeed(seedKey))) {
-      await CServices.gNotificationService.addMessage(
+    if (!(await CServices.crypto.cryptoContainer.addSeed(seedKey))) {
+      await CServices.notify.addMessage(
           context, 'Oops!!', 'Please try again.',
           actionTitle: 'Try Again'
       );

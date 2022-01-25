@@ -119,6 +119,6 @@ class WalletInfoTransactionsView extends GetView<WalletInfoTransactionsControlle
   }
 
   Future<String> selectFilterDate(BuildContext context) async {
-    return await CServices.gNotificationService.addDialog(context, child: DateSelector());
+    return await CServices.notify.addDialog(context, child: DateSelector());
   }
 }

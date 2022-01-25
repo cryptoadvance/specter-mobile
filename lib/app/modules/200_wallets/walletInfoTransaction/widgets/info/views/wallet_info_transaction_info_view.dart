@@ -94,6 +94,6 @@ class WalletInfoTransactionInfoView extends GetView<WalletInfoTransactionInfoCon
 
   void copyAddress(BuildContext context) {
     Clipboard.setData(ClipboardData(text: controller.transactionID));
-    CServices.gNotificationService.addNotify(context, 'Transaction ID copied');
+    CServices.notify.addNotify(context, 'Transaction ID copied');
   }
 }

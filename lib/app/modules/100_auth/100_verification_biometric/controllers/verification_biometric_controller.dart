@@ -12,7 +12,7 @@ class VerificationBiometricController extends GetxController {
 
   @override
   void onInit() {
-    viewPinCodeButton = CServices.gCryptoContainer.isAddedPinCodeAuth() || !CServices.gCryptoContainer.isAuthInit();
+    viewPinCodeButton = CServices.crypto.cryptoContainer.isAddedPinCodeAuth() || !CServices.crypto.cryptoContainer.isAuthInit();
     super.onInit();
   }
 
@@ -26,15 +26,15 @@ class VerificationBiometricController extends GetxController {
 
   void verifyAction(BuildContext context) async {
     if (isNeedInitAuth) {
-      if (await CServices.gCryptoContainer.addCryptoContainerAuth(CryptoContainerType.BIOMETRIC)) {
+      if (await CServices.crypto.cryptoContainer.addCryptoContainerAuth(CryptoContainerType.BIOMETRIC)) {
         openNextPage();
       }
       return;
     }
 
     //
-    if (!(await CServices.gCryptoContainer.authCryptoContainer())) {
-      await CServices.gNotificationService.addMessage(
+    if (!(await CServices.crypto.cryptoContainer.authCryptoContainer())) {
+      await CServices.notify.addMessage(
           context, 'Oops!!', 'Please try again.',
           actionTitle: 'Try Again'
       );
@@ -46,7 +46,7 @@ class VerificationBiometricController extends GetxController {
   }
 
   void openNextPage() {
-    CServices.gCryptoContainer.openAfterAuthPage();
+    CServices.crypto.cryptoContainer.openAfterAuthPage();
   }
 
   void openPinCodePage() {
