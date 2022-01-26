@@ -4,7 +4,7 @@ import 'dart:convert';
 import 'package:ffi/ffi.dart';
 import './bindings.dart';
 
-const DYNAMIC_LIBRARY_FILE_NAME = "libspecter_rust.so";
+const DYNAMIC_LIBRARY_FILE_NAME = 'libspecter_rust.so';
 
 class SpecterRustException implements Exception {
   String _message = 'Rust bindings error';
@@ -190,6 +190,9 @@ class SpecterRust {
   /// Returns an list with addresses.
   static List<dynamic> derive_addresses(
       String descriptor, String network, int start, int end) {
+    if(start < 0 || end < 0 || start >= 0x80000000 || end >= 0x80000000){
+      throw SpecterRustException('indexes must be in range [0, 0x80000000)');
+    }
     final ptrDescriptor = descriptor.toNativeUtf8(allocator: malloc);
     final ptrNetwork = network.toNativeUtf8(allocator: malloc);
 
