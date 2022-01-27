@@ -206,6 +206,27 @@ class SpecterRust {
     return _decode_result(result)['data'];
   }
 
+  /// Parses wallet descriptor and returns a summary:
+  /// { change_descriptor, recv_descriptor, policy, type, keys, mine }
+  static Map<String, dynamic> parse_descriptor(
+    String descriptor, String xprv, String network){
+
+    final ptrDescriptor = descriptor.toNativeUtf8(allocator: malloc);
+    final ptrXprv = xprv.toNativeUtf8(allocator: malloc);
+    final ptrNetwork = network.toNativeUtf8(allocator: malloc);
+
+    final ptrResult = _bindings.parse_descriptor(
+        ptrDescriptor.cast<Int8>(), ptrXprv.cast<Int8>(), ptrNetwork.cast<Int8>());
+    final result = ptrResult.cast<Utf8>().toDartString();
+    _bindings.rust_cstr_free(ptrResult);
+
+    malloc.free(ptrDescriptor);
+    malloc.free(ptrXprv);
+    malloc.free(ptrNetwork);
+    return _decode_result(result)['data'];
+
+  }
+
   /// Computes a greeting for the given name using the native function
   static String greet(String name) {
     // Allocate a native string holding argument in UTF-8

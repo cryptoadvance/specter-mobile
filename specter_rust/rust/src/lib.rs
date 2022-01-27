@@ -20,8 +20,10 @@ use bitcoin::{
     blockdata::transaction::SigHashType
 };
 use miniscript::{
-    DescriptorTrait, DescriptorPublicKey, TranslatePk2,
-    psbt::{extract, finalize}
+    DescriptorTrait, DescriptorPublicKey, TranslatePk2, ForEachKey,
+    descriptor::DescriptorType,
+    policy::Liftable,
+    psbt::{extract, finalize},
 };
 use serde_json::json;
 
@@ -178,6 +180,87 @@ pub extern fn derive_addresses(descriptor: *const c_char, network: *const c_char
     ok!(json!(addr))
 }
 
+/* parse descriptor, return a dict:
+{ recv_descriptor, change_descriptor, type (segwit / nested / legacy), policy, keys:[key], mine:[bool] }
+*/
+#[no_mangle]
+pub extern fn parse_descriptor(descriptor: *const c_char, root: *const c_char, network: *const c_char) -> *mut c_char {
+    let descriptor = cstr!(descriptor);
+    let arr: Vec<&str> = descriptor.split("#").collect();
+    let change_desc = arr[0].replace("/0/*", "/1/*");
+    let network = cstr!(network);
+    let root = cstr!(root);
+    let change_desc = err!(miniscript::Descriptor::<DescriptorPublicKey>::from_str(&change_desc));
+    let descriptor = err!(miniscript::Descriptor::<DescriptorPublicKey>::from_str(descriptor));
+    let network = err!(network.parse::<Network>());
+    let mut root = err!(ExtendedPrivKey::from_str(root));
+    root.network = network;
+
+    let mut keys = Vec::<String>::new();
+    descriptor.for_each_key(|k| {
+        keys.push(k.as_key().to_string()); 
+        true
+    });
+    let script_type = match descriptor.desc_type() {
+        DescriptorType::ShWpkh | DescriptorType::ShWsh | DescriptorType::ShWshSortedMulti => "nested",
+        DescriptorType::Wpkh | DescriptorType::Wsh | DescriptorType::WshSortedMulti => "segwit",
+        _ => "legacy",
+    };
+    let policy = match descriptor.desc_type() {
+        DescriptorType::Wpkh | DescriptorType::ShWpkh | DescriptorType::Pkh => "single key".to_string(),
+        DescriptorType::ShWshSortedMulti | DescriptorType::WshSortedMulti | DescriptorType::ShSortedMulti => {
+            let pol = descriptor.lift().unwrap();
+            let m = pol.minimum_n_keys();
+            format!("{} of {} multisig", m, keys.len())
+        },
+        _ => {
+            let pol = descriptor.lift().unwrap();
+            let mut s = pol.to_string();
+            for (i, k) in keys.iter().enumerate() {
+                // all keys should be pk(k) instead of pkh(k)?
+                // and replaced with aliases
+                s = s.replace(&format!("pkh({})", k), &format!("pk(key_{})", i));
+            }
+            s
+        },
+    };
+
+    let secp_ctx = Secp256k1::new();
+    let fingerprint = root.fingerprint(&secp_ctx);
+
+    // checks the key is mine
+    let mine : Vec<bool> = keys.iter().map(|k| {
+        let k = DescriptorPublicKey::from_str(k).unwrap();
+        // only xpub can be mine ?
+        match k {
+            DescriptorPublicKey::SinglePub(_p) => false,
+            DescriptorPublicKey::XPub(xpub) => {
+                match xpub.origin {
+                    // TODO: check [fgp/der]pubkey if it is just pubkey
+                    // check fingerprint and derivation
+                    Some((fgp, derivation)) => {
+                        if fgp != fingerprint {
+                            return false; 
+                        }
+                        let child = root.derive_priv(&secp_ctx, &derivation).unwrap();
+                        xpub.xkey == ExtendedPubKey::from_private(&secp_ctx, &child)
+                    },
+                    // check xpub itself
+                    None => xpub.xkey == ExtendedPubKey::from_private(&secp_ctx, &root),
+                }
+            },
+        }
+    }).collect();
+
+    ok!(json!({
+        "recv_descriptor": descriptor.to_string(),
+        "change_descriptor": change_desc.to_string(),
+        "type": script_type,
+        "policy": policy,
+        "keys": keys,
+        "mine": mine,
+    }))
+}
 // ========================= OTHER ===========================
 
 #[no_mangle]

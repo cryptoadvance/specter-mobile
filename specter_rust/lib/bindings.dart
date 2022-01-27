@@ -104,6 +104,23 @@ class SpecterRustBindings {
   late final _dart_derive_addresses _derive_addresses =
       _derive_addresses_ptr.asFunction<_dart_derive_addresses>();
 
+  ffi.Pointer<ffi.Int8> parse_descriptor(
+    ffi.Pointer<ffi.Int8> descriptor,
+    ffi.Pointer<ffi.Int8> root,
+    ffi.Pointer<ffi.Int8> network,
+  ) {
+    return _parse_descriptor(
+      descriptor,
+      root,
+      network,
+    );
+  }
+
+  late final _parse_descriptor_ptr =
+      _lookup<ffi.NativeFunction<_c_parse_descriptor>>('parse_descriptor');
+  late final _dart_parse_descriptor _parse_descriptor =
+      _parse_descriptor_ptr.asFunction<_dart_parse_descriptor>();
+
   ffi.Pointer<ffi.Int8> rust_greeting(
     ffi.Pointer<ffi.Int8> to,
   ) {
@@ -196,6 +213,18 @@ typedef _dart_derive_addresses = ffi.Pointer<ffi.Int8> Function(
   ffi.Pointer<ffi.Int8> network,
   int start,
   int end,
+);
+
+typedef _c_parse_descriptor = ffi.Pointer<ffi.Int8> Function(
+  ffi.Pointer<ffi.Int8> descriptor,
+  ffi.Pointer<ffi.Int8> root,
+  ffi.Pointer<ffi.Int8> network,
+);
+
+typedef _dart_parse_descriptor = ffi.Pointer<ffi.Int8> Function(
+  ffi.Pointer<ffi.Int8> descriptor,
+  ffi.Pointer<ffi.Int8> root,
+  ffi.Pointer<ffi.Int8> network,
 );
 
 typedef _c_rust_greeting = ffi.Pointer<ffi.Int8> Function(

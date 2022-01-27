@@ -31,7 +31,7 @@ dart examples/hello.dart
 
 ```
 dart pub get
-dart ffigen
+dart run ffigen
 ```
 
 Problems with llvm? For me this fixed the problem: `sudo ln /usr/lib/llvm-10/lib/libclang.so.1 /usr/lib/llvm-10/lib/libclang.so`
