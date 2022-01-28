@@ -121,6 +121,38 @@ class SpecterRustBindings {
   late final _dart_parse_descriptor _parse_descriptor =
       _parse_descriptor_ptr.asFunction<_dart_parse_descriptor>();
 
+  ffi.Pointer<ffi.Int8> parse_transaction(
+    ffi.Pointer<ffi.Int8> psbt,
+    ffi.Pointer<ffi.Int8> _wallets,
+    ffi.Pointer<ffi.Int8> _network,
+  ) {
+    return _parse_transaction(
+      psbt,
+      _wallets,
+      _network,
+    );
+  }
+
+  late final _parse_transaction_ptr =
+      _lookup<ffi.NativeFunction<_c_parse_transaction>>('parse_transaction');
+  late final _dart_parse_transaction _parse_transaction =
+      _parse_transaction_ptr.asFunction<_dart_parse_transaction>();
+
+  ffi.Pointer<ffi.Int8> sign_transaction(
+    ffi.Pointer<ffi.Int8> psbt,
+    ffi.Pointer<ffi.Int8> root,
+  ) {
+    return _sign_transaction(
+      psbt,
+      root,
+    );
+  }
+
+  late final _sign_transaction_ptr =
+      _lookup<ffi.NativeFunction<_c_sign_transaction>>('sign_transaction');
+  late final _dart_sign_transaction _sign_transaction =
+      _sign_transaction_ptr.asFunction<_dart_sign_transaction>();
+
   ffi.Pointer<ffi.Int8> rust_greeting(
     ffi.Pointer<ffi.Int8> to,
   ) {
@@ -225,6 +257,28 @@ typedef _dart_parse_descriptor = ffi.Pointer<ffi.Int8> Function(
   ffi.Pointer<ffi.Int8> descriptor,
   ffi.Pointer<ffi.Int8> root,
   ffi.Pointer<ffi.Int8> network,
+);
+
+typedef _c_parse_transaction = ffi.Pointer<ffi.Int8> Function(
+  ffi.Pointer<ffi.Int8> psbt,
+  ffi.Pointer<ffi.Int8> _wallets,
+  ffi.Pointer<ffi.Int8> _network,
+);
+
+typedef _dart_parse_transaction = ffi.Pointer<ffi.Int8> Function(
+  ffi.Pointer<ffi.Int8> psbt,
+  ffi.Pointer<ffi.Int8> _wallets,
+  ffi.Pointer<ffi.Int8> _network,
+);
+
+typedef _c_sign_transaction = ffi.Pointer<ffi.Int8> Function(
+  ffi.Pointer<ffi.Int8> psbt,
+  ffi.Pointer<ffi.Int8> root,
+);
+
+typedef _dart_sign_transaction = ffi.Pointer<ffi.Int8> Function(
+  ffi.Pointer<ffi.Int8> psbt,
+  ffi.Pointer<ffi.Int8> root,
 );
 
 typedef _c_rust_greeting = ffi.Pointer<ffi.Int8> Function(

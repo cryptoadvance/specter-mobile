@@ -186,15 +186,21 @@ pub extern fn derive_addresses(descriptor: *const c_char, network: *const c_char
 #[no_mangle]
 pub extern fn parse_descriptor(descriptor: *const c_char, root: *const c_char, network: *const c_char) -> *mut c_char {
     let descriptor = cstr!(descriptor);
+    // TODO: fix for other branch indexes
     let arr: Vec<&str> = descriptor.split("#").collect();
-    let change_desc = arr[0].replace("/0/*", "/1/*");
+    let descriptor = arr[0].replace("/{0,1}/","/0/");
+    let change_desc = descriptor.replace("/0/*", "/1/*");
     let network = cstr!(network);
     let root = cstr!(root);
     let change_desc = err!(miniscript::Descriptor::<DescriptorPublicKey>::from_str(&change_desc));
-    let descriptor = err!(miniscript::Descriptor::<DescriptorPublicKey>::from_str(descriptor));
+    let descriptor = err!(miniscript::Descriptor::<DescriptorPublicKey>::from_str(&descriptor));
     let network = err!(network.parse::<Network>());
     let mut root = err!(ExtendedPrivKey::from_str(root));
-    root.network = network;
+    if network != Network::Bitcoin {
+        // equality check requires networks to be the same
+        // so regtest and signet must become testnet for eq to hold
+        root.network = Network::Testnet;
+    }
 
     let mut keys = Vec::<String>::new();
     descriptor.for_each_key(|k| {
@@ -261,6 +267,71 @@ pub extern fn parse_descriptor(descriptor: *const c_char, root: *const c_char, n
         "mine": mine,
     }))
 }
+
+#[no_mangle]
+pub extern fn parse_transaction(psbt: *const c_char, _wallets: *const c_char, _network: *const c_char) -> *mut c_char{
+    let psbt = cstr!(psbt);
+    let raw = err!(base64::decode(psbt));
+    let psbt:PartiallySignedTransaction = err!(deserialize(&raw));
+    ok!(json!(&psbt))
+}
+
+#[no_mangle]
+pub extern fn sign_transaction(psbt: *const c_char, root: *const c_char) -> *mut c_char{
+    // TODO: fix to work with legacy transactions
+    let psbt = cstr!(psbt);
+    let root = cstr!(root);
+    let raw = err!(base64::decode(psbt));
+    let mut psbt:PartiallySignedTransaction = err!(deserialize(&raw));
+    let root = err!(ExtendedPrivKey::from_str(root));
+    let secp_ctx = Secp256k1::new();
+    let fingerprint = root.fingerprint(&secp_ctx);
+
+    // sign all inputs
+    for (i, inp) in psbt.inputs.iter_mut().enumerate() {
+        // find matching derivations
+        for (pubkey, derivation) in inp.bip32_derivation.iter() {
+            // check fingerprint
+            if fingerprint == derivation.0 {
+                // derive private key
+                let pk = root.derive_priv(&secp_ctx, &derivation.1)
+                             .unwrap()
+                             .private_key;
+
+                // Calculate and sign the transaction hash
+                // p2pkh script is a special case for segwit single-sig
+                // In other cases we can use witness_script from psbt input, or redeem script / scriptpubkey for legacy
+                // Can be refactored and moved to the beginning of per-input loop
+                let sc = match &inp.witness_script {
+                    Some(sc) => sc.clone(),
+                    None => {
+                        Script::new_p2pkh(&pk.public_key(&secp_ctx).pubkey_hash())
+                    }
+                };
+                let value = match &inp.witness_utxo {
+                    Some(utxo) => utxo.value,
+                    _ => panic!("utxo is missing")
+                };
+                // hash to sign
+                let h = bip143::SigHashCache::new(&psbt.global.unsigned_tx).signature_hash(
+                    i, &sc, value, SigHashType::All
+                ).as_hash();
+                let sig = secp_ctx.sign(
+                    &Message::from_slice(&h).unwrap(),
+                    &pk.key,
+                );
+                let mut final_signature = Vec::with_capacity(75);
+                final_signature.extend_from_slice(&sig.serialize_der());
+                final_signature.push(SigHashType::All.as_u32() as u8);
+
+                inp.partial_sigs.insert(pubkey.clone(), final_signature);
+            }
+        }
+    }
+    let signed = base64::encode(&serialize(&psbt));
+    ok!(signed)
+}
+
 // ========================= OTHER ===========================
 
 #[no_mangle]

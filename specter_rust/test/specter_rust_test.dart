@@ -204,6 +204,7 @@ void main() {
   });
 
   test('parse_descriptor', () {
+    // TODO: more tests
     String root = 'xprv9s21ZrQH143K48dWHMyaUE3yzA6KV4MkKytF2unviMieqjN8MtfXSu6WbM29w8UngGtaAWEe65u1SVcPBxoMZLasQXw6MMuZSYWb1QDAbZm';
     expect(
       SpecterRust.parse_descriptor("wsh(sortedmulti(1,[312e05df/84h/0h/0h]xpub6CXXH6KkmqEavpf5svtvJe1aXWHeBCRVgnQ1qf4ZekwjYGmXAAsxhmJ3rYnq8qfqnWFVcti42yqi6SqNahsTmpizzvxefP7N5GXyhwPZc3H/0/*,[12345678/49'/1'/3']xpub6EpqBFyJW2qiEmgcYZqwEGCRuQh3y9fY72RWeAG7pNvKJWgnx7mkviWtfsF7VNQhWPx43zzNfkWhoF8RcnP2KKsXbNHrFNdzx8MFy83N5Sq/0/*))", root, 'bitcoin'),
@@ -219,10 +220,30 @@ void main() {
         'policy': '1 of 2 multisig',
       }
     );
-    // TODO: more tests
   });
-  // TODO: parse_transaction
-  // TODO: sign_transaction
+
+  test('parse_transaction', () {
+    // TODO: more tests (malformed, multiwallet, custom sighashes)
+    String root = 'xprv9s21ZrQH143K48dWHMyaUE3yzA6KV4MkKytF2unviMieqjN8MtfXSu6WbM29w8UngGtaAWEe65u1SVcPBxoMZLasQXw6MMuZSYWb1QDAbZm';
+    String psbt = 'cHNidP8BAH0CAAAAAfDz5mfHe0eBUAbazbcr7we9vpo2+hxiiWxGnPMkwLj+AAAAAAD+////AoCWmAAAAAAAFgAUM0kk6vRugG6Gs1N6EvgVlQMNc6fNSV0FAAAAACIAIPS/xbC8hbQfm15NlCSFLrdSVY0nsQIaJQ5X9R3zbefg1gAAAAABAH0CAAAAAcGtDHVoTFXHMZZJSA8zJ362P1ZLvmPuyhqdb7k6bOWbAAAAAAD+////AgDh9QUAAAAAIgAgjG8duakkjuNk3IzbiMKr91QjvUUtT2/1Li4LXzxgBPlnEBAkAQAAABYAFKBfKSQYEBYs5aYwucljg4mW0OsuAAAAAAEBKwDh9QUAAAAAIgAgjG8duakkjuNk3IzbiMKr91QjvUUtT2/1Li4LXzxgBPkBBUdRIQJd2kbjIJNo6aA3muoxjqa3bietbgN7lqrbjMbPzScO9iEDqYT05aiCopyrT5gt8oIc8sM/JXv9nFbBVL5GR10uiptSriIGAl3aRuMgk2jpoDea6jGOprduJ61uA3uWqtuMxs/NJw72HLCvWO0wAACAAQAAgAAAAIACAACAAAAAAAAAAAAiBgOphPTlqIKinKtPmC3yghzywz8le/2cVsFUvkZHXS6KmxgxLgXfMAAAgAEAAIAAAACAAAAAAAAAAAAAAAEBR1EhAnV6ftmjyLLCxBLL3f1uGwzJDKTj+Lsu8TP7hdodCyVnIQMH1JWAelJ0hprNcX2+JnHw2b5yN4dA6nIwjesfkZ7m1FKuIgICdXp+2aPIssLEEsvd/W4bDMkMpOP4uy7xM/uF2h0LJWcYMS4F3zAAAIABAACAAAAAgAEAAAAAAAAAIgIDB9SVgHpSdIaazXF9viZx8Nm+cjeHQOpyMI3rH5Ge5tQcsK9Y7TAAAIABAACAAAAAgAIAAIABAAAAAAAAAAA=';
+    // wallet used in this transaction
+    var parsed_desc = SpecterRust.parse_descriptor('wsh(sortedmulti(1,[b0af58ed/48h/1h/0h/2h]tpubDED6SSLLgFCtDZNQv1BBCoe15uw4ebin4eN3MFNmdLtynBaXNEfVzdkVjqBL2E4kUzCYyYzc7GVNf8vv9Luefpwh2DWXbQVt8ZtCXmes2Zk/0/*,[312e05df/48h/1h/0h]tpubDD5NnAHJkEri3WeR9QP2McFoHeFte3Y9ytQAYKs2TwASMk5XutLLREGB8XvinTvUUU1wD2nvrzEwcXBzsQ1XkFdCKXEpqwLCVf2FHVpGNDb/0/*))', root, 'regtest');
+    expect(parsed_desc['mine'], [false, true]);
+    var wallet = {
+      'recv_descriptor': parsed_desc['recv_descriptor'],
+      'change_descriptor': parsed_desc['change_descriptor'],
+    };
+    var res = SpecterRust.parse_transaction(psbt, [wallet], 'regtest');
+    // TODO: finish test
+  });
+
+  test('sign_transaction', () {
+    // TODO: more tests (legacy, nested segwit, single-sig, miniscript)
+    String root = 'xprv9s21ZrQH143K48dWHMyaUE3yzA6KV4MkKytF2unviMieqjN8MtfXSu6WbM29w8UngGtaAWEe65u1SVcPBxoMZLasQXw6MMuZSYWb1QDAbZm';
+    String psbt = 'cHNidP8BAH0CAAAAAfDz5mfHe0eBUAbazbcr7we9vpo2+hxiiWxGnPMkwLj+AAAAAAD+////AoCWmAAAAAAAFgAUM0kk6vRugG6Gs1N6EvgVlQMNc6fNSV0FAAAAACIAIPS/xbC8hbQfm15NlCSFLrdSVY0nsQIaJQ5X9R3zbefg1gAAAAABAH0CAAAAAcGtDHVoTFXHMZZJSA8zJ362P1ZLvmPuyhqdb7k6bOWbAAAAAAD+////AgDh9QUAAAAAIgAgjG8duakkjuNk3IzbiMKr91QjvUUtT2/1Li4LXzxgBPlnEBAkAQAAABYAFKBfKSQYEBYs5aYwucljg4mW0OsuAAAAAAEBKwDh9QUAAAAAIgAgjG8duakkjuNk3IzbiMKr91QjvUUtT2/1Li4LXzxgBPkBBUdRIQJd2kbjIJNo6aA3muoxjqa3bietbgN7lqrbjMbPzScO9iEDqYT05aiCopyrT5gt8oIc8sM/JXv9nFbBVL5GR10uiptSriIGAl3aRuMgk2jpoDea6jGOprduJ61uA3uWqtuMxs/NJw72HLCvWO0wAACAAQAAgAAAAIACAACAAAAAAAAAAAAiBgOphPTlqIKinKtPmC3yghzywz8le/2cVsFUvkZHXS6KmxgxLgXfMAAAgAEAAIAAAACAAAAAAAAAAAAAAAEBR1EhAnV6ftmjyLLCxBLL3f1uGwzJDKTj+Lsu8TP7hdodCyVnIQMH1JWAelJ0hprNcX2+JnHw2b5yN4dA6nIwjesfkZ7m1FKuIgICdXp+2aPIssLEEsvd/W4bDMkMpOP4uy7xM/uF2h0LJWcYMS4F3zAAAIABAACAAAAAgAEAAAAAAAAAIgIDB9SVgHpSdIaazXF9viZx8Nm+cjeHQOpyMI3rH5Ge5tQcsK9Y7TAAAIABAACAAAAAgAIAAIABAAAAAAAAAAA=';
+    String res = SpecterRust.sign_transaction(psbt, root);
+    expect(res, 'cHNidP8BAH0CAAAAAfDz5mfHe0eBUAbazbcr7we9vpo2+hxiiWxGnPMkwLj+AAAAAAD+////AoCWmAAAAAAAFgAUM0kk6vRugG6Gs1N6EvgVlQMNc6fNSV0FAAAAACIAIPS/xbC8hbQfm15NlCSFLrdSVY0nsQIaJQ5X9R3zbefg1gAAAAABAH0CAAAAAcGtDHVoTFXHMZZJSA8zJ362P1ZLvmPuyhqdb7k6bOWbAAAAAAD+////AgDh9QUAAAAAIgAgjG8duakkjuNk3IzbiMKr91QjvUUtT2/1Li4LXzxgBPlnEBAkAQAAABYAFKBfKSQYEBYs5aYwucljg4mW0OsuAAAAAAEBKwDh9QUAAAAAIgAgjG8duakkjuNk3IzbiMKr91QjvUUtT2/1Li4LXzxgBPkiAgOphPTlqIKinKtPmC3yghzywz8le/2cVsFUvkZHXS6Km0cwRAIgS0xgodv7JGCxUYVvuG7DRknWP9W+sEp++g2bMS/Vg2MCIGkf0WfEoeCVaisbg2thcU/gr80x25Iewr9QdYjTphFwAQEFR1EhAl3aRuMgk2jpoDea6jGOprduJ61uA3uWqtuMxs/NJw72IQOphPTlqIKinKtPmC3yghzywz8le/2cVsFUvkZHXS6Km1KuIgYCXdpG4yCTaOmgN5rqMY6mt24nrW4De5aq24zGz80nDvYcsK9Y7TAAAIABAACAAAAAgAIAAIAAAAAAAAAAACIGA6mE9OWogqKcq0+YLfKCHPLDPyV7/ZxWwVS+RkddLoqbGDEuBd8wAACAAQAAgAAAAIAAAAAAAAAAAAAAAQFHUSECdXp+2aPIssLEEsvd/W4bDMkMpOP4uy7xM/uF2h0LJWchAwfUlYB6UnSGms1xfb4mcfDZvnI3h0DqcjCN6x+RnubUUq4iAgJ1en7Zo8iywsQSy939bhsMyQyk4/i7LvEz+4XaHQslZxgxLgXfMAAAgAEAAIAAAACAAQAAAAAAAAAiAgMH1JWAelJ0hprNcX2+JnHw2b5yN4dA6nIwjesfkZ7m1Bywr1jtMAAAgAEAAIAAAACAAgAAgAEAAAAAAAAAAA==');
+  });
 
   test('greet', () {
     expect(SpecterRust.greet('Alice'), 'Hello Alice');

@@ -227,6 +227,43 @@ class SpecterRust {
 
   }
 
+  // parses psbt transaction
+  static Map<String, dynamic> parse_transaction(
+    String psbt, List<dynamic> wallets, String network){
+
+    String wallets_json = jsonEncode(wallets);
+    final ptrPSBT = psbt.toNativeUtf8(allocator: malloc);
+    final ptrWallets = wallets_json.toNativeUtf8(allocator: malloc);
+    final ptrNetwork = network.toNativeUtf8(allocator: malloc);
+
+    final ptrResult = _bindings.parse_transaction(
+        ptrPSBT.cast<Int8>(), ptrWallets.cast<Int8>(), ptrNetwork.cast<Int8>());
+    final result = ptrResult.cast<Utf8>().toDartString();
+    _bindings.rust_cstr_free(ptrResult);
+
+    malloc.free(ptrPSBT);
+    malloc.free(ptrWallets);
+    malloc.free(ptrNetwork);
+    return _decode_result(result)['data'];
+  }
+
+  // parses psbt transaction
+  static String sign_transaction(
+    String psbt, String xprv){
+
+    final ptrPSBT = psbt.toNativeUtf8(allocator: malloc);
+    final ptrXprv = xprv.toNativeUtf8(allocator: malloc);
+
+    final ptrResult = _bindings.sign_transaction(
+        ptrPSBT.cast<Int8>(), ptrXprv.cast<Int8>());
+    final result = ptrResult.cast<Utf8>().toDartString();
+    _bindings.rust_cstr_free(ptrResult);
+
+    malloc.free(ptrPSBT);
+    malloc.free(ptrXprv);
+    return _decode_result(result)['data'];
+  }
+
   /// Computes a greeting for the given name using the native function
   static String greet(String name) {
     // Allocate a native string holding argument in UTF-8
