@@ -10,10 +10,6 @@ enum WALLET_INFO_TAB {
 class WalletInfoController extends GetxController {
   var currentTab = WALLET_INFO_TAB.DETAILS.obs;
 
-  PanelController slidingUpPanelController = PanelController();
-
-  Rx<bool> slidingUpPanelIsOpen = false.obs;
-
   @override
   void onInit() {
     super.onInit();

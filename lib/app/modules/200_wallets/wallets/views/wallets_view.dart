@@ -4,13 +4,26 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:specter_mobile/app/widgets/BottomMenu.dart';
 import 'package:specter_mobile/app/widgets/LightButton.dart';
+import 'package:specter_mobile/app/widgets/slidingUpPanel/SlidingUpPanelController.dart';
+import 'package:specter_mobile/app/widgets/slidingUpPanel/SlidingUpPanelView.dart';
 import '../controllers/wallets_controller.dart';
 
 import '../widgets/WalletsList.dart';
 
 class WalletsView extends GetView<WalletsController> {
+  final SlidingUpPanelController _slidingUpPanelController = Get.find<SlidingUpPanelController>();
+
   @override
   Widget build(BuildContext context) {
+    return Scaffold(
+        body: SlidingUpPanelView(
+            controller: _slidingUpPanelController,
+            body: getBody()
+        )
+    );
+  }
+
+  Widget getBody() {
     return Scaffold(
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
