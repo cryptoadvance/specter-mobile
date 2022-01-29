@@ -227,7 +227,10 @@ class SpecterRust {
 
   }
 
-  // parses psbt transaction
+  /// Parses psbt transaction, checks if inputs and outputs belong to any of the wallets.
+  /// Returns metadata for display as a dict. Content: inputs, outputs, fee.
+  /// Every input and output has the following info: { address, value in satoshi, wallets owning it }.
+  /// wallets is a list of indexes of the wallets owning this input or output (normally either one element or empty list).
   static Map<String, dynamic> parse_transaction(
     String psbt, List<dynamic> wallets, String network){
 
@@ -247,7 +250,7 @@ class SpecterRust {
     return _decode_result(result)['data'];
   }
 
-  // parses psbt transaction
+  /// Signs psbt transaction - pass base64 tx string and root key, get back signed transaction.
   static String sign_transaction(
     String psbt, String xprv){
 

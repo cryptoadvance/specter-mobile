@@ -246,7 +246,28 @@ void main() {
       'change_descriptor': parsed_desc['change_descriptor'],
     };
     var res = SpecterRust.parse_transaction(psbt, [wallet], 'regtest');
-    // TODO: finish test
+    expect(res, {
+      'inputs': [
+        {
+          'address': 'bcrt1q33h3mwdfyj8wxexu3ndc3s4t7a2z8029948klafw9c9470rqqnusayrnw4',
+          'value': 100000000,
+          'wallets': [0],
+        }
+      ],
+      'outputs': [
+        {
+          'address': 'bcrt1qxdyjf6h5d6qxap4n2dap97q4j5ps6ua8jkxz0z',
+          'value': 10000000,
+          'wallets': []
+        },
+        {
+          'address': 'bcrt1q7jlutv9usk6plx67fk2zfpfwkaf9trf8kypp5fgw2l63mumdulsqvpnqt3',
+          'value': 89999821,
+          'wallets': [0]
+        },
+      ],
+      'fee': 179,
+    });
   });
 
   test('sign_transaction', () {
