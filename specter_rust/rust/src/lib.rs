@@ -188,7 +188,8 @@ pub extern fn parse_descriptor(descriptor: *const c_char, root: *const c_char, n
     let descriptor = cstr!(descriptor);
     // TODO: fix for other branch indexes
     let arr: Vec<&str> = descriptor.split("#").collect();
-    let descriptor = arr[0].replace("/{0,1}/","/0/");
+    // {0,1} is used in Specter, <0;1> might be used in Core in the future
+    let descriptor = arr[0].replace("/{0,1}/","/0/").replace("/<0;1>/", "/0/");
     let change_desc = descriptor.replace("/0/*", "/1/*");
     let network = cstr!(network);
     let root = cstr!(root);
