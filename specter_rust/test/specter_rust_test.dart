@@ -232,6 +232,11 @@ void main() {
       SpecterRust.parse_descriptor("wsh(sortedmulti(1,[312e05df/84h/0h/0h]xpub6CXXH6KkmqEavpf5svtvJe1aXWHeBCRVgnQ1qf4ZekwjYGmXAAsxhmJ3rYnq8qfqnWFVcti42yqi6SqNahsTmpizzvxefP7N5GXyhwPZc3H/<0;1>/*,[12345678/49'/1'/3']xpub6EpqBFyJW2qiEmgcYZqwEGCRuQh3y9fY72RWeAG7pNvKJWgnx7mkviWtfsF7VNQhWPx43zzNfkWhoF8RcnP2KKsXbNHrFNdzx8MFy83N5Sq/<0;1>/*))", root, 'bitcoin'),
       expected
     );
+    // test without derivation at all - should add derivations automatically
+    expect(
+      SpecterRust.parse_descriptor("wsh(sortedmulti(1,[312e05df/84h/0h/0h]xpub6CXXH6KkmqEavpf5svtvJe1aXWHeBCRVgnQ1qf4ZekwjYGmXAAsxhmJ3rYnq8qfqnWFVcti42yqi6SqNahsTmpizzvxefP7N5GXyhwPZc3H,[12345678/49'/1'/3']xpub6EpqBFyJW2qiEmgcYZqwEGCRuQh3y9fY72RWeAG7pNvKJWgnx7mkviWtfsF7VNQhWPx43zzNfkWhoF8RcnP2KKsXbNHrFNdzx8MFy83N5Sq))", root, 'bitcoin'),
+      expected
+    );
   });
 
   test('parse_transaction', () {

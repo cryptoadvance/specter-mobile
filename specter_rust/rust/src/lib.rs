@@ -191,7 +191,22 @@ pub extern fn parse_descriptor(descriptor: *const c_char, root: *const c_char, n
     // TODO: fix for other branch indexes
     let arr: Vec<&str> = descriptor.split("#").collect();
     // {0,1} is used in Specter, <0;1> might be used in Core in the future
-    let descriptor = arr[0].replace("/{0,1}/","/0/").replace("/<0;1>/", "/0/");
+    let mut descriptor = arr[0].replace("/{0,1}/","/0/").replace("/<0;1>/", "/0/");
+    // check if descriptor has any wildcards. If not - add default wildcards to all extended keys
+    let tmp_desc = err!(miniscript::Descriptor::<DescriptorPublicKey>::from_str(&descriptor));
+    if !tmp_desc.is_deriveable() {
+        descriptor = tmp_desc.to_string().split("#").collect::<Vec<&str>>()[0].to_string();
+        tmp_desc.for_each_key(|k| {
+            match k.as_key() {
+                DescriptorPublicKey::SinglePub(_) => { true },
+                DescriptorPublicKey::XPub(_) => {
+                    let kstr = k.as_key().to_string();
+                    descriptor = descriptor.replace(&kstr, &format!("{}/0/*", &kstr));
+                    true
+                },
+            }
+        });
+    }
     let change_desc = descriptor.replace("/0/*", "/1/*");
     let network = cstr!(network);
     let root = cstr!(root);
