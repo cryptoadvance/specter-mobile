@@ -20,7 +20,14 @@ class EnterRecoveryPhraseListController extends GetxController {
   }
 
   @override
-  void onClose() {}
+  void onClose() {
+    super.onClose();
+    focusNodes.forEach((key, focusNode) {
+      focusNode.dispose();
+    });
+    focusNodes.clear();
+    controllers.clear();
+  }
 
   List<String> getSeedList() {
     List<String> list = [];

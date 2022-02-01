@@ -3,11 +3,15 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:specter_mobile/app/widgets/LightButton.dart';
+import 'package:specter_mobile/app/widgets/keyboard/KeyboardController.dart';
+import 'package:specter_mobile/app/widgets/keyboard/KeyboardView.dart';
 
 import '../controllers/enter_recovery_phrase_screen_controller.dart';
 import 'enter_recovery_phrase_list_view.dart';
 
 class EnterRecoveryPhraseView extends GetView<EnterRecoveryPhraseController> {
+  final KeyboardController _keyboardController = Get.find<KeyboardController>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,22 +28,22 @@ class EnterRecoveryPhraseView extends GetView<EnterRecoveryPhraseController> {
             Expanded(
               child: Container(
                 margin: EdgeInsets.only(top: 20),
-                child: getListPanel(context)
+                child: SingleChildScrollView(
+                    child: EnterRecoveryPhraseListView(keyboardController: _keyboardController)
+                )
               )
             ),
             Container(
               margin: EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 20),
               child: getBottomButtonsPanel(context)
+            ),
+            Container(
+              margin: EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 20),
+              child: KeyboardView(controller: _keyboardController)
             )
           ]
         )
       )
-    );
-  }
-
-  Widget getListPanel(BuildContext context) {
-    return SingleChildScrollView(
-      child: EnterRecoveryPhraseListView()
     );
   }
 

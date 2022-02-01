@@ -2,11 +2,15 @@ import 'dart:collection';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:specter_mobile/app/widgets/keyboard/KeyboardController.dart';
 import 'package:specter_mobile/utils.dart';
 
 import '../controllers/enter_recovery_phrase_list_controller.dart';
 
 class EnterRecoveryPhraseListView extends GetView<EnterRecoveryPhraseListController> {
+  final KeyboardController keyboardController;
+  EnterRecoveryPhraseListView({required this.keyboardController});
+
   @override
   Widget build(BuildContext context) {
     List<Widget> rows = [];
@@ -44,7 +48,18 @@ class EnterRecoveryPhraseListView extends GetView<EnterRecoveryPhraseListControl
 
   Widget getSeedInput(BuildContext context, int idx, bool isLast) {
     if (!controller.focusNodes.containsKey(idx)) {
-      controller.focusNodes[idx] = FocusNode();
+      FocusNode focusNode = FocusNode();
+      focusNode.addListener(() {
+        if (!focusNode.hasFocus) {
+          print('unfocus');
+          keyboardController.setCurrentFocus(null);
+          return;
+        }
+        print('Has focus: ' + idx.toString());
+
+        keyboardController.setCurrentFocus(controller.controllers[idx]);
+      });
+      controller.focusNodes[idx] = focusNode;
     }
     if (!controller.controllers.containsKey(idx)) {
       controller.controllers[idx] = TextEditingController();
@@ -53,6 +68,9 @@ class EnterRecoveryPhraseListView extends GetView<EnterRecoveryPhraseListControl
     Widget inputWidget = TextField(
       autocorrect: false,
       autofocus: true,
+      keyboardType: TextInputType.none,
+      showCursor: true,
+      readOnly: true,
       controller: controller.controllers[idx],
       focusNode: controller.focusNodes[idx],
       onSubmitted: (value) {
@@ -86,8 +104,8 @@ class EnterRecoveryPhraseListView extends GetView<EnterRecoveryPhraseListControl
           Container(
             width: 100,
             height: 50,
-            margin: EdgeInsets.only(left: 10, right: 10, top: 10),
-            child: inputWidget
+            margin: EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 0),
+            child:  inputWidget
           )
         ]
       )
