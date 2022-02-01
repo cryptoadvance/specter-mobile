@@ -5,7 +5,9 @@ import 'package:specter_mobile/services/CServices.dart';
 
 import '../../utils.dart';
 
+import 'BottomSlideMenu.dart';
 import 'QRCodeScanner.dart';
+import 'slidingUpPanel/SlidingUpPanelController.dart';
 
 enum BOTTOM_MENU_ITEM {
   WALLETS,
@@ -14,8 +16,10 @@ enum BOTTOM_MENU_ITEM {
 }
 
 class BottomMenu extends StatelessWidget {
+  final SlidingUpPanelController slidingUpPanelController;
   final BOTTOM_MENU_ITEM item;
-  BottomMenu({this.item = BOTTOM_MENU_ITEM.WALLETS});
+
+  BottomMenu({required this.slidingUpPanelController, this.item = BOTTOM_MENU_ITEM.WALLETS});
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +55,7 @@ class BottomMenu extends StatelessWidget {
               isActive: (item == BOTTOM_MENU_ITEM.QR_SCAN),
               icon: 'assets/icons/qr_code_scanner.svg',
               onSelect: () {
-                CServices.notify.addDialog(context, child: QRCodeScanner());
+                slidingUpPanelController.open(QRCodeScanner());
               }
             )
           ),
@@ -64,12 +68,23 @@ class BottomMenu extends StatelessWidget {
               isActive: (item == BOTTOM_MENU_ITEM.MORE),
               icon: 'assets/icons/coolicon.svg',
               onSelect: () {
-
+                slidingUpPanelController.open(getSlideMenu());
               }
             )
           )
         ]
       )
+    );
+  }
+
+  Widget getSlideMenu() {
+    return BottomSlideMenu(
+        menuItems: [
+          BottomSlideMenuItem(
+              icon: './assets/icons/menu_delete.svg',
+              title: 'Delete data'
+          )
+        ]
     );
   }
 }

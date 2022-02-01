@@ -34,7 +34,7 @@ class WalletsView extends GetView<WalletsController> {
           ),
           SafeArea(
             top: false,
-            child: BottomMenu()
+            child: BottomMenu(slidingUpPanelController: _slidingUpPanelController)
           )
         ]
       )
