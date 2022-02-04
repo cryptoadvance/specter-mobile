@@ -38,7 +38,7 @@ class EnterRecoveryPhraseView extends GetView<EnterRecoveryPhraseController> {
               child: getBottomButtonsPanel(context)
             ),
             Container(
-              margin: EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 20),
+              margin: EdgeInsets.only(top: 20),
               child: KeyboardView(controller: _keyboardController)
             )
           ]
