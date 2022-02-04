@@ -21,7 +21,7 @@ class KeyboardView extends GetView<KeyboardController> {
         )
       ),
       child: LayoutBuilder(builder: (BuildContext context, BoxConstraints constraints) {
-        return getContent(context, constraints.maxWidth);
+        return Obx(() => getContent(context, constraints.maxWidth));
       })
     );
   }
@@ -30,6 +30,11 @@ class KeyboardView extends GetView<KeyboardController> {
     double topButtonWidth = width / _controller.keyboardOptions!.keys[0].keys.length;
 
     List<Widget> rows = [];
+    rows.add(Container(
+        margin: EdgeInsets.only(top: 5, bottom: 10),
+        child: getHelpLine(context, width)
+    ));
+
     _controller.keyboardOptions!.keys.forEach((KeyboardLine keyboardLine) {
       rows.add(Container(
           child: getKeyboardLine(context, keyboardLine, width, topButtonWidth)
@@ -43,6 +48,58 @@ class KeyboardView extends GetView<KeyboardController> {
     );
   }
 
+  Widget getHelpLine(BuildContext context, double width) {
+    List<String> helps = _controller.helps.value;
+
+    int helpsCount = helps.length;
+    double buttonWidth = width / helpsCount;
+
+    List<Widget> cls = [];
+    for (int i = 0; i < helpsCount; i++) {
+      String ch = helps[i];
+      cls.add(Container(
+          width: buttonWidth,
+          height: 50,
+          padding: EdgeInsets.symmetric(horizontal: 2, vertical: 2),
+          child: getHelpKey(ch)
+      ));
+    }
+    return Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: cls
+    );
+  }
+
+  Widget getHelpKey(String ch) {
+    Widget keyIcon = Text(ch, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold));
+    
+    bool isDisabled = false;
+    return ClipRRect(
+      borderRadius: BorderRadius.all(Radius.circular(10)),
+      child: Material(
+        color: isDisabled?Color(0xff293643):Color(0xFF2C3A55).withOpacity(0.5),
+        child: InkWell(
+          splashColor: isDisabled?Colors.transparent:null,
+          hoverColor: isDisabled?Colors.transparent:null,
+          highlightColor: isDisabled?Colors.transparent:null,
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+          onTap: () {
+            _controller.setValue(ch);
+          },
+          child: Center(
+            child: Opacity(
+              opacity: isDisabled?0.3:1.0,
+              child: Container(
+                child: keyIcon
+              )
+            )
+          )
+        )
+      )
+    );
+  }
+  
   Widget getKeyboardLine(BuildContext context, KeyboardLine keyboardLine, double width, double topButtonWidth) {
     double buttonWidth = width / keyboardLine.keys.length;
     if (keyboardLine.useTopButtonWidth) {
@@ -56,7 +113,7 @@ class KeyboardView extends GetView<KeyboardController> {
         width: buttonWidth,
         height: 50,
         padding: EdgeInsets.symmetric(horizontal: 2, vertical: 2),
-        child: getKeyboardKey(ch)
+        child: getKeyboardKey(context, ch)
       ));
     }
     return Row(
@@ -66,8 +123,12 @@ class KeyboardView extends GetView<KeyboardController> {
     );
   }
 
-  Widget getKeyboardKey(String ch) {
-    bool isDisabled = _controller.keyboardOptions!.isDisabled(ch);
+  Widget getKeyboardKey(BuildContext context, String ch) {
+    bool isDisabled = _controller.keyboardOptions!.isDisabled(ch) || _controller.isDisabled.value;
+
+    if (ch.length == 1 && !_controller.possibleChars.containsKey(ch)) {
+      isDisabled = true;
+    }
 
     Widget? keyIcon;
     if (ch.length == 1) {
@@ -110,7 +171,7 @@ class KeyboardView extends GetView<KeyboardController> {
             if (isDisabled) {
               return;
             }
-            _controller.pressKey(ch);
+            _controller.pressKey(context, ch);
           },
           child: Center(
             child: Opacity(

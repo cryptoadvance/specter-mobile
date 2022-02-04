@@ -29,6 +29,12 @@ class EnterRecoveryPhraseListView extends GetView<EnterRecoveryPhraseListControl
         ]
       ));
     }
+
+    //
+    keyboardController.setSubmitProc(() {
+      controller.submitProc(context);
+    });
+
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
@@ -52,18 +58,21 @@ class EnterRecoveryPhraseListView extends GetView<EnterRecoveryPhraseListControl
       focusNode.addListener(() {
         if (!focusNode.hasFocus) {
           print('unfocus');
+          controller.currentFocusIdx = null;
           keyboardController.setCurrentFocus(null);
           return;
         }
         print('Has focus: ' + idx.toString());
 
-        keyboardController.setCurrentFocus(controller.controllers[idx]);
+        controller.currentFocusIdx = idx;
+        keyboardController.setCurrentFocus(controller.controllers[controller.currentFocusIdx]);
       });
       controller.focusNodes[idx] = focusNode;
     }
     if (!controller.controllers.containsKey(idx)) {
       controller.controllers[idx] = TextEditingController();
     }
+
 
     Widget inputWidget = TextField(
       autocorrect: false,

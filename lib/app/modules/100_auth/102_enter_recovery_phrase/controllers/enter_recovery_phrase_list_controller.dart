@@ -8,6 +8,7 @@ class EnterRecoveryPhraseListController extends GetxController {
   Map<int, TextEditingController> controllers = HashMap();
 
   final int seedSize = 24;
+  int? currentFocusIdx = 1;
 
   @override
   void onInit() {
@@ -43,5 +44,13 @@ class EnterRecoveryPhraseListController extends GetxController {
       return [];
     }
     return list;
+  }
+
+  void submitProc(BuildContext context) {
+    var nextIdx = (currentFocusIdx ?? 0) + 1;
+    if (!focusNodes.containsKey(nextIdx)) {
+      return;
+    }
+    FocusScope.of(context).requestFocus(focusNodes[nextIdx]);
   }
 }
