@@ -140,21 +140,34 @@ class CCryptoProviderRust extends CCryptoProvider {
 
   @override
   Future<RecoverySeedResult?> verifyRecoveryPhrase(List<String> recoveryPhrases) async {
-    String seedKey = '';
-    int phrasesCount = 0;
+    String mnemonic = '';
+    bool finishRead = false;
     recoveryPhrases.forEach((recoveryPhrase) {
-      if (recoveryPhrase.isNotEmpty) {
-        phrasesCount++;
+      if (finishRead) {
+        return;
       }
-      seedKey += recoveryPhrase;
+      if (recoveryPhrase.isEmpty) {
+        finishRead = true;
+        return;
+      }
+      if (mnemonic.isNotEmpty) {
+        mnemonic += ' ';
+      }
+      mnemonic += recoveryPhrase;
     });
 
-    if (phrasesCount < 3) {
+    if (mnemonic.isEmpty) {
+      return null;
+    }
+
+    try {
+      SpecterRust.mnemonic_to_root_key(mnemonic, '');
+    } catch(e) {
       return null;
     }
 
     return RecoverySeedResult(
-      seedKey: seedKey
+      seedKey: mnemonic
     );
   }
 

@@ -123,9 +123,7 @@ class KeyboardController extends GetxController  {
 
     currentTextEditingController!.text = ch;
     currentTextEditingController!.selection = TextSelection.fromPosition(TextPosition(offset: currentTextEditingController!.text.length));
-
-    //
-    calcHelps();
+    _submitProc!();
   }
 
   void setCurrentFocus(TextEditingController? textEditingController) {
