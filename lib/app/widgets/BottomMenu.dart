@@ -6,7 +6,7 @@ import 'package:specter_mobile/services/CServices.dart';
 import '../../utils.dart';
 
 import 'BottomSlideMenu.dart';
-import 'QRCodeScanner.dart';
+import 'qrCode/QRCodeScanner.dart';
 import 'slidingUpPanel/SlidingUpPanelController.dart';
 
 enum BOTTOM_MENU_ITEM {
@@ -55,7 +55,11 @@ class BottomMenu extends StatelessWidget {
               isActive: (item == BOTTOM_MENU_ITEM.QR_SCAN),
               icon: 'assets/icons/qr_code_scanner.svg',
               onSelect: () {
-                slidingUpPanelController.open(QRCodeScanner());
+                slidingUpPanelController.open(QRCodeScanner(
+                  onChange: (QRCodeScannerStatus qrCodeScannerStatus) {
+
+                  }
+                ));
               }
             )
           ),

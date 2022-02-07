@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:specter_mobile/app/routes/app_pages.dart';
 
 class ImportExistingWalletController extends GetxController {
   @override
@@ -20,7 +21,8 @@ class ImportExistingWalletController extends GetxController {
   }
 
   void scanQRCodeAction() {
-
+    Get.toNamed(Routes.SCAN_QR_CODE, arguments: {
+    });
   }
 
   void importFilesAction() {

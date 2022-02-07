@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:qr_flutter/qr_flutter.dart';
-import 'package:specter_mobile/app/widgets/QRCodeGenerator.dart';
+import 'package:specter_mobile/app/widgets/qrCode/QRCodeGenerator.dart';
 import '../controllers/wallet_info_address_qrcode_controller.dart';
 
 class WalletInfoAddressQRCodeView extends GetView<WalletInfoAddressQRCodeController> {

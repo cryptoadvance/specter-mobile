@@ -4,7 +4,39 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
+enum QRCodeScannerTypes {
+  UNKNOWN,
+  ADD_WALLET_SIMPLE,
+  ADD_WALLET_JSON
+}
+
+class QRCodeScannerResult {
+  QRCodeScannerTypes qrCodeType = QRCodeScannerTypes.UNKNOWN;
+}
+
+class QRCodeScannerResultAddWalletSimple extends QRCodeScannerResult {
+  final String name;
+  final String desc;
+
+  QRCodeScannerResultAddWalletSimple({
+    required this.name,
+    required this.desc
+  }) {
+    qrCodeType = QRCodeScannerTypes.ADD_WALLET_SIMPLE;
+  }
+}
+
+class QRCodeScannerStatus {
+  bool isFind = false;
+
+  QRCodeScannerResult? result;
+}
+
 class QRCodeScanner extends StatefulWidget {
+  final Function(QRCodeScannerStatus) onChange;
+
+  QRCodeScanner({required this.onChange});
+
   @override
   State<StatefulWidget> createState() {
     return QRCodeScannerState();
@@ -13,7 +45,10 @@ class QRCodeScanner extends StatefulWidget {
 }
 
 class QRCodeScannerState extends State<QRCodeScanner> {
-  Barcode? result;
+  String prevCode = '';
+
+  final QRCodeScannerStatus _qrCodeScannerStatus = QRCodeScannerStatus();
+
   QRViewController? controller;
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
 
@@ -30,10 +65,7 @@ class QRCodeScannerState extends State<QRCodeScanner> {
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.all(Radius.circular(10)),
-      child: getContent(context)
-    );
+    return getContent(context);
   }
 
   Widget getContent(BuildContext context) {
@@ -63,11 +95,47 @@ class QRCodeScannerState extends State<QRCodeScanner> {
       this.controller = controller;
     });
     controller.scannedDataStream.listen((Barcode scanData) {
-      print('scan: ' + scanData.code.toString());
-      setState(() {
-        result = scanData;
-      });
+      if (scanData.code == null || scanData.code == prevCode) {
+        return;
+      }
+
+      try {
+        _qrCodeScannerStatus.result = determineQRCodeType(scanData.code!);
+      } catch(e) {
+        _qrCodeScannerStatus.result = null;
+      }
+
+      prevCode = scanData.code!;
+      _qrCodeScannerStatus.isFind = true;
+      wasModified();
     });
+  }
+
+  QRCodeScannerResultAddWalletSimple? determineQRCodeType(String code) {
+    if (code.indexOf('addwallet ') == 0) {
+      code = code.substring(10);
+      int x = code.indexOf('&');
+      if (x == -1) {
+        return null;
+      }
+
+      String name = code.substring(0, x);
+      String desc = code.substring(x + 1);
+      if (name.isEmpty || desc.isEmpty) {
+        return null;
+      }
+
+      return QRCodeScannerResultAddWalletSimple(
+        name: name,
+        desc: desc
+      );
+    }
+
+    return null;
+  }
+
+  void wasModified() {
+    widget.onChange(_qrCodeScannerStatus);
   }
 
   void _onPermissionSet(BuildContext context, QRViewController ctrl, bool p) {

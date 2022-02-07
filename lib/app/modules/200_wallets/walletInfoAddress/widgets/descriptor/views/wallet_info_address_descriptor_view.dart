@@ -4,7 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:specter_mobile/app/widgets/LightButton.dart';
-import 'package:specter_mobile/app/widgets/QRCodeGenerator.dart';
+import 'package:specter_mobile/app/widgets/qrCode/QRCodeGenerator.dart';
 import 'package:specter_mobile/services/CServices.dart';
 import '../controllers/wallet_info_address_descriptor_controller.dart';
 
