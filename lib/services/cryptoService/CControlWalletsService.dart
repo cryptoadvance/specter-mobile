@@ -19,4 +19,20 @@ class CControlWalletsService {
     }
     return true;
   }
+
+  Future<bool> addExistWallet({
+    required String walletName
+  }) async {
+    SMnemonicRootKey mnemonicRootKey = CServices.crypto.cryptoContainerAuth.getCurrentMnemonicRootKey();
+    SWalletDescriptor walletDescriptor = CServices.crypto.cryptoProvider.getDefaultDescriptors(mnemonicRootKey);
+
+    //
+    if (!(await CServices.crypto.cryptoContainer.addNewWallet(
+        walletName: walletName,
+        walletDescriptor: walletDescriptor
+    ))) {
+      return false;
+    }
+    return true;
+  }
 }

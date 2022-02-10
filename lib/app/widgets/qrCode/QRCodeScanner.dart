@@ -1,13 +1,23 @@
+import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'package:specter_mobile/services/CServices.dart';
+
+import 'QRCodeView.dart';
 
 enum QRCodeScannerTypes {
   UNKNOWN,
   ADD_WALLET_SIMPLE,
   ADD_WALLET_JSON
+}
+
+extension ParseToString on QRCodeScannerTypes {
+  String toShortString() {
+    return toString().split('.').last;
+  }
 }
 
 class QRCodeScannerResult {
@@ -23,6 +33,20 @@ class QRCodeScannerResultAddWalletSimple extends QRCodeScannerResult {
     required this.desc
   }) {
     qrCodeType = QRCodeScannerTypes.ADD_WALLET_SIMPLE;
+  }
+}
+
+class QRCodeScannerResultAddWalletJSON extends QRCodeScannerResult {
+  final String label;
+  final int blockheight;
+  final String descriptor;
+
+  QRCodeScannerResultAddWalletJSON({
+    required this.label,
+    required this.blockheight,
+    required this.descriptor
+  }) {
+    qrCodeType = QRCodeScannerTypes.ADD_WALLET_JSON;
   }
 }
 
@@ -77,7 +101,9 @@ class QRCodeScannerState extends State<QRCodeScanner> {
     // we need to listen for Flutter SizeChanged notification and update controller
     return QRView(
       key: qrKey,
-      onQRViewCreated: _onQRViewCreated,
+      onQRViewCreated: (QRViewController controller) {
+        _onQRViewCreated(context, controller);
+      },
       formatsAllowed: [BarcodeFormat.qrcode],
       overlay: QrScannerOverlayShape(
           borderColor: Colors.blue,
@@ -90,11 +116,14 @@ class QRCodeScannerState extends State<QRCodeScanner> {
     );
   }
 
-  void _onQRViewCreated(QRViewController controller) {
+  void _onQRViewCreated(BuildContext context, QRViewController controller) {
     setState(() {
       this.controller = controller;
     });
-    controller.scannedDataStream.listen((Barcode scanData) {
+    controller.scannedDataStream.listen((Barcode scanData) async {
+      if (!mounted) {
+        return;
+      }
       if (scanData.code == null || scanData.code == prevCode) {
         return;
       }
@@ -108,10 +137,30 @@ class QRCodeScannerState extends State<QRCodeScanner> {
       prevCode = scanData.code!;
       _qrCodeScannerStatus.isFind = true;
       wasModified();
+
+      //
+      if (_qrCodeScannerStatus.result != null) {
+        await controller.pauseCamera();
+        await onFound(context);
+        if (!mounted) {
+          return;
+        }
+        await controller.resumeCamera();
+
+        //
+        cleanStatus();
+      }
     });
   }
 
-  QRCodeScannerResultAddWalletSimple? determineQRCodeType(String code) {
+  void cleanStatus() {
+    prevCode = '';
+    _qrCodeScannerStatus.isFind = false;
+    _qrCodeScannerStatus.result = null;
+    wasModified();
+  }
+
+  QRCodeScannerResult? determineQRCodeType(String code) {
     if (code.indexOf('addwallet ') == 0) {
       code = code.substring(10);
       int x = code.indexOf('&');
@@ -129,6 +178,32 @@ class QRCodeScannerState extends State<QRCodeScanner> {
         name: name,
         desc: desc
       );
+    }
+
+    if (code[0] == '{') {
+      Map<String, dynamic>? obj;
+      try {
+        obj = jsonDecode(code);
+      } catch(e) {
+        print(e);
+      }
+
+      if (obj != null) {
+        if (obj.containsKey('label') && obj.containsKey('blockheight') && obj.containsKey('descriptor')) {
+          String label = obj['label'];
+          int blockheight = obj['blockheight'] ?? 0;
+          String descriptor = obj['descriptor'];
+          if (label.isEmpty || blockheight < 1 || descriptor.isEmpty) {
+            return null;
+          }
+
+          return QRCodeScannerResultAddWalletJSON(
+            label: label,
+            blockheight: blockheight,
+            descriptor: descriptor
+          );
+        }
+      }
     }
 
     return null;
@@ -151,5 +226,31 @@ class QRCodeScannerState extends State<QRCodeScanner> {
   void dispose() {
     controller?.dispose();
     super.dispose();
+  }
+
+
+  Future<void> onFound(BuildContext context) async {
+    QRCodeScannerResult qrCodeScannerResult = _qrCodeScannerStatus.result!;
+    await CServices.notify.addDialog(context, child: QRCodeView(
+        qrCodeScannerResult: qrCodeScannerResult,
+        onProcess: () {
+          if (qrCodeScannerResult.qrCodeType == QRCodeScannerTypes.ADD_WALLET_SIMPLE) {
+            QRCodeScannerResultAddWalletSimple qrCode = qrCodeScannerResult as QRCodeScannerResultAddWalletSimple;
+            processSimpleAdd(context, qrCode);
+          }
+        }
+    ));
+  }
+
+  void processSimpleAdd(BuildContext context, QRCodeScannerResultAddWalletSimple qrCode) async {
+    if (!(await CServices.crypto.controlWalletsService.addExistWallet(
+        walletName: qrCode.name
+    ))) {
+      await CServices.notify.addMessage(
+          context, 'Oops!!', 'Please try again.',
+          actionTitle: 'Try Again'
+      );
+      return;
+    }
   }
 }

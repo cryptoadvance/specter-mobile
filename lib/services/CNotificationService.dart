@@ -69,8 +69,9 @@ class CNotificationService {
   }
 
   OverlayEntry? overlayEntryDialog;
+  Completer<dynamic>? dialogCompleter;
   Future<dynamic> addDialog(BuildContext context, {required Widget child}) async {
-    Completer<dynamic> completer = Completer();
+    dialogCompleter = Completer();
 
     //
     if (overlayEntryDialog != null) {
@@ -90,7 +91,7 @@ class CNotificationService {
               overlayEntryDialog = null;
 
               //
-              completer.complete('test');
+              dialogCompleter!.complete();
             }
           )
       );
@@ -98,7 +99,17 @@ class CNotificationService {
     Overlay.of(context)!.insert(overlayEntryDialog!);
 
     //
-    return completer.future;
+    return dialogCompleter!.future;
+  }
+
+  void closeDialog() {
+    if (overlayEntryDialog != null) {
+      overlayEntryDialog!.remove();
+      overlayEntryDialog = null;
+
+      //
+      dialogCompleter!.complete();
+    }
   }
 
   Widget getNotifyLabel({required String title}) {
@@ -125,14 +136,14 @@ class CNotificationService {
     var actionButton;
     if (actionTitle != null) {
       actionButton = LightButton(
-          child: Container(
-              width: double.infinity,
-              child: Text(actionTitle, textAlign: TextAlign.center, style: TextStyle(color: Colors.white))
-          ),
           isInline: true,
           onTap: () {
             closeDialog();
-          }
+          },
+          child: Container(
+              width: double.infinity,
+              child: Text(actionTitle, textAlign: TextAlign.center, style: TextStyle(color: Colors.white))
+          )
       );
     }
 

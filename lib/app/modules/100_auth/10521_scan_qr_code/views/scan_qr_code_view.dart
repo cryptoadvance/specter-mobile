@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:specter_mobile/app/widgets/qrCode/QRCodeScanner.dart';
+import 'package:specter_mobile/app/widgets/qrCode/QRCodeView.dart';
 import 'package:specter_mobile/app/widgets/slidingUpPanel/SlidingUpPanelController.dart';
 import 'package:specter_mobile/app/widgets/slidingUpPanel/SlidingUpPanelView.dart';
+import 'package:specter_mobile/services/CServices.dart';
 
 import '../../../../../utils.dart';
 import '../controllers/scan_qr_code_controller.dart';
@@ -18,12 +20,12 @@ class ScanQRCodeView extends GetView<ScanQRCodeController> {
     return Scaffold(
       body: SlidingUpPanelView(
           controller: _slidingUpPanelController,
-          body: getBody()
+          body: getBody(context)
       )
     );
   }
 
-  Widget getBody() {
+  Widget getBody(BuildContext context) {
     return Stack(
         children: [
           QRCodeScanner(

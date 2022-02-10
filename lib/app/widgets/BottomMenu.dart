@@ -57,7 +57,6 @@ class BottomMenu extends StatelessWidget {
               onSelect: () {
                 slidingUpPanelController.open(QRCodeScanner(
                   onChange: (QRCodeScannerStatus qrCodeScannerStatus) {
-
                   }
                 ));
               }
