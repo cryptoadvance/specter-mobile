@@ -4,7 +4,7 @@ import 'dart:convert';
 import 'package:ffi/ffi.dart';
 import './bindings.dart';
 
-const DYNAMIC_LIBRARY_FILE_NAME = "libspecter_rust.so";
+const DYNAMIC_LIBRARY_FILE_NAME = 'libspecter_rust.so';
 
 class SpecterRustException implements Exception {
   String _message = 'Rust bindings error';
@@ -190,6 +190,9 @@ class SpecterRust {
   /// Returns an list with addresses.
   static List<dynamic> derive_addresses(
       String descriptor, String network, int start, int end) {
+    if(start < 0 || end < 0 || start >= 0x80000000 || end >= 0x80000000){
+      throw SpecterRustException('indexes must be in range [0, 0x80000000)');
+    }
     final ptrDescriptor = descriptor.toNativeUtf8(allocator: malloc);
     final ptrNetwork = network.toNativeUtf8(allocator: malloc);
 
@@ -200,6 +203,67 @@ class SpecterRust {
 
     malloc.free(ptrDescriptor);
     malloc.free(ptrNetwork);
+    return _decode_result(result)['data'];
+  }
+
+  /// Parses wallet descriptor and returns a summary:
+  /// { change_descriptor, recv_descriptor, policy, type, keys, mine }
+  static Map<String, dynamic> parse_descriptor(
+    String descriptor, String xprv, String network){
+
+    final ptrDescriptor = descriptor.toNativeUtf8(allocator: malloc);
+    final ptrXprv = xprv.toNativeUtf8(allocator: malloc);
+    final ptrNetwork = network.toNativeUtf8(allocator: malloc);
+
+    final ptrResult = _bindings.parse_descriptor(
+        ptrDescriptor.cast<Int8>(), ptrXprv.cast<Int8>(), ptrNetwork.cast<Int8>());
+    final result = ptrResult.cast<Utf8>().toDartString();
+    _bindings.rust_cstr_free(ptrResult);
+
+    malloc.free(ptrDescriptor);
+    malloc.free(ptrXprv);
+    malloc.free(ptrNetwork);
+    return _decode_result(result)['data'];
+
+  }
+
+  /// Parses psbt transaction, checks if inputs and outputs belong to any of the wallets.
+  /// Returns metadata for display as a dict. Content: inputs, outputs, fee.
+  /// Every input and output has the following info: { address, value in satoshi, wallets owning it }.
+  /// wallets is a list of indexes of the wallets owning this input or output (normally either one element or empty list).
+  static Map<String, dynamic> parse_transaction(
+    String psbt, List<dynamic> wallets, String network){
+
+    String wallets_json = jsonEncode(wallets);
+    final ptrPSBT = psbt.toNativeUtf8(allocator: malloc);
+    final ptrWallets = wallets_json.toNativeUtf8(allocator: malloc);
+    final ptrNetwork = network.toNativeUtf8(allocator: malloc);
+
+    final ptrResult = _bindings.parse_transaction(
+        ptrPSBT.cast<Int8>(), ptrWallets.cast<Int8>(), ptrNetwork.cast<Int8>());
+    final result = ptrResult.cast<Utf8>().toDartString();
+    _bindings.rust_cstr_free(ptrResult);
+
+    malloc.free(ptrPSBT);
+    malloc.free(ptrWallets);
+    malloc.free(ptrNetwork);
+    return _decode_result(result)['data'];
+  }
+
+  /// Signs psbt transaction - pass base64 tx string and root key, get back signed transaction.
+  static String sign_transaction(
+    String psbt, String xprv){
+
+    final ptrPSBT = psbt.toNativeUtf8(allocator: malloc);
+    final ptrXprv = xprv.toNativeUtf8(allocator: malloc);
+
+    final ptrResult = _bindings.sign_transaction(
+        ptrPSBT.cast<Int8>(), ptrXprv.cast<Int8>());
+    final result = ptrResult.cast<Utf8>().toDartString();
+    _bindings.rust_cstr_free(ptrResult);
+
+    malloc.free(ptrPSBT);
+    malloc.free(ptrXprv);
     return _decode_result(result)['data'];
   }
 
