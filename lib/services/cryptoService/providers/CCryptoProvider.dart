@@ -120,5 +120,6 @@ abstract class CCryptoProvider {
 
   //Wallets API
   SMnemonicRootKey mnemonicToRootKey(String mnemonic, String pass);
-  SWalletDescriptor getDefaultDescriptors(SMnemonicRootKey mnemonicRootKey);
+  SWalletDescriptor getDefaultDescriptor(SMnemonicRootKey mnemonicRootKey);
+  SWalletDescriptor getParsedDescriptor(SMnemonicRootKey mnemonicRootKey, String descriptor);
 }

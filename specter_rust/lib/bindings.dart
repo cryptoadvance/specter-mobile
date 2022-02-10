@@ -123,13 +123,13 @@ class SpecterRustBindings {
 
   ffi.Pointer<ffi.Int8> parse_transaction(
     ffi.Pointer<ffi.Int8> psbt,
-    ffi.Pointer<ffi.Int8> _wallets,
-    ffi.Pointer<ffi.Int8> _network,
+    ffi.Pointer<ffi.Int8> wallets,
+    ffi.Pointer<ffi.Int8> network,
   ) {
     return _parse_transaction(
       psbt,
-      _wallets,
-      _network,
+      wallets,
+      network,
     );
   }
 
@@ -261,14 +261,14 @@ typedef _dart_parse_descriptor = ffi.Pointer<ffi.Int8> Function(
 
 typedef _c_parse_transaction = ffi.Pointer<ffi.Int8> Function(
   ffi.Pointer<ffi.Int8> psbt,
-  ffi.Pointer<ffi.Int8> _wallets,
-  ffi.Pointer<ffi.Int8> _network,
+  ffi.Pointer<ffi.Int8> wallets,
+  ffi.Pointer<ffi.Int8> network,
 );
 
 typedef _dart_parse_transaction = ffi.Pointer<ffi.Int8> Function(
   ffi.Pointer<ffi.Int8> psbt,
-  ffi.Pointer<ffi.Int8> _wallets,
-  ffi.Pointer<ffi.Int8> _network,
+  ffi.Pointer<ffi.Int8> wallets,
+  ffi.Pointer<ffi.Int8> network,
 );
 
 typedef _c_sign_transaction = ffi.Pointer<ffi.Int8> Function(

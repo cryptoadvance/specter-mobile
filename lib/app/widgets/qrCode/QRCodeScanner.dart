@@ -3,7 +3,10 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'package:specter_mobile/app/modules/100_auth/104_onboarding/controllers/onboarding_controller.dart';
+import 'package:specter_mobile/app/routes/app_pages.dart';
 import 'package:specter_mobile/services/CServices.dart';
 
 import 'QRCodeView.dart';
@@ -26,11 +29,11 @@ class QRCodeScannerResult {
 
 class QRCodeScannerResultAddWalletSimple extends QRCodeScannerResult {
   final String name;
-  final String desc;
+  final String descriptor;
 
   QRCodeScannerResultAddWalletSimple({
     required this.name,
-    required this.desc
+    required this.descriptor
   }) {
     qrCodeType = QRCodeScannerTypes.ADD_WALLET_SIMPLE;
   }
@@ -176,7 +179,7 @@ class QRCodeScannerState extends State<QRCodeScanner> {
 
       return QRCodeScannerResultAddWalletSimple(
         name: name,
-        desc: desc
+        descriptor: desc
       );
     }
 
@@ -244,7 +247,8 @@ class QRCodeScannerState extends State<QRCodeScanner> {
 
   void processSimpleAdd(BuildContext context, QRCodeScannerResultAddWalletSimple qrCode) async {
     if (!(await CServices.crypto.controlWalletsService.addExistWallet(
-        walletName: qrCode.name
+        walletName: qrCode.name,
+        descriptor: qrCode.descriptor
     ))) {
       await CServices.notify.addMessage(
           context, 'Oops!!', 'Please try again.',
@@ -252,5 +256,10 @@ class QRCodeScannerState extends State<QRCodeScanner> {
       );
       return;
     }
+
+    CServices.notify.closeDialog();
+    await Get.offAllNamed(Routes.ONBOARDING, arguments: {
+      'onboardingMessageType': ONBOARDING_MESSAGE_TYPE.WALLET_READY
+    });
   }
 }

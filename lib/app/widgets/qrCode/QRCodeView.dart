@@ -62,7 +62,7 @@ class QRCodeView extends StatelessWidget {
               Container(
                 width: double.infinity,
                 margin: EdgeInsets.only(top: 5),
-                child: getStatusLabel('desc', qrCode.desc)
+                child: getStatusLabel('desc', qrCode.descriptor)
               )
             ]
           )

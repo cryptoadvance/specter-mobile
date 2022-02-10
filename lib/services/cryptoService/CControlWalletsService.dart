@@ -2,13 +2,18 @@ import '../CServices.dart';
 import 'providers/CCryptoProvider.dart';
 
 class CControlWalletsService {
-  late final CCryptoProvider _cryptoProvider;
-
-  CControlWalletsService(CCryptoProvider cryptoProvider): _cryptoProvider = cryptoProvider;
+  CControlWalletsService(CCryptoProvider cryptoProvider);
 
   Future<bool> addNewWallet({required String walletName}) async {
     SMnemonicRootKey mnemonicRootKey = CServices.crypto.cryptoContainerAuth.getCurrentMnemonicRootKey();
-    SWalletDescriptor walletDescriptor = CServices.crypto.cryptoProvider.getDefaultDescriptors(mnemonicRootKey);
+
+    SWalletDescriptor walletDescriptor;
+    try {
+      walletDescriptor = CServices.crypto.cryptoProvider.getDefaultDescriptor(mnemonicRootKey);
+    } catch(e) {
+      print(e);
+      return false;
+    }
 
     //
     if (!(await CServices.crypto.cryptoContainer.addNewWallet(
@@ -21,10 +26,18 @@ class CControlWalletsService {
   }
 
   Future<bool> addExistWallet({
-    required String walletName
+    required String walletName,
+    required String descriptor
   }) async {
     SMnemonicRootKey mnemonicRootKey = CServices.crypto.cryptoContainerAuth.getCurrentMnemonicRootKey();
-    SWalletDescriptor walletDescriptor = CServices.crypto.cryptoProvider.getDefaultDescriptors(mnemonicRootKey);
+
+    SWalletDescriptor walletDescriptor;
+    try {
+      walletDescriptor = CServices.crypto.cryptoProvider.getParsedDescriptor(mnemonicRootKey, descriptor);
+    } catch(e) {
+      print(e);
+      return false;
+    }
 
     //
     if (!(await CServices.crypto.cryptoContainer.addNewWallet(
