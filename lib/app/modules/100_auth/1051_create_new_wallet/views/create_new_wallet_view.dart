@@ -9,6 +9,8 @@ import '../../../../../utils.dart';
 import '../controllers/create_new_wallet_controller.dart';
 
 class CreateNewWalletView extends GetView<CreateNewWalletController> {
+  final bool displayExternalActions = Get.arguments['displayExternalActions'] ?? false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -110,6 +112,31 @@ class CreateNewWalletView extends GetView<CreateNewWalletController> {
   }
 
   Widget getTypesSide(BuildContext context) {
+    if (!displayExternalActions) {
+      return Column(
+        children: [
+          Container(
+            margin: EdgeInsets.only(top: 20),
+            child: LightButton(
+                isInline: false,
+                onTap: () {
+                  controller.createWallet(context);
+                },
+                child: Text(
+                    'Create Wallet'.tr,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: Theme.of(context).accentColor)
+                )
+            )
+          ),
+          Container(
+            margin: EdgeInsets.only(top: 20),
+            child: Text('Create Native Seqwit wallet.')
+          )
+        ]
+      );
+    }
+
     return Column(
       children: [
         Container(

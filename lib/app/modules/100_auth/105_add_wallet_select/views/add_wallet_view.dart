@@ -7,6 +7,8 @@ import 'package:specter_mobile/app/widgets/LightButton.dart';
 import '../controllers/add_wallet_controller.dart';
 
 class AddWalletSelectView extends GetView<AddWalletSelectController> {
+  final bool displayExternalActions = Get.arguments['displayExternalActions'] ?? false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,7 +39,9 @@ class AddWalletSelectView extends GetView<AddWalletSelectController> {
                 child: LightButton(
                   isInline: false,
                   onTap: () {
-                    Get.toNamed(Routes.CREATE_NEW_WALLET);
+                    Get.toNamed(Routes.CREATE_NEW_WALLET, arguments: {
+                      'displayExternalActions': displayExternalActions
+                    });
                   },
                   child: Text(
                     'add_wallet_buttons_create_wallet'.tr,

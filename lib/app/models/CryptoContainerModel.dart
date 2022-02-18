@@ -5,10 +5,11 @@ import 'package:specter_mobile/services/cryptoContainer/CCryptoContainer.dart';
 import 'package:specter_mobile/services/cryptoService/providers/CCryptoProvider.dart';
 
 class SWalletModel {
+  String key;
   String name;
   SWalletDescriptor descriptor;
 
-  SWalletModel({required this.name, required this.descriptor});
+  SWalletModel({required this.key, required this.name, required this.descriptor});
 
   @override
   String toString() {
@@ -17,6 +18,7 @@ class SWalletModel {
 
   static SWalletModel fromJSON(obj) {
     return SWalletModel(
+      key: obj['key'],
       name: obj['name'],
       descriptor: SWalletDescriptor.fromJSON(obj['descriptor'])
     );
@@ -24,6 +26,7 @@ class SWalletModel {
 
   Map<String, dynamic> toJSON() {
     return {
+      'key': key,
       'name': name,
       'descriptor': descriptor.toJSON()
     };
@@ -124,5 +127,9 @@ class CryptoContainerModel {
 
   String getMnemonicByIdx(int idx) {
     return _seedKeys[idx]['mnemonic'];
+  }
+
+  List<SWalletModel> getWallets() {
+    return _wallets;
   }
 }

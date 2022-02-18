@@ -70,7 +70,9 @@ class CCryptoService {
 
     //
     if (!cryptoContainer.isWalletsInit()) {
-      Get.offAllNamed(Routes.ADD_WALLET);
+      Get.offAllNamed(Routes.ADD_WALLET_SELECT, arguments: {
+        'displayExternalActions': false
+      });
       return;
     }
 

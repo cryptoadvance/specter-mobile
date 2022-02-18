@@ -1,12 +1,19 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:specter_mobile/app/models/CryptoContainerModel.dart';
 import 'package:specter_mobile/app/routes/app_pages.dart';
 
 import '../../../../../utils.dart';
 import 'AccountItem.dart';
 
 class WalletItem extends StatelessWidget {
+  final SWalletModel walletModel;
+
+  WalletItem({
+    required this.walletModel
+  });
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -41,7 +48,7 @@ class WalletItem extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
-          child: Text('Primary', style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Theme.of(context).accentColor)),
+          child: Text(walletModel.name, style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Theme.of(context).accentColor)),
         ),
         Container(
           child: Row(
@@ -49,10 +56,10 @@ class WalletItem extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Multisig', style: TextStyle(fontSize: 14, color: Theme.of(context).accentColor)),
+                Text('Multisig (?)', style: TextStyle(fontSize: 14, color: Theme.of(context).accentColor)),
                 Container(
                   margin: EdgeInsets.only(left: 10),
-                  child: Text('80h/1/0', style: TextStyle(fontSize: 14, color: Theme.of(context).accentColor))
+                  child: Text('80h/1/0 (?)', style: TextStyle(fontSize: 14, color: Theme.of(context).accentColor))
                 )
               ]
           )

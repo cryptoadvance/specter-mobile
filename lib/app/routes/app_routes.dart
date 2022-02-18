@@ -17,7 +17,7 @@ abstract class Routes {
   static const ENTER_RECOVERY_PHRASE = _Paths.ENTER_RECOVERY_PHRASE;
   static const AUTH_ONBOARDING = _Paths.AUTH_ONBOARDING;
   static const ONBOARDING = _Paths.ONBOARDING;
-  static const ADD_WALLET = _Paths.ADD_WALLET_SELECT;
+  static const ADD_WALLET_SELECT = _Paths.ADD_WALLET_SELECT;
   static const CREATE_NEW_WALLET = _Paths.CREATE_NEW_WALLET;
   static const IMPORT_EXISTING_WALLET = _Paths.IMPORT_EXISTING_WALLET;
   static const WALLET_ACCOUNT = _Paths.WALLET_ACCOUNT;

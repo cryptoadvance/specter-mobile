@@ -126,7 +126,8 @@ class WalletAccountView extends GetView<WalletAccountController> {
   }
 
   Widget getActionsPanel() {
-    return LightButton(
+    return Container();
+    /*return LightButton(
         isInline: true,
         style: LightButtonStyle.PRIMARY,
         onTap: () {
@@ -141,6 +142,6 @@ class WalletAccountView extends GetView<WalletAccountController> {
               )
             ]
         )
-    );
+    );*/
   }
 }

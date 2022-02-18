@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:specter_mobile/app/routes/app_pages.dart';
 import 'package:specter_mobile/app/widgets/BottomMenu.dart';
 import 'package:specter_mobile/app/widgets/LightButton.dart';
 import 'package:specter_mobile/app/widgets/slidingUpPanel/SlidingUpPanelController.dart';
@@ -147,6 +148,9 @@ class WalletsView extends GetView<WalletsController> {
         isInline: true,
         style: LightButtonStyle.PRIMARY,
         onTap: () {
+          Get.toNamed(Routes.ADD_WALLET_SELECT, arguments: {
+            'displayExternalActions': true
+          });
         },
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,

@@ -288,7 +288,8 @@ class CCryptoContainer {
     required String walletName,
     required SWalletDescriptor walletDescriptor
   }) async {
-    SWalletModel wallet = SWalletModel(name: walletName, descriptor: walletDescriptor);
+    String key = walletDescriptor.getWalletKey();
+    SWalletModel wallet = SWalletModel(key: key, name: walletName, descriptor: walletDescriptor);
     if (!(await cryptoContainerModel!.addNewWallet(wallet))) {
       return false;
     }
@@ -310,5 +311,9 @@ class CCryptoContainer {
 
   String getMnemonicByIdx(int idx) {
     return cryptoContainerModel!.getMnemonicByIdx(idx);
+  }
+
+  List<SWalletModel> getWallets() {
+    return cryptoContainerModel!.getWallets();
   }
 }

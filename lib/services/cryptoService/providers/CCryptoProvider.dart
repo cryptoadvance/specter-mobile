@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'dart:convert';
 
+import 'package:crypto/crypto.dart';
+
 import '../../CEntropyExternalGenerationService.dart';
 import '../CGenerateSeedService.dart';
 import '../CRecoverySeedService.dart';
@@ -83,6 +85,12 @@ class SWalletDescriptor {
   @override
   String toString() {
     return jsonEncode(toJSON());
+  }
+
+  String getWalletKey() {
+    var bytes = utf8.encode(recv);
+    var digest = sha256.convert(bytes);
+    return digest.toString();
   }
 }
 

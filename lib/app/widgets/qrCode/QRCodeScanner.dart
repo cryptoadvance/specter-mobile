@@ -239,15 +239,38 @@ class QRCodeScannerState extends State<QRCodeScanner> {
         onProcess: () {
           if (qrCodeScannerResult.qrCodeType == QRCodeScannerTypes.ADD_WALLET_SIMPLE) {
             QRCodeScannerResultAddWalletSimple qrCode = qrCodeScannerResult as QRCodeScannerResultAddWalletSimple;
-            processSimpleAdd(context, qrCode);
+            processAddWalletSimple(context, qrCode);
+          }
+
+          if (qrCodeScannerResult.qrCodeType == QRCodeScannerTypes.ADD_WALLET_JSON) {
+            QRCodeScannerResultAddWalletJSON qrCode = qrCodeScannerResult as QRCodeScannerResultAddWalletJSON;
+            processAddWalletJSON(context, qrCode);
           }
         }
     ));
   }
 
-  void processSimpleAdd(BuildContext context, QRCodeScannerResultAddWalletSimple qrCode) async {
+  void processAddWalletSimple(BuildContext context, QRCodeScannerResultAddWalletSimple qrCode) async {
     if (!(await CServices.crypto.controlWalletsService.addExistWallet(
         walletName: qrCode.name,
+        descriptor: qrCode.descriptor
+    ))) {
+      await CServices.notify.addMessage(
+          context, 'Oops!!', 'Please try again.',
+          actionTitle: 'Try Again'
+      );
+      return;
+    }
+
+    CServices.notify.closeDialog();
+    await Get.offAllNamed(Routes.ONBOARDING, arguments: {
+      'onboardingMessageType': ONBOARDING_MESSAGE_TYPE.WALLET_READY
+    });
+  }
+
+  void processAddWalletJSON(BuildContext context, QRCodeScannerResultAddWalletJSON qrCode) async {
+    if (!(await CServices.crypto.controlWalletsService.addExistWallet(
+        walletName: qrCode.label,
         descriptor: qrCode.descriptor
     ))) {
       await CServices.notify.addMessage(
