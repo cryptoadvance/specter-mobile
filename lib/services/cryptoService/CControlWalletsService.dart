@@ -1,3 +1,5 @@
+import 'package:specter_mobile/app/models/CryptoContainerModel.dart';
+
 import '../CServices.dart';
 import 'providers/CCryptoProvider.dart';
 
@@ -47,5 +49,9 @@ class CControlWalletsService {
       return false;
     }
     return true;
+  }
+
+  SWalletModel getWalletByKey(String key) {
+    return CServices.crypto.cryptoContainer.getWalletByKey(key);
   }
 }

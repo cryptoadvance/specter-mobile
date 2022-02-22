@@ -3,10 +3,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:specter_mobile/app/routes/app_pages.dart';
+import 'package:specter_mobile/services/cryptoService/providers/CCryptoProvider.dart';
 
 import '../../../../../utils.dart';
 
 class AccountItem extends StatelessWidget {
+  final String walletKey;
+  final int keyIndex;
+  final SWalletKey walletKeyDetails;
+
+  AccountItem({
+    required this.walletKey,
+    required this.keyIndex,
+    required this.walletKeyDetails
+  });
+
   @override
   Widget build(BuildContext context) {
     var leftColumn = Column(
@@ -14,7 +25,7 @@ class AccountItem extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            child: Text('Account #0', style: TextStyle(fontSize: 15, color: Theme.of(context).accentColor)),
+            child: Text('Account #' + keyIndex.toString(), style: TextStyle(fontSize: 15, color: Theme.of(context).accentColor)),
           ),
           Container(
             child: Text('Exchange', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Theme.of(context).accentColor)),
@@ -94,6 +105,8 @@ class AccountItem extends StatelessWidget {
   }
 
   void tapItem() {
-    Get.toNamed(Routes.WALLET_INFO);
+    Get.toNamed(Routes.WALLET_INFO, arguments: {
+      'walletKey': walletKey
+    });
   }
 }

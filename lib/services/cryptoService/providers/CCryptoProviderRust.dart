@@ -183,18 +183,33 @@ class CCryptoProviderRust extends CCryptoProvider {
   @override
   SWalletDescriptor getDefaultDescriptor(SMnemonicRootKey mnemonicRootKey) {
     var obj = SpecterRust.get_default_descriptors(mnemonicRootKey.rootPrivateKey, 'bitcoin');
-    return SWalletDescriptor(
-      recv: obj['recv_descriptor'],
-      change: obj['change_descriptor']
-    );
+
+    String descriptor = obj['recv_descriptor'];
+    SWalletDescriptor desc = getParsedDescriptor(mnemonicRootKey, descriptor);
+    if (desc.recv != obj['recv_descriptor']) {
+      throw 'wrong recv_descriptor';
+    }
+    if (desc.change != obj['change_descriptor']) {
+      throw 'wrong change_descriptor';
+    }
+
+    return desc;
   }
 
   @override
   SWalletDescriptor getParsedDescriptor(SMnemonicRootKey mnemonicRootKey, String descriptor) {
     var obj = SpecterRust.parse_descriptor(descriptor, mnemonicRootKey.rootPrivateKey, 'bitcoin');
+    List<SWalletKey> _keys = [];
+    obj['keys'].forEach((key) {
+      _keys.add(SWalletKey.parseRAW(key));
+    });
+    
     return SWalletDescriptor(
       recv: obj['recv_descriptor'],
-      change: obj['change_descriptor']
+      change: obj['change_descriptor'],
+      policy: obj['policy'],
+      type: obj['type'],
+      keys: _keys
     );
   }
 }

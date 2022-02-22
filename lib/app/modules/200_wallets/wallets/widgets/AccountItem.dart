@@ -4,10 +4,21 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:specter_mobile/app/modules/200_wallets/walletInfo/views/wallet_info_view.dart';
 import 'package:specter_mobile/app/routes/app_pages.dart';
+import 'package:specter_mobile/services/cryptoService/providers/CCryptoProvider.dart';
 
 import '../../../../../utils.dart';
 
 class AccountItem extends StatelessWidget {
+  final String walletKey;
+  final SWalletKey walletKeyDetails;
+  final int keyIndex;
+
+  AccountItem({
+    required this.walletKey,
+    required this.walletKeyDetails,
+    required this.keyIndex
+  });
+
   @override
   Widget build(BuildContext context) {
     return InkWell(
@@ -60,7 +71,7 @@ class AccountItem extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Account #0', style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Theme.of(context).accentColor)),
+                Text('Account #' + keyIndex.toString(), style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Theme.of(context).accentColor)),
                 Container(
                   width: double.infinity,
                   padding: EdgeInsets.only(right: 20),
@@ -104,6 +115,8 @@ class AccountItem extends StatelessWidget {
   }
 
   void tapItem() {
-    Get.toNamed(Routes.WALLET_INFO);
+    Get.toNamed(Routes.WALLET_INFO, arguments: {
+      'walletKey': walletKey
+    });
   }
 }

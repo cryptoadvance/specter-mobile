@@ -132,4 +132,14 @@ class CryptoContainerModel {
   List<SWalletModel> getWallets() {
     return _wallets;
   }
+
+  SWalletModel getWalletByKey(String key) {
+    SWalletModel? walletItem;
+    _wallets.forEach((item) {
+      if (item.key == key) {
+        walletItem = item;
+      }
+    });
+    return walletItem!;
+  }
 }

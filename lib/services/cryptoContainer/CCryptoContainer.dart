@@ -301,6 +301,10 @@ class CCryptoContainer {
     return true;
   }
 
+  SWalletModel getWalletByKey(String key) {
+    return cryptoContainerModel!.getWalletByKey(key);
+  }
+
   bool isSeedsInit() {
     return cryptoContainerModel!.isSeedsInit();
   }

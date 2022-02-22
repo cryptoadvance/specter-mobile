@@ -66,7 +66,7 @@ class WalletAccountView extends GetView<WalletAccountController> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               TopSide(
-                  title: 'Primary',
+                  title: controller.walletItem!.name,
                   titleType: TOP_SIDE_TITLE_TYPE.WALLET,
                   menuType: TOP_SIDE_MENU_TYPE.OPTIONS,
                   openMenu: () {
@@ -120,7 +120,9 @@ class WalletAccountView extends GetView<WalletAccountController> {
   Widget getScrollArea() {
     return CustomScrollView(
         slivers: <Widget>[
-          AccountsList()
+          AccountsList(
+            walletItem: controller.walletItem!
+          )
         ]
     );
   }

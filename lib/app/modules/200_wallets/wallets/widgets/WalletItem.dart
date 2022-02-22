@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:specter_mobile/app/models/CryptoContainerModel.dart';
 import 'package:specter_mobile/app/routes/app_pages.dart';
+import 'package:specter_mobile/services/cryptoService/providers/CCryptoProvider.dart';
 
 import '../../../../../utils.dart';
 import 'AccountItem.dart';
@@ -56,7 +57,7 @@ class WalletItem extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Multisig (?)', style: TextStyle(fontSize: 14, color: Theme.of(context).accentColor)),
+                Text(walletModel.descriptor.policy, style: TextStyle(fontSize: 14, color: Theme.of(context).accentColor)),
                 Container(
                   margin: EdgeInsets.only(left: 10),
                   child: Text('80h/1/0 (?)', style: TextStyle(fontSize: 14, color: Theme.of(context).accentColor))
@@ -85,7 +86,8 @@ class WalletItem extends StatelessWidget {
 
   Widget getBottomPanel() {
     List<Widget> rows = [];
-    for (int i = 0; i < 2; i++) {
+    int keyIndex = 0;
+    walletModel.descriptor.keys.forEach((SWalletKey walletKeyDetails) {
       rows.add(Container(
           width: double.infinity,
           decoration: BoxDecoration(
@@ -94,16 +96,24 @@ class WalletItem extends StatelessWidget {
               )
           ),
           margin: EdgeInsets.only(top: 15),
-          child: AccountItem()
+          child: AccountItem(
+            walletKey: walletModel.key,
+            walletKeyDetails: walletKeyDetails,
+            keyIndex: keyIndex
+          )
       ));
-    }
+      keyIndex++;
+    });
+
     return Column(
         children: rows
     );
   }
 
   void tapItem() {
-    Get.toNamed(Routes.WALLET_ACCOUNT);
+    Get.toNamed(Routes.WALLET_ACCOUNT, arguments: {
+      'walletKey': walletModel.key
+    });
   }
 }
 

@@ -8,6 +8,8 @@ enum WALLET_INFO_TAB {
 }
 
 class WalletInfoController extends GetxController {
+  final String walletKey = Get.arguments['walletKey'];
+
   var currentTab = WALLET_INFO_TAB.DETAILS.obs;
 
   @override

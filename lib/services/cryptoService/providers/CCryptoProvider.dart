@@ -62,23 +62,77 @@ class SMnemonicRootKey {
   }
 }
 
-class SWalletDescriptor {
-  String recv;
-  String change;
+class SWalletKey {
+  final String raw;
+  SWalletKey({
+    required this.raw
+  });
 
-  SWalletDescriptor({required this.recv, required this.change});
+  static SWalletKey parseRAW(raw) {
+    return SWalletKey(raw: raw);
+  }
 
-  static SWalletDescriptor fromJSON(obj) {
-    return SWalletDescriptor(
-      recv: obj['recv'],
-      change: obj['change']
+  static SWalletKey fromJSON(obj) {
+    return SWalletKey(
+      raw: obj['raw']
     );
   }
 
   Map<String, dynamic> toJSON() {
     return {
+      'raw': raw
+    };
+  }
+
+  @override
+  String toString() {
+    return jsonEncode(toJSON());
+  }
+}
+
+class SWalletDescriptor {
+  String recv;
+  String change;
+  String policy;
+  String type;
+
+  List<SWalletKey> keys;
+
+  SWalletDescriptor({
+    required this.recv,
+    required this.change,
+    required this.policy,
+    required this.type,
+    required this.keys
+  });
+
+  static SWalletDescriptor fromJSON(obj) {
+    List<SWalletKey> _keys = [];
+    if (obj['keys'] != null) {
+      obj['keys'].forEach((key) {
+        _keys.add(SWalletKey.fromJSON(key));
+      });
+    }
+
+    return SWalletDescriptor(
+      recv: obj['recv'],
+      change: obj['change'],
+      policy: obj['policy'],
+      type: obj['type'],
+      keys: _keys
+    );
+  }
+
+  Map<String, dynamic> toJSON() {
+    List<dynamic> _keys = [];
+    keys.forEach((key) {
+      _keys.add(key.toJSON());
+    });
+
+    return {
       'recv': recv,
-      'change': change
+      'change': change,
+      'keys': _keys
     };
   }
 
