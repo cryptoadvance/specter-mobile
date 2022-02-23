@@ -3,12 +3,14 @@ import 'package:get/get.dart';
 import '../controllers/wallet_info_details_controller.dart';
 
 class WalletInfoDetailsView extends GetView<WalletInfoDetailsController> {
-  final WalletInfoDetailsController controller = Get.put(WalletInfoDetailsController());
+  final WalletInfoDetailsController _controller;
+
+  WalletInfoDetailsView({required WalletInfoDetailsController controller}): _controller = controller;
 
   @override
   Widget build(BuildContext context) {
     List<Widget> rows = [];
-    controller.list.forEach((node) {
+    _controller.list.forEach((node) {
       rows.add(Container(
         margin: EdgeInsets.only(top: rows.isEmpty?0:5),
         child: WalletInfoDetailsItem(node)

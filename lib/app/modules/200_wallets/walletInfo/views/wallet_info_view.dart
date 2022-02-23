@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:specter_mobile/app/modules/200_wallets/walletInfo/controllers/wallet_info_controller.dart';
+import 'package:specter_mobile/app/modules/200_wallets/walletInfo/widgets/addresses/contollers/wallet_info_addresses_controller.dart';
+import 'package:specter_mobile/app/modules/200_wallets/walletInfo/widgets/details/controllers/wallet_info_details_controller.dart';
+import 'package:specter_mobile/app/modules/200_wallets/walletInfo/widgets/transactions/controllers/wallet_info_transactions_controller.dart';
 import 'package:specter_mobile/app/widgets/BottomSlideMenu.dart';
 import 'package:specter_mobile/app/widgets/TopSide.dart';
 import 'package:specter_mobile/app/widgets/slidingUpPanel/SlidingUpPanelController.dart';
@@ -13,6 +16,10 @@ import 'package:specter_mobile/app/widgets/LightTab.dart';
 
 class WalletInfoView extends GetView<WalletInfoController> {
   final SlidingUpPanelController _slidingUpPanelController = Get.find<SlidingUpPanelController>();
+
+  final WalletInfoDetailsController _walletInfoDetailsController = Get.find<WalletInfoDetailsController>();
+  final WalletInfoAddressesController _walletInfoAddressesController = Get.find<WalletInfoAddressesController>();
+  final WalletInfoTransactionsController _walletInfoTransactionsController = Get.find<WalletInfoTransactionsController>();
 
   @override
   Widget build(BuildContext context) {
@@ -108,13 +115,19 @@ class WalletInfoView extends GetView<WalletInfoController> {
   Widget getTabContent() {
     switch(controller.currentTab.value) {
       case WALLET_INFO_TAB.DETAILS: {
-        return WalletInfoDetailsView();
+        return WalletInfoDetailsView(
+          controller: _walletInfoDetailsController
+        );
       }
       case WALLET_INFO_TAB.ADDRESSES: {
-        return WalletInfoAddressesView();
+        return WalletInfoAddressesView(
+          controller: _walletInfoAddressesController
+        );
       }
       case WALLET_INFO_TAB.TRANSACTIONS: {
-        return WalletInfoTransactionsView();
+        return WalletInfoTransactionsView(
+          controller: _walletInfoTransactionsController
+        );
       }
     }
   }

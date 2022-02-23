@@ -28,5 +28,7 @@ class WalletInfoDetailsController extends GetxController {
   }
 
   @override
-  void onClose() {}
+  void onClose() {
+    super.onClose();
+  }
 }

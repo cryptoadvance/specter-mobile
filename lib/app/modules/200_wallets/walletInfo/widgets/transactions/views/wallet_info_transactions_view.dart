@@ -11,7 +11,9 @@ import 'package:specter_mobile/app/widgets/LightTab.dart';
 import '../widgets/wallet_info_transactions_item.dart';
 
 class WalletInfoTransactionsView extends GetView<WalletInfoTransactionsController> {
-  final WalletInfoTransactionsController controller = Get.put(WalletInfoTransactionsController());
+  final WalletInfoTransactionsController _controller;
+
+  WalletInfoTransactionsView({required WalletInfoTransactionsController controller}): _controller = controller;
 
   @override
   Widget build(BuildContext context) {
@@ -32,9 +34,9 @@ class WalletInfoTransactionsView extends GetView<WalletInfoTransactionsControlle
                 LightTabNode('HISTORY', key: WALLET_INFO_TRANSACTIONS_TAB.HISTORY.toString()),
                 LightTabNode('UTXO', key: WALLET_INFO_TRANSACTIONS_TAB.UTXO.toString())
               ],
-              tabKey: controller.currentTab.toString(),
+              tabKey: _controller.currentTab.toString(),
               onSelect: (String key) {
-                controller.setCurrentTab(key);
+                _controller.setCurrentTab(key);
               }
             ),
           ),
@@ -108,7 +110,7 @@ class WalletInfoTransactionsView extends GetView<WalletInfoTransactionsControlle
     }*/
 
     return ListView.builder(
-        itemCount: controller.items.length,
+        itemCount: _controller.items.length,
         itemBuilder: (context, index) {
           return Container(
               margin: EdgeInsets.only(top: (index == 0)?10:10, left: 15, right: 15),
