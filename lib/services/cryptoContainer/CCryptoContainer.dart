@@ -236,7 +236,9 @@ class CCryptoContainer {
 
       //
       Map<String, dynamic> data = jsonDecode(containerData);
-      cryptoContainerModel!.loadStore(data);
+      if (!cryptoContainerModel!.loadStore(data)) {
+        return false;
+      }
 
       //
       print('readCryptoContainer: ' + containerData);

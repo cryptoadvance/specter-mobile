@@ -62,7 +62,7 @@ class WalletInfoView extends GetView<WalletInfoController> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               TopSide(
-                  title: 'Account #0',
+                  title: 'Account #' + controller.keyIndex.toString(),
                   titleType: TOP_SIDE_TITLE_TYPE.WALLET,
                   menuType: TOP_SIDE_MENU_TYPE.OPTIONS,
                   openMenu: () {

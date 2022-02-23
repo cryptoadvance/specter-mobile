@@ -45,22 +45,16 @@ class CryptoContainerModel {
     required authTypes
   }): _authTypes = authTypes;
 
-  void loadStore(Map<String, dynamic> data) {
+  bool loadStore(Map<String, dynamic> data) {
     _pinCodeSign = data['pinCodeSign'];
     _seedKeys = data['seedKeys'] ?? [];
 
     _wallets = [];
-    try {
-      List<dynamic> _walletsList = data['wallets'] ?? [];
-      _walletsList.forEach((wallet) {
-        _wallets.add(SWalletModel.fromJSON(wallet));
-      });
-    } catch(e) {
-      if (!kDebugMode) {
-        rethrow;
-      }
-      print(e);
-    }
+    List<dynamic> _walletsList = data['wallets'] ?? [];
+    _walletsList.forEach((wallet) {
+      _wallets.add(SWalletModel.fromJSON(wallet));
+    });
+    return true;
   }
 
   @override

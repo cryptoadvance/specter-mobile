@@ -132,6 +132,8 @@ class SWalletDescriptor {
     return {
       'recv': recv,
       'change': change,
+      'policy': policy,
+      'type': type,
       'keys': _keys
     };
   }

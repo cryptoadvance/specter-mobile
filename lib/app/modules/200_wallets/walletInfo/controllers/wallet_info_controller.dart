@@ -1,5 +1,7 @@
 import 'package:get/get.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
+import 'package:specter_mobile/app/models/CryptoContainerModel.dart';
+import 'package:specter_mobile/services/CServices.dart';
 
 enum WALLET_INFO_TAB {
   DETAILS,
@@ -9,12 +11,16 @@ enum WALLET_INFO_TAB {
 
 class WalletInfoController extends GetxController {
   final String walletKey = Get.arguments['walletKey'];
+  final int keyIndex = Get.arguments['keyIndex'];
+  SWalletModel? walletItem;
 
   var currentTab = WALLET_INFO_TAB.DETAILS.obs;
 
   @override
   void onInit() {
     super.onInit();
+
+    walletItem = CServices.crypto.controlWalletsService.getWalletByKey(walletKey);
   }
 
   @override

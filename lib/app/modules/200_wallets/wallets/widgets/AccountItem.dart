@@ -116,7 +116,8 @@ class AccountItem extends StatelessWidget {
 
   void tapItem() {
     Get.toNamed(Routes.WALLET_INFO, arguments: {
-      'walletKey': walletKey
+      'walletKey': walletKey,
+      'keyIndex': keyIndex
     });
   }
 }
