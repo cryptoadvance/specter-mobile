@@ -181,11 +181,11 @@ class CCryptoProviderRust extends CCryptoProvider {
   }
 
   @override
-  SWalletDescriptor getDefaultDescriptor(SMnemonicRootKey mnemonicRootKey) {
-    var obj = SpecterRust.get_default_descriptors(mnemonicRootKey.rootPrivateKey, 'bitcoin');
+  SWalletDescriptor getDefaultDescriptor(SMnemonicRootKey mnemonicRootKey, WalletNetwork net) {
+    var obj = SpecterRust.get_default_descriptors(mnemonicRootKey.rootPrivateKey, net.toShortString().toLowerCase());
 
     String descriptor = obj['recv_descriptor'];
-    SWalletDescriptor desc = getParsedDescriptor(mnemonicRootKey, descriptor);
+    SWalletDescriptor desc = getParsedDescriptor(mnemonicRootKey, descriptor, net);
     if (desc.recv != obj['recv_descriptor']) {
       throw 'wrong recv_descriptor';
     }
@@ -197,14 +197,15 @@ class CCryptoProviderRust extends CCryptoProvider {
   }
 
   @override
-  SWalletDescriptor getParsedDescriptor(SMnemonicRootKey mnemonicRootKey, String descriptor) {
-    var obj = SpecterRust.parse_descriptor(descriptor, mnemonicRootKey.rootPrivateKey, 'bitcoin');
+  SWalletDescriptor getParsedDescriptor(SMnemonicRootKey mnemonicRootKey, String descriptor, WalletNetwork net) {
+    var obj = SpecterRust.parse_descriptor(descriptor, mnemonicRootKey.rootPrivateKey, net.toShortString().toLowerCase());
     List<SWalletKey> _keys = [];
     obj['keys'].forEach((key) {
       _keys.add(SWalletKey.parseRAW(key));
     });
     
     return SWalletDescriptor(
+      net: net,
       recv: obj['recv_descriptor'],
       change: obj['change_descriptor'],
       policy: obj['policy'],

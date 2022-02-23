@@ -123,7 +123,21 @@ class SWalletKey {
   }
 }
 
+enum WalletNetwork {
+  BITCOIN,
+  TESTNET,
+  SIGNET,
+  REGTEST
+}
+
+extension ParseToString on WalletNetwork {
+  String toShortString() {
+    return toString().split('.').last;
+  }
+}
+
 class SWalletDescriptor {
+  WalletNetwork net;
   String recv;
   String change;
   String policy;
@@ -132,6 +146,7 @@ class SWalletDescriptor {
   List<SWalletKey> keys;
 
   SWalletDescriptor({
+    required this.net,
     required this.recv,
     required this.change,
     required this.policy,
@@ -148,6 +163,7 @@ class SWalletDescriptor {
     }
 
     return SWalletDescriptor(
+      net: getWalletNetwork(obj['net']),
       recv: obj['recv'],
       change: obj['change'],
       policy: obj['policy'],
@@ -163,6 +179,7 @@ class SWalletDescriptor {
     });
 
     return {
+      'net': net.toShortString(),
       'recv': recv,
       'change': change,
       'policy': policy,
@@ -174,6 +191,22 @@ class SWalletDescriptor {
   @override
   String toString() {
     return jsonEncode(toJSON());
+  }
+
+  static WalletNetwork getWalletNetwork(String str) {
+    if (str == 'BITCOIN') {
+      return WalletNetwork.BITCOIN;
+    }
+    if (str == 'TESTNET') {
+      return WalletNetwork.TESTNET;
+    }
+    if (str == 'SIGNET') {
+      return WalletNetwork.SIGNET;
+    }
+    if (str == 'REGTEST') {
+      return WalletNetwork.REGTEST;
+    }
+    return WalletNetwork.BITCOIN;
   }
 
   String getWalletKey() {
@@ -217,6 +250,6 @@ abstract class CCryptoProvider {
 
   //Wallets API
   SMnemonicRootKey mnemonicToRootKey(String mnemonic, String pass);
-  SWalletDescriptor getDefaultDescriptor(SMnemonicRootKey mnemonicRootKey);
-  SWalletDescriptor getParsedDescriptor(SMnemonicRootKey mnemonicRootKey, String descriptor);
+  SWalletDescriptor getDefaultDescriptor(SMnemonicRootKey mnemonicRootKey, WalletNetwork net);
+  SWalletDescriptor getParsedDescriptor(SMnemonicRootKey mnemonicRootKey, String descriptor, WalletNetwork net);
 }

@@ -27,7 +27,7 @@ class WalletInfoDetailsController extends GetxController {
     print(walletKeyDetails.raw);
 
     list = [];
-    list.add(WalletInfoDetailsNode('Net', 'Mainnet (?)'));
+    list.add(WalletInfoDetailsNode('Net', walletItem.descriptor.net.toShortString().toLowerCase()));
     list.add(WalletInfoDetailsNode('Type', walletItem.descriptor.policy));
     list.add(WalletInfoDetailsNode('Format', walletItem.descriptor.type));
     list.add(WalletInfoDetailsNode('Derivation', walletKeyDetails.getDerivationPath()));
