@@ -88,6 +88,39 @@ class SWalletKey {
   String toString() {
     return jsonEncode(toJSON());
   }
+
+  String? fingerprint, derivationPath;
+
+  void  _processRaw() {
+    try {
+      if (raw[0] != '[') {
+        return;
+      }
+
+      int x = raw.indexOf(']');
+      String subRaw = raw.substring(1, x);
+      x = subRaw.indexOf('/');
+      fingerprint = subRaw.substring(0, x);
+      derivationPath = subRaw.substring(x + 1);
+      print(subRaw);
+    } catch(e) {
+      print(e);
+    }
+  }
+
+  String getDerivationPath() {
+    if (derivationPath == null) {
+      _processRaw();
+    }
+    return derivationPath!;
+  }
+
+  String getFingerprint() {
+    if (fingerprint == null) {
+      _processRaw();
+    }
+    return fingerprint!;
+  }
 }
 
 class SWalletDescriptor {

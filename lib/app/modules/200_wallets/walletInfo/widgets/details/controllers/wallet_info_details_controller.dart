@@ -1,4 +1,7 @@
 import 'package:get/get.dart';
+import 'package:specter_mobile/app/models/CryptoContainerModel.dart';
+import 'package:specter_mobile/app/modules/200_wallets/walletInfo/controllers/wallet_info_controller.dart';
+import 'package:specter_mobile/services/cryptoService/providers/CCryptoProvider.dart';
 
 class WalletInfoDetailsNode {
   String name;
@@ -7,19 +10,30 @@ class WalletInfoDetailsNode {
 }
 
 class WalletInfoDetailsController extends GetxController {
-  final List<WalletInfoDetailsNode> list = [
-    WalletInfoDetailsNode('Net', 'Mainnet'),
-    WalletInfoDetailsNode('Type', 'Single key'),
-    WalletInfoDetailsNode('Format', 'Native Segwit'),
-    WalletInfoDetailsNode('Derivation', "84h’/1’/0"),
-    WalletInfoDetailsNode('Fingerprint', "1234abcd"),
-    WalletInfoDetailsNode('Balance', "0.123 BTC"),
-    WalletInfoDetailsNode('Balance, fiat', "4’182 USD")
-  ];
+  late SWalletModel walletItem;
+  late int keyIndex;
+
+  late List<WalletInfoDetailsNode> list;
 
   @override
   void onInit() {
     super.onInit();
+
+    WalletInfoController walletInfoController = Get.find<WalletInfoController>();
+    walletItem = walletInfoController.walletItem!;
+    keyIndex = walletInfoController.keyIndex;
+
+    SWalletKey walletKeyDetails = walletItem.descriptor.keys[keyIndex];
+    print(walletKeyDetails.raw);
+
+    list = [];
+    list.add(WalletInfoDetailsNode('Net', 'Mainnet (?)'));
+    list.add(WalletInfoDetailsNode('Type', walletItem.descriptor.policy));
+    list.add(WalletInfoDetailsNode('Format', walletItem.descriptor.type));
+    list.add(WalletInfoDetailsNode('Derivation', walletKeyDetails.getDerivationPath()));
+    list.add(WalletInfoDetailsNode('Fingerprint', walletKeyDetails.getFingerprint()));
+    list.add(WalletInfoDetailsNode('Balance', '0.0 BTC'));
+    list.add(WalletInfoDetailsNode('Balance, fiat', '0 USD'));
   }
 
   @override
