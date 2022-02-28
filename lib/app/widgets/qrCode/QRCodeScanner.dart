@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:specter_mobile/app/modules/100_auth/104_onboarding/controllers/onboarding_controller.dart';
 import 'package:specter_mobile/app/routes/app_pages.dart';
+import 'package:specter_mobile/services/CCryptoExceptions.dart';
 import 'package:specter_mobile/services/CServices.dart';
 import 'package:specter_mobile/services/cryptoService/providers/CCryptoProvider.dart';
 
@@ -295,30 +296,31 @@ class QRCodeScannerState extends State<QRCodeScanner> {
   }
 
   void processAddWalletSimple(BuildContext context, QRCodeScannerResultAddWalletSimple qrCode) async {
-    if (!(await CServices.crypto.controlWalletsService.addExistWallet(
-        walletName: qrCode.name,
-        descriptor: qrCode.descriptor
-    ))) {
-      await CServices.notify.addMessage(
-          context, 'Oops!!', 'Please try again.',
-          actionTitle: 'Try Again'
-      );
-      return;
-    }
-
-    CServices.notify.closeDialog();
-    await Get.offAllNamed(Routes.ONBOARDING, arguments: {
-      'onboardingMessageType': ONBOARDING_MESSAGE_TYPE.WALLET_READY
-    });
+    addWallet(walletName: qrCode.name, descriptor: qrCode.descriptor);
   }
 
   void processAddWalletJSON(BuildContext context, QRCodeScannerResultAddWalletJSON qrCode) async {
-    if (!(await CServices.crypto.controlWalletsService.addExistWallet(
-        walletName: qrCode.label,
-        descriptor: qrCode.descriptor
-    ))) {
+    addWallet(walletName: qrCode.label, descriptor: qrCode.descriptor);
+  }
+
+  void addWallet({
+    required String walletName,
+    required String descriptor
+  }) async {
+    try {
+      if (!(await CServices.crypto.controlWalletsService.addExistWallet(
+          walletName: walletName,
+          descriptor: descriptor
+      ))) {
+        await CServices.notify.addMessage(
+            context, 'Oops!!', 'Please try again.',
+            actionTitle: 'Try Again'
+        );
+        return;
+      }
+    } on CCryptoExceptionsWalletExists catch (e) {
       await CServices.notify.addMessage(
-          context, 'Oops!!', 'Please try again.',
+          context, 'Oops!!', 'Wallet exists.',
           actionTitle: 'Try Again'
       );
       return;

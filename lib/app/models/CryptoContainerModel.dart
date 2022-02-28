@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
+import 'package:specter_mobile/services/CCryptoExceptions.dart';
 import 'package:specter_mobile/services/cryptoContainer/CCryptoContainer.dart';
 import 'package:specter_mobile/services/cryptoService/providers/CCryptoProvider.dart';
 
@@ -107,6 +108,10 @@ class CryptoContainerModel {
   }
 
   Future<bool> addNewWallet(SWalletModel wallet) async {
+    if (checkWalletExists(wallet.key)) {
+      throw CCryptoExceptionsWalletExists();
+    }
+
     _wallets.add(wallet);
     return true;
   }
@@ -135,5 +140,15 @@ class CryptoContainerModel {
       }
     });
     return walletItem!;
+  }
+
+  bool checkWalletExists(String key) {
+    bool isExists = false;
+    _wallets.forEach((item) {
+      if (item.key == key) {
+        isExists = true;
+      }
+    });
+    return isExists;
   }
 }
