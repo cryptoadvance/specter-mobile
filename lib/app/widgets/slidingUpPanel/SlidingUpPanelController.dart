@@ -12,7 +12,6 @@ class SlidingUpPanelController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    print('slidingUpPanelController - init');
   }
 
   @override
@@ -23,7 +22,6 @@ class SlidingUpPanelController extends GetxController {
   @override
   void onClose() {
     super.onClose();
-    print('slidingUpPanelController - close');
   }
 
   void open(Widget child) {

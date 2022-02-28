@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
@@ -14,7 +15,8 @@ import 'QRCodeView.dart';
 enum QRCodeScannerTypes {
   UNKNOWN,
   ADD_WALLET_SIMPLE,
-  ADD_WALLET_JSON
+  ADD_WALLET_JSON,
+  PARSE_TRANSACTION
 }
 
 extension ParseToString on QRCodeScannerTypes {
@@ -53,6 +55,16 @@ class QRCodeScannerResultAddWalletJSON extends QRCodeScannerResult {
   }
 }
 
+class QRCodeScannerResultParseTransaction extends QRCodeScannerResult {
+  final String raw;
+
+  QRCodeScannerResultParseTransaction({
+    required this.raw
+  }) {
+    qrCodeType = QRCodeScannerTypes.PARSE_TRANSACTION;
+  }
+}
+
 class QRCodeScannerStatus {
   bool isFind = false;
 
@@ -88,6 +100,17 @@ class QRCodeScannerState extends State<QRCodeScanner> {
       controller!.pauseCamera();
     }
     controller!.resumeCamera();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    controller?.dispose();
+    super.dispose();
   }
 
   @override
@@ -164,6 +187,10 @@ class QRCodeScannerState extends State<QRCodeScanner> {
   }
 
   QRCodeScannerResult? determineQRCodeType(String code) {
+    if (kDebugMode) {
+      print('code: ' + code);
+    }
+
     if (code.indexOf('addwallet ') == 0) {
       code = code.substring(10);
       int x = code.indexOf('&');
@@ -209,6 +236,22 @@ class QRCodeScannerState extends State<QRCodeScanner> {
       }
     }
 
+    {
+      try {
+        final bytes = base64.decode(code);
+
+        String p = String.fromCharCode(bytes[0]);
+        String s = String.fromCharCode(bytes[1]);
+        String b = String.fromCharCode(bytes[2]);
+        String t = String.fromCharCode(bytes[3]);
+        if (p == 'p' && s == 's' && b == 'b' && t == 't') {
+          return QRCodeScannerResultParseTransaction(
+            raw: code
+          );
+        }
+      } catch(_) {}
+    }
+
     return null;
   }
 
@@ -225,26 +268,26 @@ class QRCodeScannerState extends State<QRCodeScanner> {
     }
   }
 
-  @override
-  void dispose() {
-    controller?.dispose();
-    super.dispose();
-  }
-
-
   Future<void> onFound(BuildContext context) async {
     QRCodeScannerResult qrCodeScannerResult = _qrCodeScannerStatus.result!;
     await CServices.notify.addDialog(context, child: QRCodeView(
         qrCodeScannerResult: qrCodeScannerResult,
         onProcess: () {
-          if (qrCodeScannerResult.qrCodeType == QRCodeScannerTypes.ADD_WALLET_SIMPLE) {
-            QRCodeScannerResultAddWalletSimple qrCode = qrCodeScannerResult as QRCodeScannerResultAddWalletSimple;
-            processAddWalletSimple(context, qrCode);
-          }
-
-          if (qrCodeScannerResult.qrCodeType == QRCodeScannerTypes.ADD_WALLET_JSON) {
-            QRCodeScannerResultAddWalletJSON qrCode = qrCodeScannerResult as QRCodeScannerResultAddWalletJSON;
-            processAddWalletJSON(context, qrCode);
+          switch(qrCodeScannerResult.qrCodeType) {
+            case QRCodeScannerTypes.UNKNOWN:
+              break;
+            case QRCodeScannerTypes.ADD_WALLET_SIMPLE:
+              QRCodeScannerResultAddWalletSimple qrCode = qrCodeScannerResult as QRCodeScannerResultAddWalletSimple;
+              processAddWalletSimple(context, qrCode);
+              break;
+            case QRCodeScannerTypes.ADD_WALLET_JSON:
+              QRCodeScannerResultAddWalletJSON qrCode = qrCodeScannerResult as QRCodeScannerResultAddWalletJSON;
+              processAddWalletJSON(context, qrCode);
+              break;
+            case QRCodeScannerTypes.PARSE_TRANSACTION:
+              QRCodeScannerResultParseTransaction qrCode = qrCodeScannerResult as QRCodeScannerResultParseTransaction;
+              processParseTransaction(context, qrCode);
+              break;
           }
         }
     ));
@@ -284,5 +327,9 @@ class QRCodeScannerState extends State<QRCodeScanner> {
     await Get.offAllNamed(Routes.ONBOARDING, arguments: {
       'onboardingMessageType': ONBOARDING_MESSAGE_TYPE.WALLET_READY
     });
+  }
+
+  void processParseTransaction(BuildContext context, QRCodeScannerResultParseTransaction qrCode) async {
+
   }
 }

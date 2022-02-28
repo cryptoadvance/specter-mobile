@@ -25,6 +25,7 @@ class SlidingUpPanelView extends GetView<SlidingUpPanelController> {
       },
       onPanelClosed: () {
         _controller.slidingUpPanelIsOpen.value = false;
+        _controller.child.value = Container();
       },
       body: getBody(),
       panel: getSlideMenu(),

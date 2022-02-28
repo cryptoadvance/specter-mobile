@@ -91,6 +91,9 @@ class QRCodeView extends StatelessWidget {
             ]
           )
         );
+      case QRCodeScannerTypes.PARSE_TRANSACTION:
+        QRCodeScannerResultParseTransaction qrCode = qrCodeScannerResult as QRCodeScannerResultParseTransaction;
+        return Text('Transaction: ' + qrCode.raw);
     }
   }
 
