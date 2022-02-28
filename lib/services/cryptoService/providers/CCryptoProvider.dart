@@ -3,6 +3,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:crypto/crypto.dart';
+import 'package:specter_mobile/app/widgets/qrCode/QRCodeScanner.dart';
 
 import '../../CEntropyExternalGenerationService.dart';
 import '../CGenerateSeedService.dart';
@@ -252,4 +253,7 @@ abstract class CCryptoProvider {
   SMnemonicRootKey mnemonicToRootKey(String mnemonic, String pass);
   SWalletDescriptor getDefaultDescriptor(SMnemonicRootKey mnemonicRootKey, WalletNetwork net);
   SWalletDescriptor getParsedDescriptor(SMnemonicRootKey mnemonicRootKey, String descriptor, WalletNetwork net);
+
+  //Transactions API
+  void parseTransaction(QRCodeScannerResultParseTransaction transaction, List<dynamic> wallets, WalletNetwork net);
 }

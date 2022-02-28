@@ -9,6 +9,7 @@ import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:specter_mobile/app/modules/100_auth/104_onboarding/controllers/onboarding_controller.dart';
 import 'package:specter_mobile/app/routes/app_pages.dart';
 import 'package:specter_mobile/services/CServices.dart';
+import 'package:specter_mobile/services/cryptoService/providers/CCryptoProvider.dart';
 
 import 'QRCodeView.dart';
 
@@ -330,6 +331,9 @@ class QRCodeScannerState extends State<QRCodeScanner> {
   }
 
   void processParseTransaction(BuildContext context, QRCodeScannerResultParseTransaction qrCode) async {
-
+    List<String> wallets = [
+      'test'
+    ];
+    CServices.crypto.cryptoProvider.parseTransaction(qrCode, wallets, WalletNetwork.BITCOIN);
   }
 }

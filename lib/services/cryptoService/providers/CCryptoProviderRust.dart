@@ -3,6 +3,7 @@ import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:hex/hex.dart';
+import 'package:specter_mobile/app/widgets/qrCode/QRCodeScanner.dart';
 import 'package:specter_rust/specter_rust.dart';
 
 import '../../../utils/bip39/bip39.dart' as bip39;
@@ -212,5 +213,11 @@ class CCryptoProviderRust extends CCryptoProvider {
       type: obj['type'],
       keys: _keys
     );
+  }
+
+  @override
+  void parseTransaction(QRCodeScannerResultParseTransaction transaction, List<dynamic> wallets, WalletNetwork net) {
+    var obj = SpecterRust.parse_transaction(transaction.raw, wallets, net.toShortString().toLowerCase());
+    print(obj.toString());
   }
 }
