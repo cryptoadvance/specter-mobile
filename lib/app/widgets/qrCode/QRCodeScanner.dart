@@ -333,9 +333,12 @@ class QRCodeScannerState extends State<QRCodeScanner> {
   }
 
   void processParseTransaction(BuildContext context, QRCodeScannerResultParseTransaction qrCode) async {
-    List<String> wallets = [
-      'test'
-    ];
-    CServices.crypto.cryptoProvider.parseTransaction(qrCode, wallets, WalletNetwork.BITCOIN);
+    if (!(CServices.crypto.controlTransactionsService.parseTransaction(qrCode))) {
+      await CServices.notify.addMessage(
+          context, 'Oops!!', 'Please try again.',
+          actionTitle: 'Try Again'
+      );
+      return;
+    }
   }
 }

@@ -3,12 +3,14 @@ import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:hex/hex.dart';
+import 'package:specter_mobile/app/models/CryptoContainerModel.dart';
 import 'package:specter_mobile/app/widgets/qrCode/QRCodeScanner.dart';
 import 'package:specter_rust/specter_rust.dart';
 
 import '../../../utils/bip39/bip39.dart' as bip39;
 
 import '../../CEntropyExternalGenerationService.dart';
+import '../CControlTransactionsService.dart';
 import '../CGenerateSeedService.dart';
 import '../CRecoverySeedService.dart';
 import 'CCryptoProvider.dart';
@@ -216,8 +218,56 @@ class CCryptoProviderRust extends CCryptoProvider {
   }
 
   @override
-  void parseTransaction(QRCodeScannerResultParseTransaction transaction, List<dynamic> wallets, WalletNetwork net) {
-    var obj = SpecterRust.parse_transaction(transaction.raw, wallets, net.toShortString().toLowerCase());
+  SCryptoTransactionModel parseTransaction(QRCodeScannerResultParseTransaction transaction, List<SWalletModel> searchWallets, WalletNetwork net) {
+    List<dynamic> walletsJson = [];
+    searchWallets.forEach((wallet) {
+      walletsJson.add({
+        'recv_descriptor': wallet.descriptor.recv,
+        'change_descriptor': wallet.descriptor.change
+      });
+    });
+    var obj = SpecterRust.parse_transaction(transaction.raw, walletsJson, net.toShortString().toLowerCase());
+
+    num fee = obj['fee'];
+    List<dynamic> inputs = obj['inputs'];
+    List<dynamic> outputs = obj['outputs'];
+
+    List<SCryptoTransactionPoint> inputsData = _parseTransactionPoints(searchWallets, inputs );
+    List<SCryptoTransactionPoint> outputsData = _parseTransactionPoints(searchWallets, outputs);
+
+    SCryptoTransactionModel tx = SCryptoTransactionModel(
+      fee: fee.toDouble(),
+      inputs: inputsData,
+      outputs: outputsData
+    );
+
     print(obj.toString());
+    print('transaction: ' + tx.toString());
+
+    return tx;
+  }
+
+  List<SCryptoTransactionPoint> _parseTransactionPoints(List<SWalletModel> searchWallets, List<dynamic> points) {
+    List<SCryptoTransactionPoint> pointsData = [];
+    points.forEach((point) {
+      pointsData.add(_parseTransactionPointItem(searchWallets, point));
+    });
+    return pointsData;
+  }
+
+  SCryptoTransactionPoint _parseTransactionPointItem(List<SWalletModel> searchWallets, var obj) {
+    String address = obj['address'];
+    double value = obj['value'];
+    List<dynamic> wallets = obj['wallets'];
+
+    num walletIndexNum = wallets.first;
+    SWalletModel walletItem = searchWallets[walletIndexNum.toInt()];
+
+    SCryptoTransactionPoint point = SCryptoTransactionPoint(
+      address: address,
+      value: value,
+      walletKey: walletItem.key
+    );
+    return point;
   }
 }

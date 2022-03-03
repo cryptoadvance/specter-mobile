@@ -7,6 +7,7 @@ import 'package:specter_rust/specter_rust.dart';
 
 import '../cryptoContainer/CCryptoContainer.dart';
 
+import 'CControlTransactionsService.dart';
 import 'CControlWalletsService.dart';
 import 'CGenerateSeedService.dart';
 import 'CRecoverySeedService.dart';
@@ -36,6 +37,7 @@ class CCryptoService {
   late CGenerateSeedService generateSeedService;
   late CRecoverySeedService recoverySeedService;
   late CControlWalletsService controlWalletsService;
+  late CControlTransactionsService controlTransactionsService;
 
   late CCryptoProvider cryptoProvider;
   late CCryptoContainerAuth cryptoContainerAuth;
@@ -47,6 +49,7 @@ class CCryptoService {
     generateSeedService = CGenerateSeedService(cryptoProvider);
     recoverySeedService = CRecoverySeedService(cryptoProvider);
     controlWalletsService = CControlWalletsService(cryptoProvider);
+    controlTransactionsService = CControlTransactionsService(cryptoProvider);
   }
 
   Future<void> init() async {

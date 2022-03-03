@@ -1,4 +1,5 @@
 import 'package:specter_mobile/app/models/CryptoContainerModel.dart';
+import 'package:specter_mobile/app/widgets/qrCode/QRCodeScanner.dart';
 
 import '../CServices.dart';
 import 'providers/CCryptoProvider.dart';
