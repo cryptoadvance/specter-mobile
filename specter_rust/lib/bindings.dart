@@ -187,6 +187,19 @@ class SpecterRustBindings {
       _lookup<ffi.NativeFunction<_c_run_bitcoin_demo>>('run_bitcoin_demo');
   late final _dart_run_bitcoin_demo _run_bitcoin_demo =
       _run_bitcoin_demo_ptr.asFunction<_dart_run_bitcoin_demo>();
+
+  ffi.Pointer<ffi.Int8> disk_test1(
+    ffi.Pointer<ffi.Int8> to,
+  ) {
+    return _disk_test1(
+      to,
+    );
+  }
+
+  late final _disk_test1_ptr =
+      _lookup<ffi.NativeFunction<_c_disk_test1>>('disk_test1');
+  late final _dart_disk_test1 _disk_test1 =
+      _disk_test1_ptr.asFunction<_dart_disk_test1>();
 }
 
 typedef _c_mnemonic_from_entropy = ffi.Pointer<ffi.Int8> Function(
@@ -300,3 +313,11 @@ typedef _dart_rust_cstr_free = void Function(
 typedef _c_run_bitcoin_demo = ffi.Pointer<ffi.Int8> Function();
 
 typedef _dart_run_bitcoin_demo = ffi.Pointer<ffi.Int8> Function();
+
+typedef _c_disk_test1 = ffi.Pointer<ffi.Int8> Function(
+  ffi.Pointer<ffi.Int8> to,
+);
+
+typedef _dart_disk_test1 = ffi.Pointer<ffi.Int8> Function(
+  ffi.Pointer<ffi.Int8> to,
+);

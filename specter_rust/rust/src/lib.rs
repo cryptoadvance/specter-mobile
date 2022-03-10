@@ -31,6 +31,9 @@ use serde::{Deserialize, Serialize};
 
 mod bitcoin_demo;
 
+#[path = "./../../rust_storage/src/specter_storage/mod.rs"]
+pub mod specter_storage;
+
 // ========================= MACROS ===========================
 
 macro_rules! err {
