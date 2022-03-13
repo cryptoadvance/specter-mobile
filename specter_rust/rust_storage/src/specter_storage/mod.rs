@@ -7,7 +7,7 @@ use std::ptr;
 use std::str::FromStr;
 
 use std::fs::File;
-use std::io::{Write, SeekFrom, Seek};
+use std::io::{Write, SeekFrom, Seek, Read};
 use std::path::Path;
 
 struct DiskHeaderVolume {
@@ -22,6 +22,9 @@ unsafe fn any_as_u8_slice<T: Sized>(p: &T) -> &[u8] {
     )
 }
 
+const USED_VOLUMES: u8 = 5;
+const CLUSTER_SIZE: usize = 1024;
+
 struct DiskStorage {
      dataDir: &'static str
 }
@@ -35,8 +38,6 @@ impl DiskStorage {
         filePath = self.dataDir.to_string() + "/header.raw";
 
         print!("Open header: {}\n", filePath);
-        
-        const USED_VOLUMES: u8 = 5;
     
         if !Path::new(filePath.as_str()).exists() {
             let mut file = File::create(filePath.as_str()).expect("Unable to open");
@@ -57,11 +58,9 @@ impl DiskStorage {
         let filePath;
         filePath = self.dataDir.to_string() + &"/data_".to_string() + &clusterIdx.to_string() + ".raw";
 
-        print!("Open storage: {}\n", filePath);
+        print!("Open storage (write): {}\n", filePath);
 
-        const USED_VOLUMES: u8 = 5;
-        const CLUSTER_SIZE: usize = 1024;
-
+        
         if !Path::new(filePath.as_str()).exists() {
             let mut file = File::create(filePath.as_str()).expect("Unable to open");
     
@@ -78,9 +77,38 @@ impl DiskStorage {
         file.seek(SeekFrom::Start(offsetStart as u64)).expect("Unable to write to file");
 
         let mut bytes: [u8; CLUSTER_SIZE] = [0; CLUSTER_SIZE];
+        unsafe {
+            let vec_ptr = bytes.as_mut_ptr() as *mut i8;
+            if dataSize  as usize > CLUSTER_SIZE {
+                return false;
+            }
+            ptr::copy_nonoverlapping(data, vec_ptr, dataSize as usize);
+        }
 
         file.write_all(&bytes);
         
+        return true;
+    }
+
+    pub fn read_storage(&mut self, volumeIdx: i32, clusterIdx: i32, data: *const c_char) -> bool {
+        let filePath;
+        filePath = self.dataDir.to_string() + &"/data_".to_string() + &clusterIdx.to_string() + ".raw";
+
+        print!("Open storage (read): {}\n", filePath);
+
+        let mut file = File::open(filePath.as_str()).expect("Unable to open");
+        let offsetStart = volumeIdx * CLUSTER_SIZE as i32;
+        file.seek(SeekFrom::Start(offsetStart as u64)).expect("Unable to write to file");
+
+        let mut bytes: [u8; CLUSTER_SIZE] = [0; CLUSTER_SIZE];
+        let vec_ptr = bytes.as_mut_ptr() as *mut i8;
+
+        file.read_exact(&mut bytes).expect("Unable to read from file");
+
+        unsafe {
+            ptr::copy_nonoverlapping(vec_ptr, data as *mut i8, 100);
+        }
+
         return true;
     }
 }
@@ -95,8 +123,10 @@ pub extern fn open_storage(path: *const c_char) -> bool {
     }
 }
 
-pub extern fn read_storage(volumeIdx: *const i32, data: *const c_char, cluster_idx: i32) -> bool {
-    return true;
+pub extern fn read_storage(volumeIdx: i32, clusterIdx: i32, data: *const c_char) -> bool {
+    unsafe {
+        return diskStorage.read_storage(volumeIdx, clusterIdx, data);
+    }
 }
 
 pub extern fn write_storage(volumeIdx: i32, clusterIdx: i32, data: *const c_char, dataSize: i32) -> bool {
