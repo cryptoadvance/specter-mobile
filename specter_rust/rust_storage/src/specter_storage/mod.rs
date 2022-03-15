@@ -52,7 +52,7 @@ impl DiskStorage {
             for volumeIdx in 0..USED_VOLUMES {
                 let my_struct = DiskHeaderVolume { volumeIndex: volumeIdx, reserved: [0; 128]};
                 let bytes: &[u8] = unsafe { any_as_u8_slice(&my_struct) };
-                file.write_all(bytes);
+                file.write_all(bytes).expect("Unable write header");
             }
     
             print!("Header file created\n");
@@ -71,9 +71,9 @@ impl DiskStorage {
         if !Path::new(filePath.as_str()).exists() {
             let mut file = File::create(filePath.as_str()).expect("Unable to open");
     
-            for volumeIdx in 0..USED_VOLUMES {
+            for _volumeIdx in 0..USED_VOLUMES {
                 let bytes: [u8; CLUSTER_SIZE] = [0; CLUSTER_SIZE];
-                file.write_all(&bytes);
+                file.write_all(&bytes).expect("Unable write empty data");
             }
 
             print!("Data file created\n");
@@ -92,7 +92,7 @@ impl DiskStorage {
             if dataSize  as usize > CLUSTER_SIZE {
                 return false;
             }
-            ptr::copy_nonoverlapping(data, vec_ptr, dataSize as usize);
+            ptr::copy_nonoverlapping(data as *mut i8, vec_ptr, dataSize as usize);
         }
 
         bytes = self.encrypt_cluster(bytes);
@@ -100,51 +100,6 @@ impl DiskStorage {
         file.write_all(&bytes).expect("Unable to write to file");
         
         return true;
-    }
-
-    fn encrypt_cluster(&mut self, mut bytes: [u8; CLUSTER_SIZE]) -> [u8; CLUSTER_SIZE] {
-        {
-            let key = GenericArray::from([0u8; 16]);
-            let mut block = GenericArray::from([42u8; 16]);
-
-            //Initialize cipher
-            let cipher = Aes128::new(&key);
-
-            let blocks = CLUSTER_SIZE / 16;
-            for i in 0..blocks {
-                let a = 16 * i;
-                let b = 16 * (i + 1);
-                block.copy_from_slice(&bytes[a..b]);
-
-                let block_copy = block.clone();
-
-                //Encrypt block in-place
-                cipher.encrypt_block(&mut block);
-
-                //Copy in bytes
-                unsafe {
-                    let block_ptr = block.as_mut_ptr();
-
-                    let vec_ptr = bytes.as_mut_ptr().offset((i * 16) as isize) as *mut u8;
-                    ptr::copy_nonoverlapping(block_ptr, vec_ptr, 16);
-                }
-
-                //Self-test
-                {
-                    let mut block2 = GenericArray::from([42u8; 16]);
-                    unsafe {
-                        let block_ptr = block2.as_mut_ptr();
-                        let vec_ptr = bytes.as_mut_ptr().offset((i * 16) as isize) as *mut u8;
-                        ptr::copy_nonoverlapping(vec_ptr, block_ptr, 16);
-                    }
-
-                    // And decrypt it back
-                    cipher.decrypt_block(&mut block2);
-                    assert_eq!(block2, block_copy);
-                }
-            }
-        }
-        return bytes;
     }
 
     pub fn read_storage(&mut self, volumeIdx: i32, clusterIdx: i32, data: *const c_char) -> bool {
@@ -162,32 +117,103 @@ impl DiskStorage {
 
         file.read_exact(&mut bytes).expect("Unable to read from file");
 
+        bytes = self.decrypt_cluster(bytes);
+
         unsafe {
             ptr::copy_nonoverlapping(vec_ptr, data as *mut i8, 100);
         }
 
         return true;
     }
+
+    fn encrypt_cluster(&mut self, mut bytes: [u8; CLUSTER_SIZE]) -> [u8; CLUSTER_SIZE] {
+        let key = GenericArray::from([0u8; 16]);
+        let mut block = GenericArray::from([42u8; 16]);
+
+        //Initialize cipher
+        let cipher = Aes128::new(&key);
+
+        let blocks = CLUSTER_SIZE / 16;
+        for i in 0..blocks {
+            let a = 16 * i;
+            let b = 16 * (i + 1);
+            block.copy_from_slice(&bytes[a..b]);
+
+            let block_copy = block.clone();
+
+            //Encrypt block in-place
+            cipher.encrypt_block(&mut block);
+
+            //Copy in bytes
+            unsafe {
+                let block_ptr = block.as_mut_ptr();
+
+                let vec_ptr = bytes.as_mut_ptr().offset((i * 16) as isize) as *mut u8;
+                ptr::copy_nonoverlapping(block_ptr, vec_ptr, 16);
+            }
+
+            //Self-test
+            {
+                let mut block2 = GenericArray::from([42u8; 16]);
+                unsafe {
+                    let block_ptr = block2.as_mut_ptr();
+                    let vec_ptr = bytes.as_mut_ptr().offset((i * 16) as isize) as *mut u8;
+                    ptr::copy_nonoverlapping(vec_ptr, block_ptr, 16);
+                }
+
+                //And decrypt it back
+                cipher.decrypt_block(&mut block2);
+                assert_eq!(block2, block_copy);
+            }
+        }
+        return bytes;
+    }
+
+    fn decrypt_cluster(&mut self, mut bytes: [u8; CLUSTER_SIZE]) -> [u8; CLUSTER_SIZE] {
+        let key = GenericArray::from([0u8; 16]);
+        let mut block = GenericArray::from([42u8; 16]);
+
+        //Initialize cipher
+        let cipher = Aes128::new(&key);
+
+        let blocks = CLUSTER_SIZE / 16;
+        for i in 0..blocks {
+            let a = 16 * i;
+            let b = 16 * (i + 1);
+            block.copy_from_slice(&bytes[a..b]);
+
+            //Decrypt block
+            cipher.decrypt_block(&mut block);
+
+            //Copy in bytes
+            unsafe {
+                let block_ptr = block.as_mut_ptr();
+                let vec_ptr = bytes.as_mut_ptr().offset((i * 16) as isize) as *mut u8;
+                ptr::copy_nonoverlapping(block_ptr, vec_ptr, 16);
+            }
+        }
+        return bytes;
+    }
 }
-static mut diskStorage: DiskStorage = DiskStorage {
+static mut DISK_STORAGE: DiskStorage = DiskStorage {
     dataDir: ""
 };
 
 #[no_mangle]
 pub extern fn open_storage(path: *const c_char) -> bool {
     unsafe {
-        return diskStorage.open_storage(path);
+        return DISK_STORAGE.open_storage(path);
     }
 }
 
 pub extern fn read_storage(volumeIdx: i32, clusterIdx: i32, data: *const c_char) -> bool {
     unsafe {
-        return diskStorage.read_storage(volumeIdx, clusterIdx, data);
+        return DISK_STORAGE.read_storage(volumeIdx, clusterIdx, data);
     }
 }
 
 pub extern fn write_storage(volumeIdx: i32, clusterIdx: i32, data: *const c_char, dataSize: i32) -> bool {
     unsafe {
-        return diskStorage.write_storage(volumeIdx, clusterIdx, data, dataSize);
+        return DISK_STORAGE.write_storage(volumeIdx, clusterIdx, data, dataSize);
     }
 }
