@@ -16,3 +16,4 @@ miniscript = "6.0.1"
 bitcoin = { version="0.27.1", features=["base64", "use-serde"] }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0.73"
+aes = "0.8.1"
