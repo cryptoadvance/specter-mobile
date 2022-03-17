@@ -7,3 +7,6 @@ edition = "2021"
 
 [dependencies]
 aes = "0.8.1"
+xts-mode = "0.5.0"
+orion = "0.17.1"
+rand = "0.8.5"
