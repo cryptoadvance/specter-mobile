@@ -30,6 +30,7 @@ unsafe fn any_as_u8_slice<T: Sized>(p: &T) -> &[u8] {
 }
 
 const USED_VOLUMES: u8 = 5;
+const HEADER_SIZE: usize = 1024;
 const CLUSTER_SIZE: usize = 1024;
 
 struct DiskStorage {
@@ -50,9 +51,9 @@ impl DiskStorage {
             let mut file = File::create(filePath.as_str()).expect("Unable to open");
     
             for volumeIdx in 0..USED_VOLUMES {
-                let my_struct = DiskHeaderVolume { volumeIndex: volumeIdx, reserved: [0; 128]};
-                let bytes: &[u8] = unsafe { any_as_u8_slice(&my_struct) };
-                file.write_all(bytes).expect("Unable write header");
+                let header = DiskHeaderVolume { volumeIndex: volumeIdx, reserved: [0; 128]};
+                let bytes = self.encrypt_header(header);
+                file.write_all(&bytes).expect("Unable write header");
             }
     
             print!("Header file created\n");
@@ -113,25 +114,44 @@ impl DiskStorage {
         file.seek(SeekFrom::Start(offsetStart as u64)).expect("Unable to write to file");
 
         let mut bytes: [u8; CLUSTER_SIZE] = [0; CLUSTER_SIZE];
-        let vec_ptr = bytes.as_mut_ptr() as *mut i8;
-
+       
         file.read_exact(&mut bytes).expect("Unable to read from file");
 
         bytes = self.decrypt_cluster(bytes);
 
         unsafe {
+            let vec_ptr = bytes.as_mut_ptr() as *mut i8;
             ptr::copy_nonoverlapping(vec_ptr, data as *mut i8, 100);
         }
 
         return true;
     }
 
-    fn encrypt_cluster(&mut self, mut bytes: [u8; CLUSTER_SIZE]) -> [u8; CLUSTER_SIZE] {
-        let key = GenericArray::from([0u8; 16]);
-        let mut block = GenericArray::from([42u8; 16]);
+    fn encrypt_header(&mut self, header: DiskHeaderVolume) -> [u8; HEADER_SIZE] {
+        let headerData: &[u8] = unsafe { any_as_u8_slice(&header) };
 
+        let mut bytes: [u8; CLUSTER_SIZE] = [0; CLUSTER_SIZE];
+        let dataSize = headerData.len();
+        unsafe {
+            let vec_ptr = bytes.as_mut_ptr() as *mut i8;
+            if dataSize  as usize > CLUSTER_SIZE {
+                panic!("Error");
+            }
+            ptr::copy_nonoverlapping(headerData.as_ptr() as *mut i8, vec_ptr, dataSize as usize);
+        }
+
+        bytes = self.encrypt_cluster(bytes);
+
+        return  bytes;
+    }
+
+    fn encrypt_cluster(&mut self, mut bytes: [u8; CLUSTER_SIZE]) -> [u8; CLUSTER_SIZE] {
         //Initialize cipher
+        let key = GenericArray::from([0u8; 16]);        
         let cipher = Aes128::new(&key);
+
+        //
+        let mut block = GenericArray::from([0u8; 16]);
 
         let blocks = CLUSTER_SIZE / 16;
         for i in 0..blocks {
