@@ -1,6 +1,8 @@
 #![allow(unused_imports)]
 #![allow(non_snake_case)]
+#![allow(unused_parens)]
 
+use std::ops::RangeBounds;
 use std::os::raw::{c_char};
 use std::ffi::{CString, CStr};
 use std::os::unix::prelude::MetadataExt;
@@ -21,6 +23,8 @@ use aes::cipher::{
 
 use aes::{Aes128, cipher::generic_array::GenericArray};
 use xts_mode::{Xts128, get_tweak_default};
+
+use std::collections::HashMap;
 
 struct DiskHeaderInit {
     salt: [u8; 16],
@@ -43,8 +47,15 @@ const USED_VOLUMES: u8 = 5;
 const HEADER_SIZE: usize = 1024;
 const CLUSTER_SIZE: usize = 1024;
 
+struct OpenedVolume {
+    volumeIdx: u32,
+    volumeKey: [u8; 32]
+}
+
 struct DiskStorage {
-     dataDir: &'static str
+    isOpened: bool,
+    dataDir: &'static str,
+    openedVolumes: Option<HashMap<u32, OpenedVolume>>
 }
 impl DiskStorage {
     pub fn open_storage(&mut self, path: *const c_char) -> bool {
@@ -60,6 +71,10 @@ impl DiskStorage {
         if !Path::new(filePath.as_str()).exists() {
             self.storage_init(filePath);
         }
+
+        unsafe {
+            DISK_STORAGE.openedVolumes = Some(HashMap::new());
+        }
     
         return true;
     }
@@ -69,7 +84,7 @@ impl DiskStorage {
 
         let salt: [u8; 16] = self.get_storage_salt();
 
-        let headerInit = DiskHeaderInit { salt: salt, reserved: [0; 128]};
+        let headerInit = DiskHeaderInit { salt, reserved: [0; 128]};
         let bytes = unsafe { any_as_u8_slice(&headerInit) };
         file.write_all(&bytes).expect("Unable write header");
     
@@ -101,8 +116,65 @@ impl DiskStorage {
         return salt;
     }
 
+    fn get_storage_rnd_cluster(&mut self) -> Vec<u8> {
+        let headerSize = CLUSTER_SIZE;
+        let mut data = vec![0u8; headerSize];
+        let mut rng = rand::thread_rng();
+
+        for i in 0..headerSize {
+            data[i] = rng.gen();
+        }
+        return data;
+    }
+
+    fn derive_volume_key(&mut self, pass: *const c_char, saltBytes: [u8; 16]) -> [u8; 32] {
+        let c_str: &CStr = unsafe { CStr::from_ptr(pass) };
+        let str_slice: &str = c_str.to_str().unwrap();
+        let password  = kdf::Password::from_slice(str_slice.as_bytes()).expect("Wrong password");
+
+        let salt = kdf::Salt::from_slice(&saltBytes).expect("Can not convert salt");
+        let derivedKey = kdf::derive_key(&password, &salt, 3, 1<<8, 32).expect("Can not derive key");
+        let derivedKeyBytes = derivedKey.unprotected_as_bytes();
+
+        let mut retKey:[u8; 32] = [0u8; 32];
+        retKey.copy_from_slice(derivedKeyBytes);
+        return retKey;
+    }
+
+    fn set_volume_key(&mut self, volumeIdx: u32, derivedKeyBytes: [u8; 32]) -> bool {
+        let obj = OpenedVolume {
+            volumeIdx: volumeIdx,
+            volumeKey: derivedKeyBytes
+        };
+
+        let openedVolumes = self.openedVolumes.as_mut().unwrap();
+        openedVolumes.insert(volumeIdx, obj);
+        return true;
+    }
+
+    fn get_volume_key(&mut self, volumeIdx: u32) -> [u8; 32] {
+        let openedVolumes = self.openedVolumes.as_mut().unwrap();
+        let obj = openedVolumes.get(&volumeIdx);
+        if (obj.is_none()) {
+            panic!("volume not opened");
+        }
+
+        let objPointer = obj.unwrap();
+        if (objPointer.volumeIdx != volumeIdx) {
+            panic!("wrong volume");
+        }
+        return objPointer.volumeKey;
+    }
+
     pub fn create_volume(&mut self, volumeIdx: u32, pass: *const c_char) -> bool {
         print!("Create volume: {}\n", volumeIdx);
+
+        {
+            let openedVolumes = self.openedVolumes.as_ref().unwrap();
+            if openedVolumes.contains_key(&volumeIdx) {
+                return false;
+            }
+        }
 
         let filePath= self.dataDir.to_string() + "/header.raw";
 
@@ -119,15 +191,75 @@ impl DiskStorage {
 
         //
         let offsetStart = volumeIdx * CLUSTER_SIZE as u32;
-        file.seek(SeekFrom::Current(offsetStart as i64)).expect("Unable to write to file");
+        file.seek(SeekFrom::Current(offsetStart as i64)).expect("Unable to seek in the file");
+
+        //
+        let derivedKeyBytes:[u8; 32] = self.derive_volume_key(pass, _header.salt);
+        self.set_volume_key(volumeIdx, derivedKeyBytes);
 
         //
         let header = DiskHeaderVolume { volumeIndex: volumeIdx as u8, reserved: [0; 128]};
 
         //Encrypt header
-        let data = self.encrypt_header(header);
+        let data = self.encrypt_header(header, volumeIdx);
 
         file.write_all(&data).expect("Unable to write to file");
+
+        return true;
+    }
+
+    pub fn open_volume(&mut self, volumeIdx: u32, pass: *const c_char) -> bool {
+        print!("Open volume: {}\n", volumeIdx);
+
+        {
+            let openedVolumes = self.openedVolumes.as_ref().unwrap();
+            if openedVolumes.contains_key(&volumeIdx) {
+                return true;
+            }
+        }
+
+        let filePath = self.dataDir.to_string() + "/header.raw";
+
+        let mut file = OpenOptions::new().create(false).read(true).write(true).open(filePath.as_str()).expect("Unable open file to write");
+
+        //Read header data
+        let mut headerData = vec![0u8; mem::size_of::<DiskHeaderInit>()];
+        file.read_exact(&mut headerData).expect("Unable to read from file");
+        let _header: &DiskHeaderInit;
+        unsafe {
+            let header_p: *const DiskHeaderInit = headerData.as_ptr() as *const DiskHeaderInit;
+            _header = &*header_p;
+        }
+
+        //
+        let derivedKeyBytes:[u8; 32] = self.derive_volume_key(pass, _header.salt);
+
+        //Seek volume header
+        let offsetStart = volumeIdx * CLUSTER_SIZE as u32;
+        file.seek(SeekFrom::Current(offsetStart as i64)).expect("Unable to seek in the file");
+
+        //
+        let mut bytes: [u8; CLUSTER_SIZE] = [0; CLUSTER_SIZE];
+        file.read_exact(&mut bytes).expect("Unable to read from file");
+
+        //Try decrypt volume header
+        {
+            let xts = self.get_xts_cipher(derivedKeyBytes);
+            xts.decrypt_area(&mut bytes, CLUSTER_SIZE, 0 as u128, get_tweak_default);
+        }
+
+        let _headerVolume: &DiskHeaderVolume;
+        unsafe {
+            let header_p: *const DiskHeaderVolume = bytes.as_ptr() as *const DiskHeaderVolume;
+            _headerVolume = &*header_p;
+        }
+
+        if (_headerVolume.volumeIndex != volumeIdx as u8) {
+            return false;
+        }
+
+        //Volume opened
+        self.set_volume_key(volumeIdx, derivedKeyBytes);
 
         return true;
     }
@@ -139,15 +271,14 @@ impl DiskStorage {
         let mut file = File::create(filePath.as_str()).expect("Unable to open");
 
         for _volumeIdx in 0..USED_VOLUMES {
-            let mut bytes: [u8; CLUSTER_SIZE] = [0; CLUSTER_SIZE];
-            bytes = self.encrypt_cluster(bytes, clusterIdx + 1);
-            file.write_all(&bytes).expect("Unable write empty data");
+            let clusterData = self.get_storage_rnd_header();
+            file.write_all(&clusterData).expect("Unable write empty data");
         }
 
         print!("Data file created\n");
     }
 
-    pub fn write_storage(&mut self, volumeIdx: i32, clusterIdx: u32, data: *const c_char, dataSize: i32) -> bool {
+    pub fn write_storage(&mut self, volumeIdx: u32, clusterIdx: u32, data: *const c_char, dataSize: i32) -> bool {
         let filePath;
         filePath = self.dataDir.to_string() + &"/data_".to_string() + &clusterIdx.to_string() + ".raw";
 
@@ -160,7 +291,7 @@ impl DiskStorage {
         let mut file = OpenOptions::new().create(false).write(true).open(filePath.as_str()).expect("Unable open file to write");
 
         //
-        let offsetStart = volumeIdx * CLUSTER_SIZE as i32;
+        let offsetStart = volumeIdx * CLUSTER_SIZE as u32;
         file.seek(SeekFrom::Start(offsetStart as u64)).expect("Unable to write to file");
 
         let mut bytes: [u8; CLUSTER_SIZE] = [0; CLUSTER_SIZE];
@@ -173,21 +304,21 @@ impl DiskStorage {
         }
 
         //Use (clusterIdx + 1) because (clusterIdx == 0) it`s header
-        bytes = self.encrypt_cluster(bytes, clusterIdx + 1);
+        bytes = self.encrypt_cluster(bytes, volumeIdx, clusterIdx + 1);
 
         file.write_all(&bytes).expect("Unable to write to file");
         
         return true;
     }
 
-    pub fn read_storage(&mut self, volumeIdx: i32, clusterIdx: u32, data: *const c_char) -> bool {
+    pub fn read_storage(&mut self, volumeIdx: u32, clusterIdx: u32, data: *const c_char) -> bool {
         let filePath;
         filePath = self.dataDir.to_string() + &"/data_".to_string() + &clusterIdx.to_string() + ".raw";
 
         print!("Open storage (read): {}\n", filePath);
 
         let mut file = File::open(filePath.as_str()).expect("Unable to open");
-        let offsetStart = volumeIdx * CLUSTER_SIZE as i32;
+        let offsetStart = volumeIdx * CLUSTER_SIZE as u32;
         file.seek(SeekFrom::Start(offsetStart as u64)).expect("Unable to write to file");
 
         let mut bytes: [u8; CLUSTER_SIZE] = [0; CLUSTER_SIZE];
@@ -195,7 +326,7 @@ impl DiskStorage {
         file.read_exact(&mut bytes).expect("Unable to read from file");
 
         //Use (clusterIdx + 1) because (clusterIdx == 0) it`s header
-        bytes = self.decrypt_cluster(bytes, clusterIdx + 1);
+        bytes = self.decrypt_cluster(bytes, volumeIdx, clusterIdx + 1);
 
         unsafe {
             let vec_ptr = bytes.as_mut_ptr() as *mut i8;
@@ -205,7 +336,7 @@ impl DiskStorage {
         return true;
     }
 
-    fn encrypt_header(&mut self, header: DiskHeaderVolume) -> [u8; HEADER_SIZE] {
+    fn encrypt_header(&mut self, header: DiskHeaderVolume, volumeIdx: u32) -> [u8; HEADER_SIZE] {
         let headerData: &[u8] = unsafe { any_as_u8_slice(&header) };
 
         let mut bytes: [u8; CLUSTER_SIZE] = [0; CLUSTER_SIZE];
@@ -218,20 +349,13 @@ impl DiskStorage {
             ptr::copy_nonoverlapping(headerData.as_ptr() as *mut i8, vec_ptr, dataSize as usize);
         }
 
-        bytes = self.encrypt_cluster(bytes, 0);
-
+        bytes = self.encrypt_cluster(bytes, volumeIdx, 0);
+ 
         return  bytes;
     }
 
-    fn get_xts_cipher(&mut self) -> Xts128::<Aes128> {
-        let saltBytes:[u8; 16] = [0u8; 16];
-        
+    fn get_xts_cipher(&mut self, derivedKeyBytes: [u8; 32]) -> Xts128::<Aes128> {
         let mut key = GenericArray::from([0u8; 32]);
-
-        let password  = kdf::Password::from_slice(b"User password").expect("Wrong password");
-        let salt = kdf::Salt::from_slice(&saltBytes).expect("Can not convert salt");
-        let derivedKey = kdf::derive_key(&password, &salt, 3, 1<<8, 32).expect("Can not derive key");
-        let derivedKeyBytes = derivedKey.unprotected_as_bytes();
         key.copy_from_slice(&derivedKeyBytes);
 
         //
@@ -241,18 +365,20 @@ impl DiskStorage {
         return xts;
     }
 
-    fn encrypt_cluster(&mut self, mut bytes: [u8; CLUSTER_SIZE], clusterIndex: u32) -> [u8; CLUSTER_SIZE] {
+    fn encrypt_cluster(&mut self, mut bytes: [u8; CLUSTER_SIZE], volumeIdx: u32, clusterIndex: u32) -> [u8; CLUSTER_SIZE] {
         //Initialize cipher
-        let xts = self.get_xts_cipher();
+        let derivedKeyBytes = self.get_volume_key(volumeIdx);
+        let xts = self.get_xts_cipher(derivedKeyBytes);
 
         //
         xts.encrypt_area(&mut bytes, CLUSTER_SIZE, clusterIndex as u128, get_tweak_default);
         return bytes;
     }
 
-    fn decrypt_cluster(&mut self, mut bytes: [u8; CLUSTER_SIZE], clusterIndex: u32) -> [u8; CLUSTER_SIZE] {
+    fn decrypt_cluster(&mut self, mut bytes: [u8; CLUSTER_SIZE], volumeIdx: u32, clusterIndex: u32) -> [u8; CLUSTER_SIZE] {
         //Initialize cipher
-        let xts = self.get_xts_cipher();
+        let derivedKeyBytes = self.get_volume_key(volumeIdx);
+        let xts = self.get_xts_cipher(derivedKeyBytes);
 
         //
         xts.decrypt_area(&mut bytes, CLUSTER_SIZE, clusterIndex as u128, get_tweak_default);
@@ -260,30 +386,58 @@ impl DiskStorage {
     }
 }
 static mut DISK_STORAGE: DiskStorage = DiskStorage {
-    dataDir: ""
+    isOpened: false,
+    dataDir: "",
+    openedVolumes: None
 };
 
 #[no_mangle]
 pub extern fn open_storage(path: *const c_char) -> bool {
     unsafe {
-        return DISK_STORAGE.open_storage(path);
+        if (DISK_STORAGE.isOpened) {
+            return false;
+        }
+        
+        if (!DISK_STORAGE.open_storage(path)) {
+            return false;
+        }
+        DISK_STORAGE.isOpened = true;
+        return true;
     }
 }
 
 pub extern fn create_volume(volumeIdx: u32, pass: *const c_char) -> bool {
     unsafe {
+        if (!DISK_STORAGE.isOpened) {
+            return false;
+        }
         return DISK_STORAGE.create_volume(volumeIdx, pass);
     }
 }
 
-pub extern fn read_storage(volumeIdx: i32, clusterIdx: u32, data: *const c_char) -> bool {
+pub extern fn open_volume(volumeIdx: u32, pass: *const c_char) -> bool {
     unsafe {
+        if (!DISK_STORAGE.isOpened) {
+            return false;
+        }
+        return DISK_STORAGE.open_volume(volumeIdx, pass);
+    }
+}
+
+pub extern fn read_storage(volumeIdx: u32, clusterIdx: u32, data: *const c_char) -> bool {
+    unsafe {
+        if (!DISK_STORAGE.isOpened) {
+            return false;
+        }
         return DISK_STORAGE.read_storage(volumeIdx, clusterIdx, data);
     }
 }
 
-pub extern fn write_storage(volumeIdx: i32, clusterIdx: u32, data: *const c_char, dataSize: i32) -> bool {
+pub extern fn write_storage(volumeIdx: u32, clusterIdx: u32, data: *const c_char, dataSize: i32) -> bool {
     unsafe {
+        if (!DISK_STORAGE.isOpened) {
+            return false;
+        }
         return DISK_STORAGE.write_storage(volumeIdx, clusterIdx, data, dataSize);
     }
 }

@@ -8,10 +8,15 @@ fn main() {
     println!("Hello, world!");
 
     let path = CString::new( "/home/linux-dev/Documents/flutter-apps/other/tmp".to_owned()).unwrap().into_raw();
-    let mut isOk = specter_storage::open_storage(path);
+    let mut _isOk = specter_storage::open_storage(path);
 
     let strA = CString::new("pass1").expect("CString::new failed");
-    isOk = specter_storage::create_volume(0, strA.as_ptr());
+    _isOk = specter_storage::create_volume(0, strA.as_ptr());
+
+    if !specter_storage::open_volume(0, strA.as_ptr()) {
+        println!("Can not open volume");
+        return;
+    }
 
     let strA = CString::new("testA").expect("CString::new failed");
     specter_storage::write_storage(0, 0, strA.as_ptr(), 5);
