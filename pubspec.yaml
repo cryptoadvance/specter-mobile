@@ -80,6 +80,7 @@ flutter:
     - assets/stickers/ghost_sad-x512.png
     - assets/stickers/ghost_alert-x512.png
     - assets/stickers/ghost_thinks-x512.png
+    - assets/stickers/narwal_main.png
     - assets/bip-0039/english.txt
 
   fonts:

@@ -33,7 +33,7 @@ void main() {
 
   runApp(
     GetMaterialApp(
-      title: 'Specter Mobile',
+      title: 'Narwhale Mobile',
       locale: Locale('en', 'US'),
       theme: _lightTheme,
       darkTheme: _darkTheme,

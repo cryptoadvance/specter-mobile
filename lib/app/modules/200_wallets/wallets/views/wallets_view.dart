@@ -103,7 +103,7 @@ class WalletsView extends GetView<WalletsController> {
                   constraints: BoxConstraints(
                     maxWidth: 75
                   ),
-                  child: Image.asset('assets/stickers/ghost_normal_3d-x512.png')
+                  child: Image.asset('assets/stickers/narwal_main.png')
                 )
               ]
             )

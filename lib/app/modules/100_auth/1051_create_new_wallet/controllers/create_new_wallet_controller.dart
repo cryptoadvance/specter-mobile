@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:specter_mobile/app/modules/100_auth/104_onboarding/controllers/onboarding_controller.dart';
 import 'package:specter_mobile/app/routes/app_pages.dart';
+import 'package:specter_mobile/services/CCryptoExceptions.dart';
 import 'package:specter_mobile/services/CServices.dart';
 
 class CreateNewWalletController extends GetxController {
@@ -44,9 +45,17 @@ class CreateNewWalletController extends GetxController {
       return;
     }
 
-    if (!(await CServices.crypto.controlWalletsService.addNewWallet(walletName: walletName))) {
+    try {
+      if (!(await CServices.crypto.controlWalletsService.addNewWallet(walletName: walletName))) {
+        await CServices.notify.addMessage(
+            context, 'Oops!!', 'Please try again.',
+            actionTitle: 'Try Again'
+        );
+        return;
+      }
+    } on CCryptoExceptionsWalletExists catch (e) {
       await CServices.notify.addMessage(
-          context, 'Oops!!', 'Please try again.',
+          context, 'Oops!!', 'Wallet exists.',
           actionTitle: 'Try Again'
       );
       return;
