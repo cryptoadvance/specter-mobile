@@ -29,6 +29,7 @@ dependencies:
 
   biometric_storage:
     path: ./external/biometric_storage
+  path_provider: ^2.0.10
 
 dev_dependencies: 
   flutter_test: 

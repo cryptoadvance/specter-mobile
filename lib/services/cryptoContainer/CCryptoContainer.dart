@@ -1,10 +1,13 @@
 import 'dart:collection';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:biometric_storage/biometric_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:specter_mobile/app/models/CryptoContainerModel.dart';
 import 'package:specter_mobile/services/cryptoService/providers/CCryptoProvider.dart';
+import 'package:specter_rust/DiskStorage.dart';
 
 import 'CCryptoLocalSign.dart';
 import '../../utils.dart';
@@ -62,6 +65,21 @@ class CCryptoContainer {
     cryptoContainerModel = CryptoContainerModel(
         authTypes: authTypes
     );
+
+    Directory appDocDir = await getApplicationDocumentsDirectory();
+    String appDocPath = appDocDir.path;
+    print('path: ' + appDocPath);
+
+    var res = DiskStorage.openStorage(appDocPath);
+    print('open storage: ' + res.toString());
+
+    res = DiskStorage.createVolume(0, "test");
+    print('create volume: ' + res.toString());
+
+    res = DiskStorage.writeStorage(0, 0, "test", 2);
+    print('write storage: ' + res.toString());
+
+    DiskStorage.readStorage(0, 0);
   }
 
   bool isAuthInit() {

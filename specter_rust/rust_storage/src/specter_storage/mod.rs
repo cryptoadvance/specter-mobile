@@ -54,16 +54,16 @@ struct OpenedVolume {
 
 struct DiskStorage {
     isOpened: bool,
-    dataDir: &'static str,
+    dataDir: String,
     openedVolumes: Option<HashMap<u32, OpenedVolume>>
 }
 impl DiskStorage {
     pub fn open_storage(&mut self, path: *const c_char) -> bool {
         let pathStr: &CStr = unsafe { CStr::from_ptr(path) };
-        let str_slice: &str = pathStr.to_str().unwrap();
+        let str_slice: &str = pathStr.to_str().unwrap().clone();
 
         let filePath;
-        self.dataDir = str_slice;
+        self.dataDir = str_slice.to_string();
         filePath = self.dataDir.to_string() + "/header.raw";
 
         print!("Open header: {}\n", filePath);
@@ -72,10 +72,9 @@ impl DiskStorage {
             self.storage_init(filePath);
         }
 
-        unsafe {
+       unsafe {
             DISK_STORAGE.openedVolumes = Some(HashMap::new());
         }
-    
         return true;
     }
 
@@ -178,7 +177,7 @@ impl DiskStorage {
 
         let filePath= self.dataDir.to_string() + "/header.raw";
 
-        let mut file = OpenOptions::new().create(false).read(true).write(true).open(filePath.as_str()).expect("Unable open file to write");
+        let mut file = OpenOptions::new().create(false).read(true).write(true).open(filePath).expect("Unable open file to write");
 
         //Read header data
         let mut headerData = vec![0u8; mem::size_of::<DiskHeaderInit>()];
@@ -387,57 +386,73 @@ impl DiskStorage {
 }
 static mut DISK_STORAGE: DiskStorage = DiskStorage {
     isOpened: false,
-    dataDir: "",
+    dataDir: String::new(),
     openedVolumes: None
 };
 
 #[no_mangle]
-pub extern fn open_storage(path: *const c_char) -> bool {
+pub extern fn ds_open_storage(path: *const c_char) -> i32 {
     unsafe {
         if (DISK_STORAGE.isOpened) {
-            return false;
+            return 0;
         }
         
         if (!DISK_STORAGE.open_storage(path)) {
-            return false;
+            return 0;
         }
         DISK_STORAGE.isOpened = true;
-        return true;
+        return 1;
     }
 }
 
-pub extern fn create_volume(volumeIdx: u32, pass: *const c_char) -> bool {
+#[no_mangle]
+pub extern fn ds_create_volume(volumeIdx: u32, pass: *const c_char) -> i32 {
     unsafe {
         if (!DISK_STORAGE.isOpened) {
-            return false;
+            return 0;
         }
-        return DISK_STORAGE.create_volume(volumeIdx, pass);
+        if (DISK_STORAGE.create_volume(volumeIdx, pass)) {
+            return 1;
+        }
+        return 0;
     }
 }
 
-pub extern fn open_volume(volumeIdx: u32, pass: *const c_char) -> bool {
+#[no_mangle]
+pub extern fn ds_open_volume(volumeIdx: u32, pass: *const c_char) -> i32 {
     unsafe {
         if (!DISK_STORAGE.isOpened) {
-            return false;
+            return 0;
         }
-        return DISK_STORAGE.open_volume(volumeIdx, pass);
+        if (DISK_STORAGE.open_volume(volumeIdx, pass)) {
+            return 1;
+        }
+        return 0;
     }
 }
 
-pub extern fn read_storage(volumeIdx: u32, clusterIdx: u32, data: *const c_char) -> bool {
+#[no_mangle]
+pub extern fn ds_read_storage(volumeIdx: u32, clusterIdx: u32, data: *const c_char) -> i32 {
     unsafe {
         if (!DISK_STORAGE.isOpened) {
-            return false;
+            return 0;
         }
-        return DISK_STORAGE.read_storage(volumeIdx, clusterIdx, data);
+        if (DISK_STORAGE.read_storage(volumeIdx, clusterIdx, data)) {
+            return 1;
+        }
+        return 0;
     }
 }
 
-pub extern fn write_storage(volumeIdx: u32, clusterIdx: u32, data: *const c_char, dataSize: i32) -> bool {
+#[no_mangle]
+pub extern fn ds_write_storage(volumeIdx: u32, clusterIdx: u32, data: *const c_char, dataSize: i32) -> i32 {
     unsafe {
         if (!DISK_STORAGE.isOpened) {
-            return false;
+            return 0;
         }
-        return DISK_STORAGE.write_storage(volumeIdx, clusterIdx, data, dataSize);
+        if (DISK_STORAGE.write_storage(volumeIdx, clusterIdx, data, dataSize)) {
+            return 1;
+        }
+        return 0;
     }
 }

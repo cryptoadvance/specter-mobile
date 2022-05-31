@@ -21,6 +21,10 @@ class SpecterRust {
   static final SpecterRustBindings _bindings =
       SpecterRustBindings(SpecterRust._loadLibrary());
 
+  static SpecterRustBindings getBindings() {
+    return _bindings;
+  }
+
   static DynamicLibrary _loadLibrary() {
     // If we are in test environment, handle library loading differently
     if (Platform.environment.containsKey('FLUTTER_TEST')) {

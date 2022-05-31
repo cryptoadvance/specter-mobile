@@ -188,18 +188,84 @@ class SpecterRustBindings {
   late final _dart_run_bitcoin_demo _run_bitcoin_demo =
       _run_bitcoin_demo_ptr.asFunction<_dart_run_bitcoin_demo>();
 
-  ffi.Pointer<ffi.Int8> disk_test1(
-    ffi.Pointer<ffi.Int8> to,
+  int ds_open_storage(
+    ffi.Pointer<ffi.Int8> path,
   ) {
-    return _disk_test1(
-      to,
+    return _ds_open_storage(
+      path,
     );
   }
 
-  late final _disk_test1_ptr =
-      _lookup<ffi.NativeFunction<_c_disk_test1>>('disk_test1');
-  late final _dart_disk_test1 _disk_test1 =
-      _disk_test1_ptr.asFunction<_dart_disk_test1>();
+  late final _ds_open_storage_ptr =
+      _lookup<ffi.NativeFunction<_c_ds_open_storage>>('ds_open_storage');
+  late final _dart_ds_open_storage _ds_open_storage =
+      _ds_open_storage_ptr.asFunction<_dart_ds_open_storage>();
+
+  int ds_create_volume(
+    int volumeIdx,
+    ffi.Pointer<ffi.Int8> pass,
+  ) {
+    return _ds_create_volume(
+      volumeIdx,
+      pass,
+    );
+  }
+
+  late final _ds_create_volume_ptr =
+      _lookup<ffi.NativeFunction<_c_ds_create_volume>>('ds_create_volume');
+  late final _dart_ds_create_volume _ds_create_volume =
+      _ds_create_volume_ptr.asFunction<_dart_ds_create_volume>();
+
+  int ds_open_volume(
+    int volumeIdx,
+    ffi.Pointer<ffi.Int8> pass,
+  ) {
+    return _ds_open_volume(
+      volumeIdx,
+      pass,
+    );
+  }
+
+  late final _ds_open_volume_ptr =
+      _lookup<ffi.NativeFunction<_c_ds_open_volume>>('ds_open_volume');
+  late final _dart_ds_open_volume _ds_open_volume =
+      _ds_open_volume_ptr.asFunction<_dart_ds_open_volume>();
+
+  int ds_read_storage(
+    int volumeIdx,
+    int clusterIdx,
+    ffi.Pointer<ffi.Int8> data,
+  ) {
+    return _ds_read_storage(
+      volumeIdx,
+      clusterIdx,
+      data,
+    );
+  }
+
+  late final _ds_read_storage_ptr =
+      _lookup<ffi.NativeFunction<_c_ds_read_storage>>('ds_read_storage');
+  late final _dart_ds_read_storage _ds_read_storage =
+      _ds_read_storage_ptr.asFunction<_dart_ds_read_storage>();
+
+  int ds_write_storage(
+    int volumeIdx,
+    int clusterIdx,
+    ffi.Pointer<ffi.Int8> data,
+    int dataSize,
+  ) {
+    return _ds_write_storage(
+      volumeIdx,
+      clusterIdx,
+      data,
+      dataSize,
+    );
+  }
+
+  late final _ds_write_storage_ptr =
+      _lookup<ffi.NativeFunction<_c_ds_write_storage>>('ds_write_storage');
+  late final _dart_ds_write_storage _ds_write_storage =
+      _ds_write_storage_ptr.asFunction<_dart_ds_write_storage>();
 }
 
 typedef _c_mnemonic_from_entropy = ffi.Pointer<ffi.Int8> Function(
@@ -314,10 +380,56 @@ typedef _c_run_bitcoin_demo = ffi.Pointer<ffi.Int8> Function();
 
 typedef _dart_run_bitcoin_demo = ffi.Pointer<ffi.Int8> Function();
 
-typedef _c_disk_test1 = ffi.Pointer<ffi.Int8> Function(
-  ffi.Pointer<ffi.Int8> to,
+typedef _c_ds_open_storage = ffi.Int32 Function(
+  ffi.Pointer<ffi.Int8> path,
 );
 
-typedef _dart_disk_test1 = ffi.Pointer<ffi.Int8> Function(
-  ffi.Pointer<ffi.Int8> to,
+typedef _dart_ds_open_storage = int Function(
+  ffi.Pointer<ffi.Int8> path,
+);
+
+typedef _c_ds_create_volume = ffi.Int32 Function(
+  ffi.Uint32 volumeIdx,
+  ffi.Pointer<ffi.Int8> pass,
+);
+
+typedef _dart_ds_create_volume = int Function(
+  int volumeIdx,
+  ffi.Pointer<ffi.Int8> pass,
+);
+
+typedef _c_ds_open_volume = ffi.Int32 Function(
+  ffi.Uint32 volumeIdx,
+  ffi.Pointer<ffi.Int8> pass,
+);
+
+typedef _dart_ds_open_volume = int Function(
+  int volumeIdx,
+  ffi.Pointer<ffi.Int8> pass,
+);
+
+typedef _c_ds_read_storage = ffi.Int32 Function(
+  ffi.Uint32 volumeIdx,
+  ffi.Uint32 clusterIdx,
+  ffi.Pointer<ffi.Int8> data,
+);
+
+typedef _dart_ds_read_storage = int Function(
+  int volumeIdx,
+  int clusterIdx,
+  ffi.Pointer<ffi.Int8> data,
+);
+
+typedef _c_ds_write_storage = ffi.Int32 Function(
+  ffi.Uint32 volumeIdx,
+  ffi.Uint32 clusterIdx,
+  ffi.Pointer<ffi.Int8> data,
+  ffi.Int32 dataSize,
+);
+
+typedef _dart_ds_write_storage = int Function(
+  int volumeIdx,
+  int clusterIdx,
+  ffi.Pointer<ffi.Int8> data,
+  int dataSize,
 );
