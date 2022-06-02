@@ -72,7 +72,7 @@ class CControlTransactionsService {
   CControlTransactionsService(CCryptoProvider cryptoProvider): _cryptoProvider = cryptoProvider;
 
   bool parseTransaction(QRCodeScannerResultParseTransaction transaction) {
-    List<SWalletModel> wallets = CServices.crypto.cryptoContainer.getWallets();
+    List<SWalletModel> wallets = CServices.crypto.privateCryptoContainer.getWallets();
     CServices.crypto.cryptoProvider.parseTransaction(transaction, wallets, WalletNetwork.BITCOIN);
     return true;
   }

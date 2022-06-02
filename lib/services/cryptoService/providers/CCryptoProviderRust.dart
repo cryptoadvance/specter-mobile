@@ -7,8 +7,6 @@ import 'package:specter_mobile/app/models/CryptoContainerModel.dart';
 import 'package:specter_mobile/app/widgets/qrCode/QRCodeScanner.dart';
 import 'package:specter_rust/specter_rust.dart';
 
-import '../../../utils/bip39/bip39.dart' as bip39;
-
 import '../../CEntropyExternalGenerationService.dart';
 import '../CControlTransactionsService.dart';
 import '../CGenerateSeedService.dart';
@@ -52,14 +50,7 @@ class CCryptoProviderRust extends CCryptoProvider {
     Uint8List seedList = getRandomSeed(bytes);
 
     //
-    List<String> seedWords = bip39.entropyHexToMnemonic(seedList);
-    
-    //
-    String mnemonicFromLocal = seedWords.join(' ');
     String mnemonicFromRust = SpecterRust.mnemonic_from_entropy(HEX.encode(seedList));
-    if (mnemonicFromLocal != mnemonicFromRust) {
-      throw 'mnemonic different';
-    }
 
     //
     _mnemonic = mnemonicFromRust;

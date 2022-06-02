@@ -3,9 +3,10 @@ import 'dart:async';
 import 'package:get/get.dart';
 import 'package:specter_mobile/app/routes/app_pages.dart';
 import 'package:specter_mobile/services/CServices.dart';
+import 'package:specter_mobile/services/cryptoContainer/PrivateCryptoContainer.dart';
 import 'package:specter_rust/specter_rust.dart';
 
-import '../cryptoContainer/CCryptoContainer.dart';
+import '../cryptoContainer/SharedCryptoContainer.dart';
 
 import 'CControlTransactionsService.dart';
 import 'CControlWalletsService.dart';
@@ -19,7 +20,7 @@ class CCryptoContainerAuth {
   SMnemonicRootKey? _currentMnemonicRootKey;
 
   bool selectCurrentMnemonicByIdx(int idx, String pass) {
-    String mnemonic = CServices.crypto.cryptoContainer.getMnemonicByIdx(idx);
+    String mnemonic = CServices.crypto.privateCryptoContainer.getMnemonicByIdx(idx);
     SMnemonicRootKey mnemonicRootKey = CServices.crypto.cryptoProvider.mnemonicToRootKey(mnemonic, pass);
 
     _currentMnemonicIdx = idx;
@@ -33,7 +34,9 @@ class CCryptoContainerAuth {
 }
 
 class CCryptoService {
-  late CCryptoContainer cryptoContainer;
+  late SharedCryptoContainer sharedCryptoContainer;
+  late PrivateCryptoContainer privateCryptoContainer;
+
   late CGenerateSeedService generateSeedService;
   late CRecoverySeedService recoverySeedService;
   late CControlWalletsService controlWalletsService;
@@ -44,7 +47,8 @@ class CCryptoService {
 
   CCryptoService() {
     cryptoProvider = CCryptoProviderRust();
-    cryptoContainer = CCryptoContainer();
+    sharedCryptoContainer = SharedCryptoContainer();
+    privateCryptoContainer = PrivateCryptoContainer();
     cryptoContainerAuth = CCryptoContainerAuth();
     generateSeedService = CGenerateSeedService(cryptoProvider);
     recoverySeedService = CRecoverySeedService(cryptoProvider);
@@ -58,12 +62,17 @@ class CCryptoService {
 
     //
     await Future.wait([
-      cryptoContainer.init()
+      sharedCryptoContainer.init(),
+      privateCryptoContainer.init()
     ]);
   }
 
+  bool tryOpenPrivateCryptoContainer(String pass) {
+    return privateCryptoContainer.tryOpenPrivateCryptoContainer(pass);
+  }
+
   void openAfterAuthPage() {
-    if (!cryptoContainer.isSeedsInit()) {
+    if (!sharedCryptoContainer.isAppInit()) {
       Get.offAllNamed(Routes.RECOVERY_SELECT);
       return;
     }
@@ -72,7 +81,7 @@ class CCryptoService {
     }
 
     //
-    if (!cryptoContainer.isWalletsInit()) {
+    if (!privateCryptoContainer.isWalletsInit()) {
       Get.offAllNamed(Routes.ADD_WALLET_SELECT, arguments: {
         'displayExternalActions': false
       });

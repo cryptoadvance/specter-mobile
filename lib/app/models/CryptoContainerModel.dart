@@ -1,8 +1,7 @@
 import 'dart:convert';
 
-import 'package:flutter/foundation.dart';
 import 'package:specter_mobile/services/CCryptoExceptions.dart';
-import 'package:specter_mobile/services/cryptoContainer/CCryptoContainer.dart';
+import 'package:specter_mobile/services/cryptoContainer/SharedCryptoContainer.dart';
 import 'package:specter_mobile/services/cryptoService/providers/CCryptoProvider.dart';
 
 class SWalletModel {
@@ -34,42 +33,29 @@ class SWalletModel {
   }
 }
 
-class CryptoContainerModel {
+class SharedCryptoContainerModel {
   final version = 1;
   final List<CryptoContainerType> _authTypes;
   String? _pinCodeSign;
+  bool _appInit = false;
 
-  List<dynamic> _seedKeys = [];
-  List<SWalletModel> _wallets = [];
-
-  CryptoContainerModel({
+  SharedCryptoContainerModel({
     required authTypes
   }): _authTypes = authTypes;
 
   bool loadStore(Map<String, dynamic> data) {
     _pinCodeSign = data['pinCodeSign'];
-    _seedKeys = data['seedKeys'] ?? [];
-
-    _wallets = [];
-    List<dynamic> _walletsList = data['wallets'] ?? [];
-    _walletsList.forEach((wallet) {
-      _wallets.add(SWalletModel.fromJSON(wallet));
-    });
+    _appInit = data['appInit'];
     return true;
   }
 
   @override
   String toString() {
-    List<dynamic> _walletsList = [];
-    _wallets.forEach((wallet) {
-      _walletsList.add(wallet.toJSON());
-    });
     return jsonEncode({
       'version': 1,
+      'appInit': _appInit,
       'authTypes': getAuthTypes(),
-      'pinCodeSign': _pinCodeSign,
-      'seedKeys': _seedKeys,
-      'wallets': _walletsList
+      'pinCodeSign': _pinCodeSign
     });
   }
 
@@ -98,6 +84,47 @@ class CryptoContainerModel {
       return false;
     }
     return true;
+  }
+
+  bool isAppInit() {
+    return _appInit;
+  }
+
+  void setAppInit() {
+    _appInit = true;
+  }
+}
+
+class PrivateCryptoContainerModel {
+  final version = 1;
+
+  List<dynamic> _seedKeys = [];
+  List<SWalletModel> _wallets = [];
+
+  PrivateCryptoContainerModel();
+
+  bool loadStore(Map<String, dynamic> data) {
+    _seedKeys = data['seedKeys'] ?? [];
+
+    _wallets = [];
+    List<dynamic> _walletsList = data['wallets'] ?? [];
+    _walletsList.forEach((wallet) {
+      _wallets.add(SWalletModel.fromJSON(wallet));
+    });
+    return true;
+  }
+
+  @override
+  String toString() {
+    List<dynamic> _walletsList = [];
+    _wallets.forEach((wallet) {
+      _walletsList.add(wallet.toJSON());
+    });
+    return jsonEncode({
+      'version': 1,
+      'seedKeys': _seedKeys,
+      'wallets': _walletsList
+    });
   }
 
   Future<bool> addSeed(String seedKey) async {

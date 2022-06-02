@@ -19,7 +19,7 @@ class CControlWalletsService {
     }
 
     //
-    if (!(await CServices.crypto.cryptoContainer.addNewWallet(
+    if (!(await CServices.crypto.privateCryptoContainer.addNewWallet(
         walletName: walletName,
         walletDescriptor: walletDescriptor
     ))) {
@@ -43,7 +43,7 @@ class CControlWalletsService {
     }
 
     //
-    if (!(await CServices.crypto.cryptoContainer.addNewWallet(
+    if (!(await CServices.crypto.privateCryptoContainer.addNewWallet(
         walletName: walletName,
         walletDescriptor: walletDescriptor
     ))) {
@@ -53,6 +53,6 @@ class CControlWalletsService {
   }
 
   SWalletModel getWalletByKey(String key) {
-    return CServices.crypto.cryptoContainer.getWalletByKey(key);
+    return CServices.crypto.privateCryptoContainer.getWalletByKey(key);
   }
 }

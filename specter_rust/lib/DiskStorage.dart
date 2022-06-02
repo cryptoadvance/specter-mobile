@@ -1,4 +1,5 @@
 import 'dart:ffi';
+import 'dart:typed_data';
 
 import 'package:ffi/ffi.dart';
 import 'bindings.dart';
@@ -36,42 +37,53 @@ class DiskStorage {
     return result;
   }
 
-  static bool openVolume(int volumeIdx, String pass) {
+  static int findVolumeAndOpen(String pass) {
     if (_bindings == null) {
-      return false;
+      return -1;
     }
 
     final ptrName = pass.toNativeUtf8(allocator: malloc);
-    bool result = _bindings!.ds_open_volume(volumeIdx, ptrName.cast<Int8>()) == 1;
+    int volumeIdx = _bindings!.ds_find_volume_and_open(ptrName.cast<Int8>());
 
     malloc.free(ptrName);
-    return result;
+    return volumeIdx;
   }
 
-  static bool readStorage(int volumeIdx, int clusterIdx) {
+  static int clusterSize = 1024;
+
+  static bool readStorage(int volumeIdx, int clusterIdx, Uint8List data) {
     if (_bindings == null) {
       return false;
     }
-
-    final ptrName = malloc.allocate(1024);
-    bool result = _bindings!.ds_read_storage(volumeIdx, clusterIdx, ptrName.cast<Int8>()) == 1;
-
-    var x = ptrName.cast<Utf8>();
-    final fooDart = x.toDartString();
-
-    malloc.free(ptrName);
-    return result;
-  }
-
-  static bool writeStorage(int volumeIdx, int clusterIdx, String data, int dataSize) {
-    if (_bindings == null) {
+    if (data.length != clusterSize) {
       return false;
     }
 
-    final ptrName = data.toNativeUtf8(allocator: malloc);
-    bool result = _bindings!.ds_write_storage(volumeIdx, clusterIdx, ptrName.cast<Int8>(), dataSize) == 1;
+    final blob = calloc<Uint8>(clusterSize);
+    bool result = _bindings!.ds_read_storage(volumeIdx, clusterIdx, blob.cast<Int8>(), clusterSize) == 1;
 
-    malloc.free(ptrName);
+    final blobBytes = blob.asTypedList(clusterSize);
+    data.setAll(0, blobBytes);
+
+    malloc.free(blob);
+    return result;
+  }
+
+  static bool writeStorage(int volumeIdx, int clusterIdx, Uint8List data) {
+    if (_bindings == null) {
+      return false;
+    }
+    if (data.length != clusterSize) {
+      return false;
+    }
+
+    final blob = calloc<Uint8>(clusterSize);
+    final blobBytes = blob.asTypedList(clusterSize);
+    blobBytes.setAll(0, data);
+
+    bool result = _bindings!.ds_write_storage(volumeIdx, clusterIdx, blob.cast<Int8>(), clusterSize) == 1;
+
+    malloc.free(blob);
     return result;
   }
 }

@@ -216,30 +216,31 @@ class SpecterRustBindings {
   late final _dart_ds_create_volume _ds_create_volume =
       _ds_create_volume_ptr.asFunction<_dart_ds_create_volume>();
 
-  int ds_open_volume(
-    int volumeIdx,
+  int ds_find_volume_and_open(
     ffi.Pointer<ffi.Int8> pass,
   ) {
-    return _ds_open_volume(
-      volumeIdx,
+    return _ds_find_volume_and_open(
       pass,
     );
   }
 
-  late final _ds_open_volume_ptr =
-      _lookup<ffi.NativeFunction<_c_ds_open_volume>>('ds_open_volume');
-  late final _dart_ds_open_volume _ds_open_volume =
-      _ds_open_volume_ptr.asFunction<_dart_ds_open_volume>();
+  late final _ds_find_volume_and_open_ptr =
+      _lookup<ffi.NativeFunction<_c_ds_find_volume_and_open>>(
+          'ds_find_volume_and_open');
+  late final _dart_ds_find_volume_and_open _ds_find_volume_and_open =
+      _ds_find_volume_and_open_ptr.asFunction<_dart_ds_find_volume_and_open>();
 
   int ds_read_storage(
     int volumeIdx,
     int clusterIdx,
     ffi.Pointer<ffi.Int8> data,
+    int dataSize,
   ) {
     return _ds_read_storage(
       volumeIdx,
       clusterIdx,
       data,
+      dataSize,
     );
   }
 
@@ -398,13 +399,11 @@ typedef _dart_ds_create_volume = int Function(
   ffi.Pointer<ffi.Int8> pass,
 );
 
-typedef _c_ds_open_volume = ffi.Int32 Function(
-  ffi.Uint32 volumeIdx,
+typedef _c_ds_find_volume_and_open = ffi.Int32 Function(
   ffi.Pointer<ffi.Int8> pass,
 );
 
-typedef _dart_ds_open_volume = int Function(
-  int volumeIdx,
+typedef _dart_ds_find_volume_and_open = int Function(
   ffi.Pointer<ffi.Int8> pass,
 );
 
@@ -412,12 +411,14 @@ typedef _c_ds_read_storage = ffi.Int32 Function(
   ffi.Uint32 volumeIdx,
   ffi.Uint32 clusterIdx,
   ffi.Pointer<ffi.Int8> data,
+  ffi.Int32 dataSize,
 );
 
 typedef _dart_ds_read_storage = int Function(
   int volumeIdx,
   int clusterIdx,
   ffi.Pointer<ffi.Int8> data,
+  int dataSize,
 );
 
 typedef _c_ds_write_storage = ffi.Int32 Function(

@@ -7,7 +7,7 @@ import 'WalletItem.dart';
 class WalletsList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    List<SWalletModel> wallets = CServices.crypto.cryptoContainer.getWallets();
+    List<SWalletModel> wallets = CServices.crypto.privateCryptoContainer.getWallets();
 
     return SliverList(
         delegate: SliverChildBuilderDelegate((BuildContext context, int index) {

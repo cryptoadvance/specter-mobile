@@ -46,7 +46,7 @@ class EnterRecoveryPhraseController extends GetxController {
     }
 
     String seedKey = recoverySeedResult.seedKey;
-    if (!(await CServices.crypto.cryptoContainer.addSeed(seedKey))) {
+    if (!(await CServices.crypto.privateCryptoContainer.addSeed(seedKey))) {
       await CServices.notify.addMessage(
           context, 'Oops!!', 'Please try again.',
           actionTitle: 'Try Again'

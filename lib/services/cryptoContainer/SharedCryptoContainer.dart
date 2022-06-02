@@ -1,15 +1,11 @@
 import 'dart:collection';
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:biometric_storage/biometric_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:specter_mobile/app/models/CryptoContainerModel.dart';
-import 'package:specter_mobile/services/cryptoService/providers/CCryptoProvider.dart';
-import 'package:specter_rust/DiskStorage.dart';
-
-import 'CCryptoLocalSign.dart';
+import 'package:specter_mobile/services/CServices.dart';
+import 'shared/CCryptoLocalSign.dart';
 import '../../utils.dart';
 
 enum CryptoContainerType {
@@ -26,14 +22,16 @@ extension ParseToString on CryptoContainerType {
 /*
  * Manages data storage in the secure storage
  */
-class CCryptoContainer {
+class SharedCryptoContainer {
   SharedPreferences? prefs;
 
   CryptoContainerType? currentAuthType;
-  CryptoContainerModel? cryptoContainerModel;
+  SharedCryptoContainerModel? sharedCryptoContainerModel;
   Map<CryptoContainerType, BiometricStorageFile> stores = HashMap();
 
   final CCryptoLocalSign _cryptoLocalSign = CCryptoLocalSign();
+
+  String currentVolumePass = '';
 
   Future<void> init() async {
     prefs = await SharedPreferences.getInstance();
@@ -62,38 +60,23 @@ class CCryptoContainer {
 
     print('load authTypes: ' + authTypes.toString());
 
-    cryptoContainerModel = CryptoContainerModel(
-        authTypes: authTypes
+    sharedCryptoContainerModel = SharedCryptoContainerModel(
+      authTypes: authTypes
     );
-
-    Directory appDocDir = await getApplicationDocumentsDirectory();
-    String appDocPath = appDocDir.path;
-    print('path: ' + appDocPath);
-
-    var res = DiskStorage.openStorage(appDocPath);
-    print('open storage: ' + res.toString());
-
-    res = DiskStorage.createVolume(0, "test");
-    print('create volume: ' + res.toString());
-
-    res = DiskStorage.writeStorage(0, 0, "test", 2);
-    print('write storage: ' + res.toString());
-
-    DiskStorage.readStorage(0, 0);
   }
 
   bool isAuthInit() {
-    List<String> authTypes = cryptoContainerModel!.getAuthTypes();
+    List<String> authTypes = sharedCryptoContainerModel!.getAuthTypes();
     return authTypes.isNotEmpty;
   }
 
   bool isAddedBiometricAuth() {
-    List<String> authTypes = cryptoContainerModel!.getAuthTypes();
+    List<String> authTypes = sharedCryptoContainerModel!.getAuthTypes();
     return authTypes.contains(CryptoContainerType.BIOMETRIC.toShortString());
   }
 
   bool isAddedPinCodeAuth() {
-    List<String> authTypes = cryptoContainerModel!.getAuthTypes();
+    List<String> authTypes = sharedCryptoContainerModel!.getAuthTypes();
     return authTypes.contains(CryptoContainerType.PIN_CODE.toShortString());
   }
 
@@ -111,7 +94,17 @@ class CCryptoContainer {
     BiometricStorageFile store = await _getCryptoContainer(authType);
 
     //
-    cryptoContainerModel!.addAuthType(authType);
+    sharedCryptoContainerModel!.addAuthType(authType);
+
+    if (!sharedCryptoContainerModel!.isAppInit()) {
+      if (!CServices.crypto.privateCryptoContainer.createDefaultVolume()) {
+        print('Can not create default volume');
+        return false;
+      }
+
+      print('Default volume created');
+      sharedCryptoContainerModel!.setAppInit();
+    }
 
     //
     if (!(await _saveCryptoContainer())) {
@@ -119,7 +112,7 @@ class CCryptoContainer {
     }
 
     //
-    await prefs!.setStringList('types', cryptoContainerModel!.getAuthTypes());
+    await prefs!.setStringList('types', sharedCryptoContainerModel!.getAuthTypes());
     return true;
   }
 
@@ -135,7 +128,7 @@ class CCryptoContainer {
 
     print('pinCodeSign: ' + signResult.sign!);
 
-    cryptoContainerModel!.setCryptoContainerPinCodeSign(signResult.sign!);
+    sharedCryptoContainerModel!.setCryptoContainerPinCodeSign(signResult.sign!);
 
     if (!(await _saveCryptoContainer())) {
       return false;
@@ -156,7 +149,7 @@ class CCryptoContainer {
 
     print('pinCodeSign: ' + signResult.sign!);
 
-    return cryptoContainerModel!.verifyCryptoContainerPinCodeSign(signResult.sign!);
+    return sharedCryptoContainerModel!.verifyCryptoContainerPinCodeSign(signResult.sign!);
   }
 
   Future<BiometricStorageFile> _getCurrentCryptoContainer() {
@@ -227,7 +220,7 @@ class CCryptoContainer {
   }
 
   Future<bool> _saveCryptoContainer() async {
-    String containerData = cryptoContainerModel.toString();
+    String containerData = sharedCryptoContainerModel.toString();
 
     BiometricStorageFile store = await _getCurrentCryptoContainer();
 
@@ -254,13 +247,13 @@ class CCryptoContainer {
 
       //
       Map<String, dynamic> data = jsonDecode(containerData);
-      if (!cryptoContainerModel!.loadStore(data)) {
+      if (!sharedCryptoContainerModel!.loadStore(data)) {
         return false;
       }
 
       //
       print('readCryptoContainer: ' + containerData);
-      print('loadedCryptoContainer: ' + cryptoContainerModel.toString());
+      print('loadedCryptoContainer: ' + sharedCryptoContainerModel.toString());
       return true;
     } on AuthException catch(e) {
       print(e.toString());
@@ -273,7 +266,7 @@ class CCryptoContainer {
     return response;
   }
 
-  Future<bool> authCryptoContainer() async {
+  Future<bool> tryOpenSharedCryptoContainer() async {
     if (isAddedPinCodeAuth()) {
       currentAuthType = CryptoContainerType.PIN_CODE;
     } else {
@@ -281,8 +274,6 @@ class CCryptoContainer {
     }
 
     //
-    BiometricStorageFile store = await _getCurrentCryptoContainer();
-
     if (!(await _readCryptoContainer())) {
       print('authCryptoContainer - error');
       return false;
@@ -291,53 +282,8 @@ class CCryptoContainer {
     print('authCryptoContainer - success');
     return true;
   }
-
-  Future<bool> addSeed(String seedKey) async {
-    if (!(await cryptoContainerModel!.addSeed(seedKey))) {
-      return false;
-    }
-
-    if (!(await _saveCryptoContainer())) {
-      return false;
-    }
-
-    return true;
-  }
-
-  Future<bool> addNewWallet({
-    required String walletName,
-    required SWalletDescriptor walletDescriptor
-  }) async {
-    String key = walletDescriptor.getWalletKey();
-    SWalletModel wallet = SWalletModel(key: key, name: walletName, descriptor: walletDescriptor);
-    if (!(await cryptoContainerModel!.addNewWallet(wallet))) {
-      return false;
-    }
-
-    if (!(await _saveCryptoContainer())) {
-      return false;
-    }
-
-    return true;
-  }
-
-  SWalletModel getWalletByKey(String key) {
-    return cryptoContainerModel!.getWalletByKey(key);
-  }
-
-  bool isSeedsInit() {
-    return cryptoContainerModel!.isSeedsInit();
-  }
-
-  bool isWalletsInit() {
-    return cryptoContainerModel!.isWalletsInit();
-  }
-
-  String getMnemonicByIdx(int idx) {
-    return cryptoContainerModel!.getMnemonicByIdx(idx);
-  }
-
-  List<SWalletModel> getWallets() {
-    return cryptoContainerModel!.getWallets();
+  
+  bool isAppInit() {
+    return sharedCryptoContainerModel!.isAppInit();
   }
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'package:specter_mobile/services/cryptoContainer/CCryptoContainer.dart';
+import 'package:specter_mobile/services/cryptoContainer/SharedCryptoContainer.dart';
 import 'package:specter_mobile/services/CServices.dart';
 
 import 'pincode_input_controller.dart';
@@ -49,11 +49,19 @@ class VerificationPinCodeController extends GetxController {
 
     //
     if (isNeedInitAuth) {
-      if (!await CServices.crypto.cryptoContainer.addCryptoContainerAuth(CryptoContainerType.PIN_CODE)) {
+      if (!await CServices.crypto.sharedCryptoContainer.addCryptoContainerAuth(CryptoContainerType.PIN_CODE)) {
         return;
       }
 
-      if (!await CServices.crypto.cryptoContainer.setCryptoContainerPinCode(pinCode)) {
+      if (!await CServices.crypto.sharedCryptoContainer.setCryptoContainerPinCode(pinCode)) {
+        return;
+      }
+
+      if (!CServices.crypto.tryOpenPrivateCryptoContainer('')) {
+        await CServices.notify.addMessage(
+            context, 'Oops!!', 'Can not open volume',
+            actionTitle: 'Try Again'
+        );
         return;
       }
 
@@ -62,7 +70,7 @@ class VerificationPinCodeController extends GetxController {
     }
 
     //
-    if (!(await CServices.crypto.cryptoContainer.authCryptoContainer())) {
+    if (!(await CServices.crypto.sharedCryptoContainer.tryOpenSharedCryptoContainer())) {
       await CServices.notify.addMessage(
           context, 'Oops!!', 'Can not load crypto container.',
           actionTitle: 'Try Again'
@@ -70,12 +78,20 @@ class VerificationPinCodeController extends GetxController {
       return;
     }
 
-    if (!await CServices.crypto.cryptoContainer.verifyCryptoContainerPinCode(pinCode)) {
+    if (!await CServices.crypto.sharedCryptoContainer.verifyCryptoContainerPinCode(pinCode)) {
       await CServices.notify.addMessage(
           context, 'Oops!!', 'The PIN-code is not correct. \nPlease try again.',
           actionTitle: 'Try Again'
       );
       pinCodeInputController.clean();
+      return;
+    }
+
+    if (!CServices.crypto.tryOpenPrivateCryptoContainer('')) {
+      await CServices.notify.addMessage(
+          context, 'Oops!!', 'Can not open volume',
+          actionTitle: 'Try Again'
+      );
       return;
     }
 
