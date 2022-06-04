@@ -336,6 +336,15 @@ impl DiskStorage {
             return false;
         }
 
+        if !Path::new(filePath.as_str()).exists() {
+            let mut bytes: [u8; CLUSTER_SIZE] = [0; CLUSTER_SIZE];
+            unsafe {
+                let vec_ptr = bytes.as_mut_ptr() as *mut i8;
+                ptr::copy_nonoverlapping(vec_ptr, data as *mut i8, CLUSTER_SIZE);
+            }
+            return true;
+        }
+
         let mut file = File::open(filePath.as_str()).expect("Unable to open");
         let offsetStart = volumeIdx * CLUSTER_SIZE as u32;
         file.seek(SeekFrom::Start(offsetStart as u64)).expect("Unable to write to file");

@@ -23,7 +23,7 @@ fn main() {
         println!("Can not open volume");
         return;
     }*/
-    let strB = CString::new("pass2").expect("CString::new failed");
+    let strB = CString::new("pass1").expect("CString::new failed");
     let volumeIdx = specter_storage::ds_find_volume_and_open(strB.as_ptr());
     if (volumeIdx < 0) {
         println!("Can not find volume and open");
@@ -31,10 +31,10 @@ fn main() {
     }
 
     let strA = CString::new("testA").expect("CString::new failed");
-    specter_storage::ds_write_storage(0, 0, strA.as_ptr(), 5);
+    specter_storage::ds_write_storage(volumeIdx as u32, 0, strA.as_ptr(), 5);
 
     let mut bytes: [u8; 1024] = [0; 1024];
-    specter_storage::ds_read_storage(0, 0, bytes.as_mut_ptr() as *const i8, 1024);
+    specter_storage::ds_read_storage(volumeIdx as u32, 0, bytes.as_mut_ptr() as *const i8, 1024);
 
     let s = match std::str::from_utf8(&bytes) {
         Ok(v) => v,

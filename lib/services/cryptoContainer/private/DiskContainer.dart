@@ -6,6 +6,7 @@ import 'package:specter_rust/DiskStorage.dart';
 
 class DiskContainer {
   static const int usedVolumes = 5;
+  int currentVolumeID = -1;
 
   Future<bool> init() async {
     Directory appDocDir = await getApplicationDocumentsDirectory();
@@ -30,11 +31,26 @@ class DiskContainer {
       return false;
     }
     print('Find volume: ' + volumeIdx.toString());
+    currentVolumeID = volumeIdx;
     return true;
   }
 
-  void test() {
-    var res = DiskStorage.createVolume(3, "1234");
+  Uint8List readCluster(int clusterId) {
+    Uint8List readData = Uint8List(1024);
+    if (!DiskStorage.readStorage(currentVolumeID, clusterId, readData)) {
+      throw 'can not read storage';
+    }
+    return readData;
+  }
+
+  void writeCluster(int clusterId, Uint8List data) {
+    if (!DiskStorage.writeStorage(currentVolumeID, clusterId, data)) {
+      throw 'can not write storage';
+    }
+  }
+
+  /*void test() {
+    var res = DiskStorage.createVolume(0, "1234");
     print('create volume: ' + res.toString());
 
 
@@ -50,5 +66,5 @@ class DiskContainer {
     Uint8List readData = Uint8List(1024);
     DiskStorage.readStorage(0, 0, readData);
     print('read: ' + readData.toString());
-  }
+  }*/
 }
