@@ -5,6 +5,7 @@ import 'package:specter_mobile/services/cryptoService/providers/CCryptoProvider.
 
 import 'private/DiskBlobsContainer.dart';
 import 'private/DiskContainer.dart';
+import 'private/storages/DiskStorageJSON.dart';
 
 class PrivateCryptoContainer {
   PrivateCryptoContainerModel? _privateCryptoContainerModel;
@@ -24,7 +25,7 @@ class PrivateCryptoContainer {
   }
 
   void test() {
-    // createDefaultVolume();
+     createDefaultVolume();
 
     if (!tryOpenPrivateCryptoContainer('')) {
       throw 'can not open';
@@ -38,7 +39,7 @@ class PrivateCryptoContainer {
       Uint8List data = Uint8List.fromList(resA.codeUnits);
       _diskBlobsContainer!.writeData(1, data);
 
-      Uint8List readData = _diskBlobsContainer!.readData(1)!;
+      Uint8List readData = _diskBlobsContainer!.readData(1);
       String resAAnswer = String.fromCharCodes(readData);
       print('answer: ' +  resAAnswer);
     }
@@ -51,7 +52,7 @@ class PrivateCryptoContainer {
       Uint8List data = Uint8List.fromList(resA.codeUnits);
       _diskBlobsContainer!.writeData(10, data);
 
-      Uint8List readData = _diskBlobsContainer!.readData(10)!;
+      Uint8List readData = _diskBlobsContainer!.readData(10);
       String resAAnswer = String.fromCharCodes(readData);
       print('answer: ' +  resAAnswer);
     }
@@ -64,9 +65,18 @@ class PrivateCryptoContainer {
       Uint8List data = Uint8List.fromList(resA.codeUnits);
       _diskBlobsContainer!.writeData(1, data);
 
-      Uint8List readData = _diskBlobsContainer!.readData(1)!;
+      Uint8List readData = _diskBlobsContainer!.readData(1);
       String resAAnswer = String.fromCharCodes(readData);
       print('answer: ' +  resAAnswer);
+    }
+
+    {
+      DiskStorageJSON storageJSON = DiskStorageJSON(diskBlobsContainer: _diskBlobsContainer!, resourceID: 15);
+      /*storageJSON.saveData({
+        'test': 100
+      });*/
+      var obj = storageJSON.readData();
+      print(obj.toString());
     }
   }
 

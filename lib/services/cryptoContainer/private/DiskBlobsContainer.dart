@@ -90,7 +90,7 @@ class DiskBlobsContainer {
     _writeDiskHeaders();
   }
 
-  Uint8List? readData(int resourceId) {
+  Uint8List readData(int resourceId) {
     if (resourceId < 1) {
       throw 'wrong resourceId';
     }
@@ -231,7 +231,7 @@ class DiskBlobsContainer {
       }
 
       //
-      if (clusters!.contains(dataChunkId)) {
+      if (clusters!.length > dataChunkId) {
         return clusters[dataChunkId] + headerId * (clustersInHeader + 2) + 1;
       }
 
