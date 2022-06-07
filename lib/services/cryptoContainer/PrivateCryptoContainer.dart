@@ -16,16 +16,18 @@ class PrivateCryptoContainer {
   static String emptyPass = 'default';
   bool isVolumeOpen = false;
 
+  static const int _mainContainerResourceID = 30;
+
   Future<void> init() async {
     await _diskContainer.init();
 
     _diskBlobsContainer = DiskBlobsContainer(diskContainer: _diskContainer);
 
-    test();
+    //test();
   }
 
   void test() {
-     createDefaultVolume();
+    //createDefaultVolume();
 
     if (!tryOpenPrivateCryptoContainer('')) {
       throw 'can not open';
@@ -93,11 +95,29 @@ class PrivateCryptoContainer {
     }
 
     isVolumeOpen = true;
+
+    _loadCryptoContainer();
     return true;
   }
 
-  Future<bool> _saveCryptoContainer() async {
-    return false;
+  void _loadCryptoContainer() {
+    DiskStorageJSON storageJSON = DiskStorageJSON(diskBlobsContainer: _diskBlobsContainer!, resourceID: _mainContainerResourceID);
+    var obj = storageJSON.readData();
+
+    _privateCryptoContainerModel = PrivateCryptoContainerModel();
+    if (obj != null) {
+      _privateCryptoContainerModel!.loadStore(obj);
+    }
+
+    print('read container: ' + _privateCryptoContainerModel.toString());
+  }
+
+  void _saveCryptoContainer() {
+    DiskStorageJSON storageJSON = DiskStorageJSON(diskBlobsContainer: _diskBlobsContainer!, resourceID: _mainContainerResourceID);
+    var data = _privateCryptoContainerModel!.getData();
+    storageJSON.saveData(data);
+
+    print('write container: ' + data.toString());
   }
 
   Future<bool> addSeed(String seedKey) async {
@@ -109,9 +129,7 @@ class PrivateCryptoContainer {
       return false;
     }
 
-    if (!(await _saveCryptoContainer())) {
-      return false;
-    }
+    _saveCryptoContainer();
 
     return true;
   }
@@ -130,9 +148,7 @@ class PrivateCryptoContainer {
       return false;
     }
 
-    if (!(await _saveCryptoContainer())) {
-      return false;
-    }
+    _saveCryptoContainer();
 
     return true;
   }

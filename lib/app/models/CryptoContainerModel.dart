@@ -114,17 +114,21 @@ class PrivateCryptoContainerModel {
     return true;
   }
 
-  @override
-  String toString() {
+  dynamic getData() {
     List<dynamic> _walletsList = [];
     _wallets.forEach((wallet) {
       _walletsList.add(wallet.toJSON());
     });
-    return jsonEncode({
+    return {
       'version': 1,
       'seedKeys': _seedKeys,
       'wallets': _walletsList
-    });
+    };
+  }
+
+  @override
+  String toString() {
+    return jsonEncode(getData());
   }
 
   Future<bool> addSeed(String seedKey) async {

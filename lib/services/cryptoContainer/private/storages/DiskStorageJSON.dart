@@ -13,6 +13,9 @@ class DiskStorageJSON extends DiskStorage {
   }): super(diskBlobsContainer: diskBlobsContainer, resourceID: resourceID);
 
   void saveData(dynamic obj) {
+    if (obj is String) {
+      throw 'wrong obj type';
+    }
     String str = jsonEncoder.convert(obj);
     Uint8List data = Uint8List.fromList(str.codeUnits);
     Uint8List bytes = packData(data);
@@ -25,7 +28,7 @@ class DiskStorageJSON extends DiskStorage {
       return null;
     }
     Uint8List data = unpackData(readData);
-    String str = String.fromCharCodes(data).trim();
+    String str = String.fromCharCodes(data);
     var obj = jsonDecode(str);
     return obj;
   }

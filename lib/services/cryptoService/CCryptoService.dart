@@ -76,6 +76,10 @@ class CCryptoService {
       Get.offAllNamed(Routes.RECOVERY_SELECT);
       return;
     }
+    if (!privateCryptoContainer.isSeedsInit()) {
+      Get.offAllNamed(Routes.RECOVERY_SELECT);
+      return;
+    }
     if (!cryptoContainerAuth.selectCurrentMnemonicByIdx(0, '')) {
       throw 'can not select mnemonic';
     }
